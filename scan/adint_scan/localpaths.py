@@ -48,9 +48,8 @@ def path_problem(path):
 
     drive, tail = os.path.splitdrive(path)
     current = drive + os.sep
-    for part in tail.replace("\\", os.sep).split(os.sep):
-        if not part:
-            continue
+    parts = [p for p in tail.replace("\\", os.sep).split(os.sep) if p]
+    for index, part in enumerate(parts):
         current = os.path.join(current, part)
         try:
             info = os.lstat(current)
@@ -60,6 +59,24 @@ def path_problem(path):
             return "cannot safely inspect {}: {}".format(current, exc)
         if (stat.S_ISLNK(info.st_mode)
                 or getattr(info, "st_file_attributes", 0) & 0x400):
+            # macOS exposes its standard /var, /tmp and /etc directories through
+            # root-owned aliases into /private. These exact system aliases are
+            # safe to validate lexically; arbitrary user links remain refused.
+            # readlink reads the link itself and does not traverse its target.
+            aliases = {"/var": "/private/var", "/tmp": "/private/tmp",
+                       "/etc": "/private/etc"}
+            target = aliases.get(current) if sys.platform == "darwin" else None
+            if (target and stat.S_ISLNK(info.st_mode)
+                    and getattr(info, "st_uid", None) == 0):
+                try:
+                    link = os.readlink(current)
+                except OSError as exc:
+                    return "cannot inspect system alias {}: {}".format(current, exc)
+                # Apple's links commonly use 'private/var', relative to '/'.
+                # Accept only these two exact spellings of the expected target.
+                if link in (target, target.lstrip("/")):
+                    canonical = os.path.join(target, *parts[index + 1:])
+                    return path_problem(canonical)
             return "symlink or reparse point was not followed: {}".format(current)
     return ""
 

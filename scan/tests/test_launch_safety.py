@@ -2,8 +2,11 @@
 
 import json
 import os
+import posixpath
 import sqlite3
+import stat
 import sys
+import unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -254,3 +257,83 @@ class TestLocalPathGuard(BrowserLaunchBase):
             result = hashscan.run(self.ctx)
         self.assertTrue(any(not c.ran for c in result.checks))
         guard.assert_called_with(self.tmp)
+
+
+class TestDarwinSystemAliases(unittest.TestCase):
+    def guard_fixture(self, path, links, owners=None, platform="darwin", temp=None):
+        queried, readlinks = [], []
+        owners = owners or {}
+        def lstat(value):
+            queried.append(value)
+            return SimpleNamespace(
+                st_mode=(stat.S_IFLNK if value in links else stat.S_IFDIR) | 0o755,
+                st_uid=owners.get(value, 0))
+        def readlink(value):
+            readlinks.append(value)
+            return links[value]
+        fake_path = SimpleNamespace(isabs=posixpath.isabs,
+                                    splitdrive=posixpath.splitdrive,
+                                    join=posixpath.join,
+                                    isdir=lambda value: value == temp)
+        fake_os = SimpleNamespace(fspath=os.fspath, path=fake_path, sep="/",
+                                  lstat=lstat, readlink=readlink,
+                                  environ={"TMPDIR": temp} if temp else {})
+        with patch.object(localpaths, "os", fake_os), \
+             patch.object(localpaths, "sys", SimpleNamespace(platform=platform)):
+            result = (localpaths.local_temp_dir() if temp
+                      else localpaths.path_problem(path))
+        return result, queried, readlinks
+
+    def test_exact_root_owned_aliases_validate_their_target_components(self):
+        for alias in ("/var", "/tmp", "/etc"):
+            target = "/private" + alias
+            for spelling in (target, target.lstrip("/")):
+                with self.subTest(alias=alias, target=spelling):
+                    problem, queried, links = self.guard_fixture(
+                        alias + "/folder/file", {alias: spelling})
+                    self.assertEqual(problem, "")
+                    self.assertEqual(links, [alias])
+                    self.assertIn("/private", queried)
+                    self.assertIn(target + "/folder/file", queried)
+                    self.assertNotIn(alias + "/folder", queried)
+
+    def test_untrusted_owner_and_unexpected_targets_are_rejected(self):
+        for target, owner in (("/private/var", 501), ("/Users/person", 0),
+                              ("//server/share", 0), ("private/../var", 0)):
+            with self.subTest(target=target, owner=owner):
+                problem, queried, _links = self.guard_fixture(
+                    "/var/folders", {"/var": target}, {"/var": owner})
+                self.assertIn("not followed", problem)
+                self.assertEqual(queried, ["/var"])
+
+    def test_arbitrary_and_nested_symlinks_remain_rejected(self):
+        problem, queried, links = self.guard_fixture(
+            "/custom/file", {"/custom": "/private/var"})
+        self.assertIn("not followed", problem)
+        self.assertEqual(links, [])
+        problem, queried, links = self.guard_fixture(
+            "/var/folders/redirect/file",
+            {"/var": "private/var", "/private/var/folders/redirect": "/elsewhere"})
+        self.assertIn("not followed", problem)
+        self.assertNotIn("/private/var/folders/redirect/file", queried)
+        self.assertEqual(links, ["/var"])
+
+    def test_target_ancestor_redirection_is_rejected(self):
+        problem, queried, _links = self.guard_fixture(
+            "/var/folders", {"/var": "private/var", "/private": "/elsewhere"})
+        self.assertIn("not followed", problem)
+        self.assertEqual(queried, ["/var", "/private"])
+
+    def test_alias_exception_is_not_enabled_on_linux(self):
+        problem, queried, links = self.guard_fixture(
+            "/var/folders", {"/var": "private/var"}, platform="linux")
+        self.assertIn("not followed", problem)
+        self.assertEqual(links, [])
+
+    def test_standard_darwin_temp_alias_is_usable_after_validation(self):
+        temp = "/var/folders/synthetic/T"
+        result, queried, links = self.guard_fixture(
+            temp, {"/var": "private/var"}, temp=temp)
+        self.assertEqual(result, temp)
+        self.assertIn("/private/var/folders/synthetic/T", queried)
+        self.assertEqual(links, ["/var"])
