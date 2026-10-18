@@ -260,27 +260,13 @@ def render_human(document: Dict[str, Any]) -> str:
             for h in m["hits"]:
                 key = h.get("evidence") or "unclassified"
                 counts[key] = counts.get(key, 0) + 1
-        serious_n = sum(n for k, n in counts.items() if is_serious(k))
         w("  By evidence strength: " + ", ".join(
             "{} {}".format(n, k) for k, n in sorted(counts.items())))
         w("")
-        if serious_n:
-            w("  {} of these {} SERIOUS - a file on disk, an auto-start entry, a".format(
-                serious_n, "is" if serious_n == 1 else "are"))
-            w("  connection record, DNS record, or blocked attempt. Read those first;")
-            w("  they are marked >> above. The rest are reference-only.")
-        else:
-            w("  ALL of these are reference-only: a string in cached page content,")
-            w("  history or a blocklist - most often a page ABOUT this campaign (a")
-            w("  news article, a report, this tool's own documentation) rather than")
-            w("  any contact with the infrastructure. Check what the page was,")
-            w("  without opening it, before drawing a conclusion.")
-        w("")
-        w("A match means INVESTIGATE, not 'you are compromised'. An ad impression")
-        w("from this infrastructure is not proof of infection — the validator server")
-        w("decided per device whether to proceed. If you have any concrete reason to")
-        w("suspect this machine, the right answer is expert forensics, not this tool:")
-        _referrals(w)
+        w("  Follow the next steps in the summary. The indicator's role and the")
+        w("  evidence type determine those steps; the number of matches does not.")
+        w("  A match means INVESTIGATE, not 'you are compromised'.")
+        w("  A match does not by itself establish that spyware ran on this device.")
     else:
         if v["gaps"]:
             w("VERDICT: no known indicators found IN WHAT COULD BE CHECKED.")
@@ -295,9 +281,8 @@ def render_human(document: Dict[str, Any]) -> str:
         # D1: the mandatory closing line, verbatim.
         w(document["doctrine_line"])
         w("")
-        w("This grade of spyware is purpose-built to defeat exactly this class of")
-        w("check. If you are at risk, contact people who do this properly:")
-        _referrals(w)
+    w("")
+    _support_options(w)
     w(_RULE)
     return _defang_report("\n".join(out), document)
 
@@ -553,6 +538,10 @@ def _headline_for(hit) -> str:
     """The summary headline for one serious hit, chosen by grade AND tier."""
     if hit.get("tier") in NOT_MALWARE_TIERS and hit.get("evidence") == EV_ON_DISK:
         return ON_DISK_NOT_MALWARE_HEADLINE
+    if hit.get("evidence") == EV_ON_DISK and hit.get("tier") != "sample":
+        return "A FILE FINGERPRINT MATCHED; ITS CLASSIFICATION NEEDS REVIEW"
+    if hit.get("tier") == "candiru-ip" and hit.get("evidence") == EV_CONTACTED:
+        return "THIS DEVICE CONTACTED A HISTORICALLY ATTRIBUTED IP ADDRESS"
     return EVIDENCE_HEADLINE.get(hit.get("evidence"), "A SERIOUS INDICATOR MATCHED")
 
 
@@ -560,6 +549,13 @@ def _evidence_gloss(hit) -> str:
     """What this grade establishes for this hit (tier-aware, same reason)."""
     if hit.get("tier") in NOT_MALWARE_TIERS and hit.get("evidence") == EV_ON_DISK:
         return ON_DISK_NOT_MALWARE_GLOSS
+    if hit.get("evidence") == EV_ON_DISK and hit.get("tier") != "sample":
+        return ("a file fingerprint matched an indicator, but its classification "
+                "does not identify it as a known spyware sample; expert review "
+                "is needed")
+    if hit.get("tier") == "candiru-ip" and hit.get("evidence") == EV_CONTACTED:
+        return ("a connection record names this IP address; who controlled it "
+                "at the time is not established by this match")
     return EVIDENCE_MEANING.get(hit.get("evidence") or "", "")
 
 
@@ -649,6 +645,133 @@ def _defang_report(text, document):
     return text
 
 
+def _recommended_action(hit) -> int:
+    """Human next steps, separate from evidence grades and the JSON verdict.
+
+    0: saved context; 1: self-review; 2: qualified interpretation;
+    3: prompt expert help. Unknown metadata never becomes reassurance.
+    """
+    evidence, tier = hit.get("evidence"), hit.get("tier")
+    if evidence == EV_REFERENCED:
+        return 0
+    if evidence == EV_ON_DISK and tier == "vuln-driver":
+        return 1
+    if evidence in (EV_ON_DISK, EV_PERSISTENCE):
+        return 3
+    if (tier in ("delivery", "candiru-ip") and
+            evidence in (EV_CONTACTED, EV_DNS, EV_ATTEMPTED, EV_CONFIGURED)):
+        return 1
+    return 2
+
+
+def _advice_paragraph(w, text):
+    for line in _wrap(text, 66):
+        w("    " + line)
+
+
+def _next_steps(w, hits):
+    action = max(_recommended_action(h) for h in hits)
+    w("  WHAT TO DO")
+    if action == 3:
+        _advice_paragraph(w, "Seek expert help promptly. Preserve this report and "
+                         "the named files or registrations. Do NOT delete, move, "
+                         "run or try to clean them. A file match establishes "
+                         "presence; a registration establishes configuration. "
+                         "Neither alone establishes that spyware executed.")
+        w("")
+        _advice_paragraph(w, "Contact a qualified incident responder or your "
+                         "organisation's security team. You do not need to "
+                         "finish investigating first. Support options are at "
+                         "the end of this report.")
+    elif action == 2:
+        _advice_paragraph(w, "Qualified interpretation is recommended. Review "
+                         "the evidence type, saved date and location below. "
+                         "A DNS record may be a failed lookup; it does not "
+                         "establish a connection. Missing or unrecognised "
+                         "evidence labels also need review, not reassurance.")
+        w("")
+        _advice_paragraph(w, "A connection record for command-and-control, "
+                         "validator or other attributed spyware infrastructure "
+                         "warrants specialist review. For a DNS-only or "
+                         "configuration finding, seek qualified help if the "
+                         "local context does not explain it, or if you have "
+                         "a credible reason to believe you are being targeted. "
+                         "These records do not by themselves establish infection.")
+        w("")
+        _advice_paragraph(w, "Keep the report and original records. Do NOT delete "
+                         "or clean them while arranging review. Your organisation's "
+                         "security team or a qualified incident responder can help.")
+    else:
+        _advice_paragraph(w, "Start with the saved evidence below. Check the "
+                         "indicator's role, evidence type, browser/profile, "
+                         "date (if available), and file or record that matched. "
+                         "Use the report and existing records; do not visit "
+                         "the indicator to investigate it.")
+        if any(h.get("tier") == "delivery" and h.get("evidence") in
+               (EV_CONTACTED, EV_DNS, EV_ATTEMPTED) for h in hits):
+            w("")
+            _advice_paragraph(w, "Advertising-network records alone do not show "
+                             "that you were selected for an exploit or infected. "
+                             "A connection can result from an ordinary ad; a "
+                             "DNS record does not even establish that connection. "
+                             "This finding alone does not call for a spyware "
+                             "helpline referral.")
+        if any(h.get("tier") == "vuln-driver" and
+               h.get("evidence") == EV_ON_DISK for h in hits):
+            w("")
+            _advice_paragraph(w, "For the legitimate driver, check whether its "
+                             "location and installation history match hardware "
+                             "or software you use. Your IT support or the "
+                             "software vendor can help identify it. Do not "
+                             "delete it solely because of this match.")
+        if any(h.get("tier") == "candiru-ip" for h in hits):
+            w("")
+            _advice_paragraph(w, "For a historical IP address, ownership can change. "
+                             "The tool has not established who controlled it "
+                             "at the time of this record. Check the saved date "
+                             "against the cited research; an absent date leaves "
+                             "that question unresolved.")
+        if any(h.get("evidence") == EV_CONFIGURED for h in hits):
+            w("")
+            _advice_paragraph(w, "For a configuration entry, check who or what "
+                             "created it and why. An ordinary ad impression "
+                             "does not explain a local hosts-file entry. "
+                             "Do not edit it merely to make this finding disappear.")
+        w("")
+        _advice_paragraph(w, "Keep the report. If you cannot explain a finding, "
+                         "ask trusted IT support for help interpreting it. "
+                         "Stronger findings or a credible targeting concern "
+                         "warrant qualified security help directly; you do not "
+                         "have to complete these steps first.")
+    w("")
+    _advice_paragraph(w, "Do NOT open, visit or look up indicator addresses. Keep "
+                     "the [.] spelling when sharing them. Reports can contain "
+                     "usernames, profile names, file paths and browsing details. "
+                     "Ask a responder how to share evidence securely; do not "
+                     "post the full report publicly.")
+
+
+def _support_options(w):
+    w("WHEN TO SEEK SUPPORT")
+    w("A credible targeting concern or a genuine security notification warrants")
+    w("qualified help regardless of this scan's result. You do not need to")
+    w("complete self-checks first. Contact your organisation's security team")
+    w("or a qualified incident responder.")
+    w("")
+    w("For journalists, activists, human-rights defenders and other civil")
+    w("society members, Access Now offers a Digital Security Helpline:")
+    w("  https://www.accessnow.org/help/")
+    w("  Eligibility and support: https://www.accessnow.org/help/helpline-faq/")
+    w("Check its intake instructions before sending private evidence.")
+    w("")
+    w("Research and further guidance:")
+    w("  Amnesty International Security Lab  https://securitylab.amnesty.org/")
+    w("  The Citizen Lab                     https://citizenlab.ca/")
+    w("")
+    w("A saved reference or advertising-network trace alone is not a reason")
+    w("to assume spyware infection. No result from this tool rules it out.")
+
+
 def render_summary(document: Dict[str, Any]) -> str:
     """The part a person actually reads. Answers, in order: what was found, what
     it means, what to do, and what this scan could not check.
@@ -675,8 +798,14 @@ def render_summary(document: Dict[str, Any]) -> str:
         w("  what was searched and, more importantly, what could not be.")
     elif serious:
         n = len(serious)
-        w("  RESULT: {} serious finding{} that need{} a person to look.".format(
-            n, "" if n == 1 else "s", "s" if n == 1 else ""))
+        action = max(_recommended_action(h) for h in serious)
+        if action == 3:
+            w("  RESULT: SERIOUS FINDING - seek expert help promptly.")
+        elif action == 2:
+            w("  RESULT: potentially SERIOUS finding - qualified review recommended.")
+        else:
+            w("  RESULT: {} finding{} to review; start with the saved context.".format(
+                n, "" if n == 1 else "s"))
         if benign:
             nb = len(benign)
             w("          ({} further match{} {} only {} in saved page "
@@ -687,7 +816,8 @@ def render_summary(document: Dict[str, Any]) -> str:
         w("  WHAT WAS FOUND")
         # Strongest grade first; collapse repeats of the same indicator+grade so
         # one domain in three cache files is not three lines.
-        for h in _dedup_serious(serious):
+        for h in sorted(_dedup_serious(serious),
+                        key=_recommended_action, reverse=True):
             headline = _headline_for(h)
             w("    >> {}".format(headline))
             w("       {}  [{}]".format(_defang(h["indicator"]), h["tier"]))
@@ -700,32 +830,15 @@ def render_summary(document: Dict[str, Any]) -> str:
             if h.get("observed"):
                 w("          When: {}".format(h["observed"][:19].replace("T", " ")))
             w("          Where: {}".format(
-                _defang_text(_short_path(h["location"]), h["indicator"])))
+                _defang_text(h["location"], h["indicator"])))
             w("")
-        w("  WHAT TO DO")
-        w("    1. Do NOT delete, move or \"clean\" anything named above. It is the")
-        w("       evidence a forensic examiner would need, and deleting it cannot")
-        w("       be undone.")
-        w("    2. Do NOT open, visit or look up any name above - not even to")
-        w("       check it. Contacting it tells whoever runs it that someone is")
-        w("       looking. The names are written with [.] so they cannot be")
-        w("       clicked by accident; keep them that way if you forward this.")
-        w("    3. Contact one of the organisations at the end of this report. A")
-        w("       serious finding here is a reason to get expert help, not a")
-        w("       verdict this tool can give on its own.")
-        w("")
-        w("    Before you forward this report: it contains your Windows username,")
-        w("    your browser profile names, and the web addresses of matching")
-        w("    records - personal information. That is fine to send to the help")
-        w("    organisations below, who need it; think before posting it in public.")
+        _next_steps(w, serious)
         if benign:
             n_b = len(benign)
             w("")
-            w("    The {} reference-only match{} {} listed in the detail section "
-              "below; {} most likely {} you read about this campaign.".format(
-                  n_b, "" if n_b == 1 else "es", "is" if n_b == 1 else "are",
-                  "it is" if n_b == 1 else "they are",
-                  "a page" if n_b == 1 else "pages"))
+            w("    The {} reference-only match{} {} listed in DETAIL. Saved text".format(
+                  n_b, "" if n_b == 1 else "es", "is" if n_b == 1 else "are"))
+            w("    can mention an indicator without a connection to it.")
     else:
         n = len(benign)
         w("  RESULT: {} match{} found, all of them reference-only.".format(
@@ -733,15 +846,18 @@ def render_summary(document: Dict[str, Any]) -> str:
         w("")
         w("  WHAT THIS PROBABLY IS")
         for line in _wrap(
-                "Every match is a string found in saved page content - no sign "
-                "that this device ever contacted the infrastructure, ran a "
-                "sample, or was configured to. The usual cause is reading about "
-                "this campaign: a news article, a research report, a blocklist "
-                "or this tool's own documentation puts these names in a browser "
-                "cache. Check the page's own title in the DETAIL section below - "
-                "do not open the page - before drawing any conclusion. This is "
-                "probably not a sign of compromise.", 68):
+                "These matches are names found in saved content, such as page "
+                "text, an unvisited bookmark or browser storage. A reference "
+                "does not establish a connection, execution or infection. "
+                "Check the saved title, location and date in DETAIL without "
+                "opening the indicator address. A reference alone is probably "
+                "not a sign of compromise; it does not clear the device either.", 68):
             w("    " + line)
+        w("")
+        _advice_paragraph(w, "A reference alone does not call for a helpline "
+                         "referral. If you have a credible targeting concern "
+                         "or a genuine security notification, seek qualified "
+                         "help directly regardless of this result.")
 
     gaps = v.get("gaps") or []
     if gaps:
@@ -794,22 +910,6 @@ def _wrap(text: str, width: int) -> List[str]:
     if cur:
         lines.append(cur)
     return lines
-
-
-def _short_path(path: str) -> str:
-    """Keep a path readable without losing which browser or profile it came from.
-    The old version cut at "User Data", so Chrome, Edge and Brave all rendered as
-    "...\\Default\\Network\\Cookies" and the reader could not tell them apart."""
-    p = str(path)
-    for marker in ("User Data", "Profiles"):
-        if marker in p:
-            head, _, tail = p.partition(marker)
-            # Keep the last directory before the marker - the vendor folder, e.g.
-            # "...\\Google\\Chrome\\User Data\\Default\\...".
-            lead = [part for part in head.replace("/", "\\").split("\\") if part]
-            vendor = ("\\".join(lead[-2:]) + "\\") if len(lead) >= 2 else ""
-            return "...\\" + vendor + marker + tail
-    return p if len(p) < 70 else "..." + p[-67:]
 
 
 def _referrals(w) -> None:

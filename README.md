@@ -123,11 +123,24 @@ what to do, and **what could not be checked**. Findings are ranked strongest-fir
   identifies that sample; a `vuln-driver` match identifies legitimate software
   known to be abused and is not proof of infection.
 - **persistence** — a name is registered to run automatically (serious)
-- **contacted** — the device demonstrably communicated with the host (serious)
+- **contacted** — a connection record; its significance depends on the
+  indicator's role, such as advertising delivery versus command-and-control
 - **dns-record** — a name or address appears in local resolver data; a lookup
   may have failed, and resolution alone does not prove contact with the server
 - **configured** — a name is mapped to a real address in local configuration
-- **referenced** — the name only appeared in saved page text (usually benign)
+- **referenced** — the name appeared in saved content, such as page text,
+  an unvisited bookmark or browser storage; this does not establish contact
+
+Next steps depend on both the evidence and the indicator's role. Advertising
+traces and legitimate-driver matches start with checking the saved context;
+they do not automatically trigger a spyware-helpline referral. More concerning
+infrastructure warrants qualified interpretation. Known spyware-file matches
+and persistence findings call for prompt expert review and preservation of the
+evidence. A credible targeting concern warrants direct help regardless of the
+scan result. Multiple weak matches do not automatically become strong evidence.
+
+Evidence locations are printed in full so they can be copied. Detailed findings
+follow the coverage information and, where applicable, DNS-history instructions.
 
 Domain and IP matches are printed defanged (`example[.]com`) so that forwarding a
 report to a help organisation cannot cause a mail gateway to contact the
