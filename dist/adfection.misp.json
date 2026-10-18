@@ -1,0 +1,4502 @@
+{
+  "Event": {
+    "uuid": "488ca63a-d3c3-5f39-a764-2d806c4686a7",
+    "info": "AdFection / Discover-Tech / Candiru — zero-click spyware delivered through real-time ad bidding",
+    "date": "2026-10-17",
+    "timestamp": "1792266561",
+    "analysis": "2",
+    "threat_level_id": "1",
+    "published": false,
+    "Attribute": [
+      {
+        "uuid": "7f64da60-19f1-527b-8c33-b48dc47543c7",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "104.207.153.0",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "53e01f39-23ee-567c-a89c-30193d6e017a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "107.170.37.216",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a623eb9d-c567-5946-8bd1-826c1931089d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "107.170.42.32",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "149297b2-1607-58cc-a8d1-73cecf96afe5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "107.170.42.56",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "324fd9d3-2db1-5c58-8bf4-b3af7c8c1029",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "134.209.220.157",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2da5c03d-0e8d-57bd-89ae-7d92a41041da",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "134.209.3.89",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "521cf1ae-3342-5551-9ac6-242bd9ed4a8f",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "136.244.69.219",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b65b6c4a-d73d-5bd8-8bf8-a4d5c5262429",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "137.184.254.107",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "52ef9bbc-9ef1-5d78-9ebf-d2680213d179",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "138.197.43.97",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6bed02a6-fef4-5b84-b3c6-0a991acacdfb",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "139.59.14.26",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "16cfee65-f95e-56c1-bb07-02158b7785ae",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "139.84.208.188",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6a90c9dc-b71c-52b9-8a3d-a09662d96540",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "140.82.5.20",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9eb767f2-d48b-546b-9e35-e328f822e930",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "143.198.64.22",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "fc7ac9fa-0e0d-59eb-8d2e-c816b2594319",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.102.108",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "365772a8-cab1-5a2e-8c40-07243609a921",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.102.110",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "008467b3-d4d6-566b-b119-14ae291fcef9",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.102.121",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "35c769a8-e734-5e28-ae3b-293a5cf0124a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.102.134",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ef3ded54-7592-5a5a-815d-d5c7bb56b1ce",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.116.7",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "531f3e37-7eae-5e4f-b0ad-bd010971600d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.131.224",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9fd49899-a812-514c-9acf-061fa3d25ddb",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.147.9",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "fae7c409-c26f-545e-a70d-494b44ce2826",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.160.49",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "70210935-cf02-59fd-b4ac-0acdbb185117",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.169.165",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "209fd84c-884e-5b21-80c2-e4cd718114a4",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.20.203",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ac80ff67-4514-54be-b3d5-b5d9a30c6e16",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.29.228",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "891d6ce5-f32c-5cc6-b035-386dab6e0170",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.53.156",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2a3c13fe-2dea-52e7-a7ce-92e148f61527",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.81.218",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2cd8a9b9-6616-53a8-8e5b-6d6e522728b9",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "146.70.86.251",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e869636b-ef1d-531f-9333-26ce7f6eb823",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "147.182.161.167",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4b057298-7aba-5f26-b82e-6fb4b1644486",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.248.1.147",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f39e6a9b-9389-5545-a126-f9d0afb59e9c",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.142.211",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a928ec46-5e0a-5e4b-998f-40e3ea57be3d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.242.133",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ace0f05c-87da-5fe0-8c24-0060dcdde5ce",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.250.35",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d0759937-e5e4-544f-bb94-dd422df064bd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.253.112",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b7804746-dedb-560c-ae47-e7c5cc651d84",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.57.173",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "77e55635-ebb9-5dd5-a1bc-e1fd96d89ba6",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.71.25",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8cac6739-fccc-5406-b610-b05637863523",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "149.28.77.207",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "86d6a407-9d6a-5595-a25a-0e3894814286",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "152.42.226.197",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "eb56c163-3459-5660-8516-acc204aac380",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "155.138.163.117",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8f813845-0657-5115-b61a-607859658ecc",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "155.138.202.66",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3cef1e96-7df2-58a9-a759-466efc07e8b2",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "155.138.240.74",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4136abbc-bf58-5357-b6f6-49b4c78dd3c8",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "157.230.128.10",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "59c53519-f7fe-5d79-816f-e91be85381a4",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "157.245.176.133",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e11cf572-e094-515a-ad7e-cd0bfc429d03",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "158.247.194.199",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2489dd1b-9f3f-55a0-8c67-a574e9895efa",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "159.223.151.126",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7fb2bb93-0b7b-5904-b76f-225d8a03288e",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "159.223.208.191",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "53667527-7b89-5cb0-b974-0245d51eca0e",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "159.89.14.225",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a88d4191-b3e6-5abc-a176-a727a512d191",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "161.35.150.79",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1295407c-d7b2-5bdb-be12-994931e122e0",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "164.92.225.66",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4cb6489f-081a-58c9-8ee7-e915339d78d7",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "164.92.235.125",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "06e10e3f-0ee7-56e0-b564-e94eb31f81b0",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "165.22.5.231",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "366fa97b-5e39-5a93-b11d-0f6ef02b2ea7",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "165.22.51.81",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0d3fa6d4-7986-51bd-a7ef-d9eac8f45458",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "165.22.71.71",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ed9a221c-2705-586b-a29b-1f7281b2ccec",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "165.227.145.109",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "c134a430-b351-5f7f-b5e4-aed6e7de9c4a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "167.99.3.150",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "137d6d65-13e7-5f8e-90d2-8bc430c7cc2a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "167.99.85.48",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a69b2ce8-f989-5869-a990-0991bb48c61d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "174.138.34.46",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "72268ded-58da-5798-a2ed-b678a9ad8555",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "178.128.49.106",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "282427d1-84e9-530d-a8e3-65779c77e26b",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.181.8.155",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"historical\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "af69dc47-3258-52e0-8b4a-23887498c355",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "185.234.52.230",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "141fdc5a-7e46-5228-9cb8-90cb48860249",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "188.208.141.190",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2fdf4358-53a5-5445-94d6-c902a7e5d41a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "194.180.158.45",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0b8ccc9b-6319-5c11-929a-94b931bdeb11",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "194.180.158.71",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f8f7a397-c075-588c-9711-7cb5c52abdd0",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "194.180.191.84",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "eee8bfc4-7c88-566d-a472-a3e4d3eb67ee",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "194.37.97.159",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2e978cbc-69e4-588e-8104-167b389a9fce",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "198.211.98.248",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a0a114a0-26a6-50b0-bc13-a24aefbaddc5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "199.247.10.38",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "145eb071-dffc-52a1-896d-e28c044dcf5d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "206.81.14.237",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f55e4346-8263-5dd8-9a18-2b554a9de3a1",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "207.246.105.206",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ef1aa76f-871e-5c7d-b2ad-c677ff1263d5",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "207.246.113.7",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bd373f4b-2ed8-5aa5-9bde-0c5208c35540",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "207.246.87.188",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "dd0a59e9-84d4-5bd1-bb6b-f445974ae1ee",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "207.246.90.6",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "245912c3-7291-5ecc-a005-36684ff6c792",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "208.76.221.167",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3255bf7d-ee28-514f-8cbf-13aba94f3bde",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "208.76.223.59",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5469f74c-fea9-55dc-be32-91e10d6a11f9",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "208.85.18.104",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a3fb6aa4-97a9-5645-83e6-4e014d5e9335",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "213.252.232.129",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1af5687c-c1de-5ee7-921a-81ad424275f6",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "213.252.232.141",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "20933417-64db-5975-88a7-a0164e853e35",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "216.128.178.12",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2a65dd58-1293-5986-a36a-79870b892302",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "216.238.77.17",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ef6ef1fc-2e98-5ac2-a699-d79cb0f412cb",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "216.238.80.164",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "40fc7f0a-79b3-59c2-b44f-224f93c5d81d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "216.238.86.164",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6bb1b279-03b4-50e6-8a4e-27050a074c5f",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "216.238.91.249",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "682f8ce6-e9f4-52e5-970a-bd333e683292",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "217.69.10.11",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8c8c6959-4aec-51ec-9a91-31cb92c4f5d1",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "217.69.6.58",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "81994c0b-2615-5f90-92ee-5564cc5f0f71",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "23.227.198.196",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2ec811d0-958a-5190-b72a-5050e5ec146b",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "23.29.115.188",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f00771c1-002d-598d-ae6e-fffa37662a61",
+        "type": "sha256",
+        "category": "Payload delivery",
+        "value": "255869de85e2a171993fc5eb8a556d873a1b8966e040f6f55926f2fa2d595cc8",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=sample confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"sample\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d4c25f4c-07af-5d0e-b7c2-d6aa5cd24c99",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "38.132.101.35",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d8497a09-e0b5-52b6-9614-0a505ca5e1f6",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.32.109.170",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6a21ac52-a353-55c5-a0bb-63bba6bca11a",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.32.150.100",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b65dcf24-f512-5df8-972e-ea1d59658d45",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.76.252.109",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8f0f8f15-c17a-57e9-aa4c-da07e4b3e5bb",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.76.31.6",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1064d022-8d43-570b-8bd4-9d28fcef4d94",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.77.105.76",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "54ae97a9-3162-5ac0-9692-e060803e315c",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "45.77.57.173",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "cbc68574-4f3d-5ffe-a08a-4ab9e7ca7d2d",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "5.181.159.109",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0996ee3f-568e-5666-8601-e074817c4cde",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "5.252.178.158",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0a0d5eca-c858-5466-9eb9-c2661b17c2c6",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "52.174.65.77",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7ed979e5-8e4c-5189-a861-f5b855874044",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "64.225.3.138",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2a48f545-d721-58ea-abae-889b79494cb8",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "64.226.103.163",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e152b580-8cb0-5657-a549-d2cef326de89",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "65.20.105.177",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "fb91139a-2c57-54b6-9066-83d48f9946dd",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "65.20.106.49",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0e323549-98fc-551f-bcae-ecdf7bee1957",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "65.20.96.9",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7664403a-4186-52cf-a424-bded9637ebd8",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "66.42.126.125",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f973f399-b6a9-5280-9921-7feb5811a457",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "66.42.73.169",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "93d7a46f-deb1-5fea-bfd9-d4f6eb48fade",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "68.183.169.21",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "cdc246c6-17d8-5220-90d8-6aca2b320774",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "68.183.186.185",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "192ece75-e65e-5445-a0e7-3e00b5b0d288",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "70.34.194.5",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2cdbc771-8a5f-53cb-810e-e5652416ce93",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "70.34.251.208",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9152222f-5357-5ce0-8d57-bc37f05948b8",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "84.247.51.183",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9b51294e-2b40-57be-85ef-caf2051cc419",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "88.119.175.56",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "63a4ff5b-edd7-565a-9c4a-43beb861d0a0",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "88.119.175.75",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bbf98d06-6279-5052-bbb1-4eb3e9d80ec3",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "91.207.173.115",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "c513dd09-2de9-5ca6-aacd-c0999ba69318",
+        "type": "ip-dst",
+        "category": "Network activity",
+        "value": "95.179.215.54",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru-ip\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9019599b-0ff3-5335-a793-b1415486ea64",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ads-impressions.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1a2c58e4-e0b0-5e4b-a8e9-900a1ce78211",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ads-monitor.xyz",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "974f8a02-9258-56f7-82ed-b80a552eba6e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "adtimizer.co",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0a8b8762-1ba5-597e-ad0e-b8fc82f3cfc9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "adtracker.link",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"historical\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "573c79c0-5431-52f6-b74c-8d95ad8ebb25",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "akedo.gg",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8a443ab8-454b-5243-8cef-1a9983e68b0f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ambiguouscommerce.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b64be040-a37e-5d09-bb95-183287b332a9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "antperspective.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6ce69fa2-c93a-5761-bfdb-8e9223ddae5d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "aperturebelt.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "311eeaad-5a09-5f05-9667-d509df260d6e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "archer.westeurope.cloudapp.azure.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "850fe752-b10a-55da-8d63-8f499d5579ad",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "asknapkin.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "fc59989b-f90c-5143-9c4b-ac90f150ac3c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "barnsecret.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "32d56479-247d-532b-8497-11422c3c5223",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "baseagriculture.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2c2d5675-5274-5394-8762-e18f07fb8b1f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "basicstraw.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "69dfebdf-b89b-5e49-8f80-e4f553fb3053",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "basinapposite.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "75e409ae-e8db-53bd-bb3b-f956e2aaf43c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bd-mainserver.herokuapp.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f0591a86-f83b-5879-b242-08ac09ca9ab8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "beneathbreadth.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "70f1f8ca-5a75-5d3e-99be-097ca28d3146",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bizarreclassify.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5dfe410d-0345-559c-b8ed-d6fa44230689",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "blockroster.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "93b40f05-1b91-5a85-b2a1-733c0f0cf406",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bondmuscle.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9d830e05-88d4-52ab-b04d-d421b11ad032",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "breadgroomer.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d9e23b6b-5881-537d-82e6-80d61907eb12",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bronzemonth.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ca57696f-2b14-5d08-9f05-037074b82db5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "browniebell.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2b327679-fccb-5ce7-8ff4-a8e32f373055",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bypassbirch.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "70e8d6d0-dec1-573b-8973-3ccb230dfca9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bypasscalculate.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6d05861e-8b53-5f02-8089-2051296f6aa7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "bypasscommerce.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a79e8329-d9f0-555f-9b5c-bb61c5b4c29d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "calmbase.org",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1283bd97-2d52-5580-89b4-975c19aa1ac5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cartoondrop.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "2641ad15-ec24-58db-9dec-b0b96239b55d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cdnmobile.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"historical\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a33e68c1-1c81-5748-88c8-52786b80d2ff",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "checkmyimp.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f088465d-2037-5b1f-a9da-0860b5028391",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "chickenstrawberry.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7c07cf78-e6cc-52fc-bd5c-dc2a9f145ce7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "citecivilization.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e9e00004-34a8-5086-aabe-3ccb83ff0e43",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "closetmeat.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "46d76413-e5d6-5285-9327-c4bc45ac4158",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "commonclever.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "50473d21-6553-5515-a821-e81a40306b1a",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "concretebottle.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3ba82d0a-def8-53a3-9f92-24b9d26e383c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "conquerconfess.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "89c27445-822d-50f3-948f-13c683ac8c91",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "containsnow.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b6f9a91e-2634-53f6-b350-ef62df1bcecd",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "contradictionblindness.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5b7a286d-4aec-5507-9741-a8799bdca273",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "controlium.net",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1eb943be-303d-5ab2-9946-5e193457e0cc",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "convincechaotic.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4cf08b96-c992-5d4e-b6ff-02248e183d22",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cookie-sync.xyz",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6789dd45-7ebc-55bf-8df6-fde75346cff9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cookiesurfer.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6984a9e0-e01a-5640-b171-149d483a669b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cooperatedisinfect.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bb657bee-f849-56f5-8baf-480167b1ae9f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cottonbread.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "cb01e3f2-8846-5150-b6ca-ae095da6ff28",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cranberrybear.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "58487411-26a2-517a-8575-d3b9e285e030",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "cropcritique.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e4144140-7f8e-51ac-87d8-a5b35e8e41c8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "crossoverdue.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "92aac80c-ab9f-5ae1-b003-d4a2d01e19f3",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "d1fcoizt7mje85.cloudfront.net",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "c2930987-6ecf-5e87-a184-23061c5e37ac",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "damageconsider.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "38f8e8bd-a64c-588c-9be5-b8f40734e5dd",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "deardrill.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9bf8cdc9-06f1-5802-9dd3-6d19fbcd1697",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "dediccatedconsideration.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8631087e-de35-5139-9fe0-0fed1dff1eba",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "deducedefend.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6e97054c-425f-5b50-aff3-b375a2fc8e8b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "deliverconcern.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7a025135-f42f-5cfd-a950-e68ebd124d5e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "densefoot.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9fbd2f54-9c91-5ab6-82b7-3c81e4bb1f4c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "desireeclipse.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d39fed10-dc24-5984-9114-e85739e566eb",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "detaincharity.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0f5d4993-8d0d-5030-9543-582a54dec446",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "deterdiffusion.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b8c817e8-bf40-51d9-b2dd-4c46ad3c6152",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "devotionbelief.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a47dcd1a-1440-5d40-9beb-0421ad37be6b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "discover-tech.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "43d21a6a-bdb5-5a16-b42e-316d8f4b9829",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "discovertech-alb-100966113.us-east-1.elb.amazonaws.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a5c2bb3c-2789-5bac-87f1-a4e33def2a78",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "distractionfar.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d614feeb-a0d9-5448-982c-9ff0aeaeebc9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "drivesplash.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "03c18440-0918-51cb-b622-10af2a4ca3ae",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "drummerjourney.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3a359b1d-c543-5121-adb3-e3eb41b720a1",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "dtech.adtimizer.co",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d1824a6e-18d9-573c-8512-980da8936aa8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "dumplingbell.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e07b6b54-d3ac-5569-ada6-36d666766083",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "electric-prime.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "c10a60e8-1cfa-5da2-ae1d-ccf72426d96c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "elifluousscintillam.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9a40dc38-a900-5c8e-8e02-0060604573b5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "eminententwine.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "23ebeb9a-f05e-5286-9ca8-d57cc6124510",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "events.myweb3id.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "12f70ddb-4511-55e5-8a94-e564481bb8e7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "events.platc-tester.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bb7653f9-b256-5b49-ab19-086b9a93091b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "exhibitexpanse.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f768a9d3-ee8d-5427-8f1b-9751a671623a",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "fallaciousessential.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e3350342-4cb5-583f-a196-a3bd65cbf2b8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "fearevolve.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "23aefd7c-2a17-5320-bb87-96cea7dd3333",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "fileswaper.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "622aa206-2bbe-5418-9c1c-890b966d186f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "finalsalami.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b79aed50-154b-5576-9411-7dc888649d05",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "flexibleelevator.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b6bf93a8-9fbc-5ec6-a529-5d059b8cdad7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "foamdirection.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4d82697f-fc90-50c9-bdc1-cae5ef951a9b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "forecastgarden.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "339de0cd-7ba2-571b-b648-7d5a29d28336",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "goatsandals.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1e4759db-b0be-568c-a749-52053d0329b7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "golfconcert.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e69874f2-c82e-5223-9719-ed181a3be7bd",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "groundbreakinginitative.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "523fd99f-07bd-5b3f-ae55-a1df9ee839d9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "guitarcalculate.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "082d9089-9f6a-59b4-9296-40702ec0ff68",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "hostilefauna.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "33d36c34-9468-5b7a-9b42-b9b31e6aa080",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "infinoas.mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "587c9800-eff6-54d6-8f0b-5f51b1b11ad6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "insightenterprisells.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "98868fa4-d970-5328-bfbd-cb1fc7584033",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "isolatelecture.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d89a6124-5c19-5f82-bf20-5c0e09ae370e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "jellybat.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6899c2cb-6be2-5067-8032-70a269da265c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "jobmarcher.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b139d16a-1ddb-541c-a0b5-deed28eff950",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "journeyjest.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "873a8b5c-e85a-50c2-8b4b-6eef3ef11f08",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "kartingrumble.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "fe09c43e-2fd0-5992-870e-a58f84043078",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "keyadapter.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=validator confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"validator\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "40d76321-c163-51ae-9ecf-cad5c8db2357",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "labyrinthextravagance.org",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6bd959e4-0574-5494-b6e9-1d5d2c316f92",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "leafconfuse.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3016d44b-91ab-5ca4-aac0-b9be81ff369f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "lessonhandle.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9861d8ea-f87f-5a0d-bd68-bb47a023ad8d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "macrodrop.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9fb97c8a-91f3-5e85-b897-cb6b1e0be4be",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "macromint.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f99ed1ab-ff54-5b73-92c5-b7e7fb16fc86",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "maturitygenesis.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e0225106-6bbd-563a-a7ac-3770c1da4e98",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "measurecabin.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7bc26fc8-7ba0-5985-8de5-6fac8f48ae5b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "msstore.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"historical\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ca3138c9-aa96-502f-b6fd-a41fc1905974",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "3d0e7163-f431-55ea-8035-26cd59ee4f6b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "mushroompalm.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1aad03a5-6872-5d09-96ab-726b2388b554",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "mydsp.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ce971310-6c8c-589c-827f-164bb2aced16",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "myipinfo.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "73f7c974-3b9b-564b-b1fc-f6ea65aca33b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "myweb3id.io",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8af2e0ad-82fd-5d51-a181-8dd01e09843b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "noas.adtimizer.co",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4e6fd8e8-509a-58d6-8b45-a50ec67bec84",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "noas.impchkdsp.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ef7e382a-bf9b-5157-bc1f-7cfb72b5fbd6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "noas.mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "23d18141-15ee-5cab-a7ed-d774e70e0cb6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "noas.powerium.net",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "131cc834-4354-5c84-9ed0-a5eafc9f4ab9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "noas.trakking.co",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4af57c4d-925b-5b13-a9a6-9524e8c204ec",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "notableexam.org",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ed664dc2-2993-5be3-b7eb-1a461a2f8fc9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "notionnowadays.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6a74451b-36d7-555a-9ae0-50e20481f44d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "nutralove.co",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "437b95d6-ef9d-5ff9-850b-c6953f469a64",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "outdooutcome.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e75464eb-7eaf-5042-a050-108e1fcef897",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "parkourbus.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ade067d5-2d6e-51cc-bb1a-1e925f01196d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "patternperiod.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "6318f0c0-f91b-5a15-848f-a3ff2c574da1",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "penslice.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a5a44c28-51b7-5f56-b5b1-f3adfe2cecb2",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "pepperdominate.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5fbf5bea-1cb9-52bd-9cdf-f365a4bf233c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "plasticbells.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "c987a4c3-3d49-593b-ab9b-df89d0a1023f",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "platc-tester.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "15bff269-4a5f-57fe-92f7-ba6790a18717",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "powerium.net",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "99388821-84d0-57f8-9ba0-1ea86684527c",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ppv2.mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4c95044f-1ef2-592e-8a99-c43b5ff9bb6b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "pqv2.mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bb24e5eb-69f4-5f06-a0cd-08386e3dfed5",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "prawnbasket.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "a7c0322b-92e8-53fe-bfb2-da67c491da80",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "predictproper.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1ffe4ab4-5585-5b9d-af19-31a43c097af9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "pressaviation.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d54ddcc5-e547-56c3-b00e-90f5b1aeed72",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "profligatecensure.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1d6076bf-139b-5be9-a6f2-39904e9b7f1e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "qa-noas.powerium.net",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ef510e86-8c41-5cc7-ab12-c013889431ac",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "rollstrech.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "e686b62a-6343-5e01-92ab-2ca9c6500f65",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "romancedrum.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0a461839-e8af-5ab2-aa3e-09397ee5866b",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "sacrificeprincipal.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "48a866b5-3a6a-5b51-b521-a4e404735318",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "salmonpride.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0abd000f-1d58-5006-9bb4-5609e27f68ce",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "scoreparade.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "bce6814c-2246-5739-a0dc-0c76af2a1ab6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "selectedpazzle.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "29afc7fd-0c5c-511b-9ee1-4349bad96ef9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "shareitwork.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "0ab0df91-57bc-5d06-8da5-741ab64ff09d",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "sharethere.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=validator confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"validator\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ab47daf9-b5ca-54c6-83a7-b51314e7feb8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "signifyslight.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5636b3a7-5e11-57c5-8cec-28fcf6aa0dc6",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "sincereaccertain.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "8a05f6b5-2f03-52f5-b8e6-d46d283a950e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "spongefruit.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "7204a65e-9046-57cd-af4b-f833d0395a10",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "stablesurface.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "b9b740e2-38b5-565e-b277-6c82eaeaafd8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "strangegarden.org",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "95cf2238-b4ff-54e1-8221-baa6fb58f0a9",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "stylebrakedown.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "4b6e8eaf-390c-5220-820a-9b62e6414ddf",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "suggestutterly.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"cc\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "1ce0d3e9-278a-5785-a957-61371ac9ec00",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "sunsetpotential.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "d4f363a8-1be4-516f-bb3c-ca04d9c66be7",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "tacticscheap.net",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "481bbf46-4bdd-5da5-aecd-600a606728c8",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "tidalscreen.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "9669926a-4f73-555c-911b-e0e11237bd37",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "tracker.mtrtb.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "5dace905-ee69-5f75-bffb-7e2b6670a2c4",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "tracookiepixel.xyz",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "f58ff1f2-9fef-5b77-bfd2-c4b7e9e0e8f2",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "tubeshape.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "870e2630-ee37-5fd6-abab-f319eb3f9270",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "ultimatematter.info",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "ca7d9195-134a-5288-b876-8354df5b2bb4",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "velvetpremier.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "59909e3e-b03e-5a50-b654-f5848621896e",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "volasim.com",
+        "to_ids": false,
+        "timestamp": "1792266561",
+        "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"delivery\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      },
+      {
+        "uuid": "41b98c12-c290-554f-b757-d2f49bdd6ad1",
+        "type": "domain",
+        "category": "Network activity",
+        "value": "windomination.com",
+        "to_ids": true,
+        "timestamp": "1792266561",
+        "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
+        "Tag": [
+          {
+            "name": "adint:tier=\"candiru\""
+          },
+          {
+            "name": "adint:confidence=\"primary\""
+          }
+        ]
+      }
+    ],
+    "Tag": [
+      {
+        "name": "type:OSINT"
+      },
+      {
+        "name": "misp-galaxy:mercenary-spyware=\"Candiru\""
+      },
+      {
+        "name": "adint:campaign=\"AdFection\""
+      }
+    ],
+    "Object": [],
+    "extra": {
+      "source": "The Citizen Lab, 'Exposing AdFection' (2026-10-15) and Confiant, 'ADINT' (2026-10-15).",
+      "source_url": "https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/",
+      "attribution_note": "Neither The Citizen Lab nor Confiant is affiliated with this tool or endorses it. Their report is the source; the tool is not theirs.",
+      "caveat": "An ad impression from the delivery-tier infrastructure is NOT proof of infection. The validator server decided per device whether to proceed. A hit means investigate."
+    }
+  }
+}
