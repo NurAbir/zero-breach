@@ -233,7 +233,9 @@ class TestLocalPathGuard(BrowserLaunchBase):
             self.assertTrue(localpaths.path_problem(path))
 
     def test_reparse_component_is_not_followed(self):
-        link = os.path.join(self.tmp, "junction")
+        # Canonicalize only our already-created test directory so the mock
+        # matches macOS's validated /var -> /private/var alias expansion.
+        link = os.path.join(os.path.realpath(self.tmp), "junction")
         child = os.path.join(link, "payload.dll")
         real_lstat = localpaths.os.lstat
         touched = []
