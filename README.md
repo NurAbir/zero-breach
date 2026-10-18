@@ -9,7 +9,7 @@ Windows, macOS and Linux (Python 3.8–3.12) in CI.
 
 It searches the machine's own leftover records — browser history, cookies, caches
 and connection records, file fingerprints, auto-start registrations, known
-malware file-paths and the DNS resolver cache — for 338 published indicators, and
+malware file-paths and the DNS resolver cache — for published indicators, and
 reports what it found, how strong the evidence is, and just as importantly
 **what it could not check**.
 
@@ -202,18 +202,30 @@ numbered "what to do" that starts with *do not delete the evidence*.
 
 ## Indicator data and interoperability
 
-The 338 indicators live in [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt),
-one per line with its tier, confidence and source. They cover the AdFection
-campaign plus curated historical Candiru infrastructure (ESET 2021, Avast 2022,
-Citizen Lab 2021). Each indicator is exported with its own citation, so an
-indicator that came from ESET or Recorded Future is not attributed to anyone else.
+The current source dataset has **405 indicators: 292 domains, 111 IP addresses,
+one spyware hash and one legitimate vulnerable-driver hash**, in
+[`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt), one per line with its tier,
+confidence and source. Signed release **v0.1.1 remains unchanged and embeds 338
+indicators**; later source/feed updates do not replace its signed assets.
+
+Coverage combines Citizen Lab's AdFection (2026), Hooking Candiru (2021) and
+CatalanGate (2022) reports, Confiant ADINT (2026), Recorded Future (2025),
+Microsoft DevilsTongue (2021), ESET (2021), Avast (2022), Google TAG (2021) and
+Amnesty Security Lab's Indonesia research (2024). Only their Candiru-related
+indicators are included. Each export retains the indicator's actual citation.
 They are exported to [`dist/`](dist/) in several formats:
 
 - **STIX 2.1** and **MISP** — for MISP, a SIEM, or Amnesty International's Mobile
   Verification Toolkit: `mvt-ios check-backup --iocs dist/adfection.stix.json <backup>`
 - **DNS/ad blocklists** — `hosts`, Adblock/uBlock/AdGuard, dnsmasq, and a plain
   domain list, for a phone's or router's DNS filter, Pi-hole or AdGuard Home.
-  Only domains are blocked; shared cloud IPs are deliberately excluded.
+  The current lists contain **291 reviewed domains/hostnames**. Shared cloud IPs
+  and hosting parents are excluded. Bare `adtimizer.co` remains scanner evidence
+  but is excluded from blocking; its specifically documented operational hosts
+  are included. Historical attribution does not establish current ownership or
+  activity. Regenerate with `--no-historical` to omit the historical tier; this
+  still includes Recorded Future's separately attributed 2025 infrastructure.
+  Hosts files block exact names; Adblock and dnsmasq rules also cover subdomains.
 
 Regenerate the exports with `python build/emit_stix.py`, `build/emit_misp.py` and
 `build/emit_denylist.py`.

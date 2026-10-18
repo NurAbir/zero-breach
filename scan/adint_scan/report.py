@@ -473,8 +473,9 @@ TIER_MEANING = {
     "candiru-ip": ("An IP address attributed to Candiru infrastructure in 2025. "
                    "Weak on its own: cloud IP addresses are reassigned to "
                    "unrelated, innocent customers within months."),
-    "historical": ("Infrastructure from the separate, older 2021 Candiru "
-                   "campaign. A hit would still be significant."),
+    "historical": ("Infrastructure from separate, older Candiru campaigns. "
+                   "Interpret dated evidence in the cited report's context; "
+                   "current ownership and activity are not established."),
     "sample": ("The file fingerprint of a published Candiru sample. A match "
                "here is conclusive, not circumstantial."),
     "vuln-driver": ("A LEGITIMATE, signed third-party driver that this actor "

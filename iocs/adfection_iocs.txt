@@ -17,25 +17,24 @@
 # and Controlium") and its body text. Every line below was read out of the report itself
 # and cross-checked by two independent reads of the page before being added.
 #
-# Format: indicator <TAB> tier <TAB> confidence
+# Format: indicator <TAB> tier <TAB> confidence <TAB> source-tag
 #   tier       = cc | validator | delivery | historical | sample | vuln-driver
+#                | candiru | candiru-ip
 #                (`sample` = the spyware itself; `vuln-driver` = legitimate signed
 #                 software this actor abuses - a match is a lead, never proof)
-#   confidence = primary   (read out of the Citizen Lab AdFection report body or its
-#                           appendix)
+#   confidence = primary   (read from the cited current-campaign primary report)
 #                secondary (from a third-party summary of that report, OR from a
 #                           primary report of a separate/older campaign - verify
 #                           currency before acting; the source column says which)
 #
-# The indicator TYPE is inferred from its shape, so this file stays three columns:
-#   64 hex chars -> sha256 sample hash   dotted quad -> IP   otherwise -> domain
-# The schema is deliberately wider than this one campaign: ADINT is a technique, not
-# an incident, so the same file is meant to carry other vendors (NSO, Intellexa /
-# Predator, Paragon, Cytrox) as their indicators are published. Keep the confidence
-# column on every line - a hit without a citation is unusable.
+# The indicator TYPE is inferred from its shape: 64 hex chars -> SHA-256,
+# dotted quad -> IP, otherwise -> domain. Scope is Candiru / DevilsTongue and
+# its AdFection delivery infrastructure; other spyware vendors are not imported.
+# Scanner evidence is distinct from live blocklist membership: the denylist
+# emitter excludes bare adtimizer.co while keeping named operational subhosts.
 #
 # Appendix C lists its entries as wildcards (`*.controlium[.]net`). Matching here is
-# case-insensitive SUBSTRING matching, so the registrable domain covers every subdomain
+# case-insensitive boundary matching, so a registrable domain matches its subdomains
 # automatically. Named subdomains are kept anyway, because knowing WHICH endpoint was
 # contacted is worth more than a bare domain hit when someone has to triage it.
 #
@@ -488,3 +487,105 @@ indoprogress.co	historical	secondary	citizenlab-candiru-2021
 # false 'you are infected' to anyone running that hardware - the worst failure this
 # tool can have.
 6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5	vuln-driver	secondary	avast-2022
+
+# Source: confiant-adint-2026; published 2026-10-15
+# https://blog.confiant.com/p/adint-weaponized-ad-tech-for-zero-click-spyware-and-mass-identity-vacuuming
+# Exact operational hosts only; the SDK endpoint is delivery-tier JavaScript
+# control, not proof of an implant callback. Tracking/ad contact is not infection.
+dtech.mtrtb.com	delivery	primary	confiant-adint-2026
+tekma.adtimizer.co	delivery	primary	confiant-adint-2026
+www.discover-tech.io	delivery	primary	confiant-adint-2026
+d8lmy5wyiokrq.cloudfront.net	delivery	primary	confiant-adint-2026
+d23625plpxg1yn.cloudfront.net	delivery	primary	confiant-adint-2026
+d39619tdxn6mhj.cloudfront.net	delivery	primary	confiant-adint-2026
+d2f4zpg1mgzwov.cloudfront.net	delivery	primary	confiant-adint-2026
+d1fzw0miu1r9rc.cloudfront.net	delivery	primary	confiant-adint-2026
+d19oo8r6k9oumb.cloudfront.net	delivery	primary	confiant-adint-2026
+d147nolwbekx2b.cloudfront.net	delivery	primary	confiant-adint-2026
+dcv2rnj2ograe.cloudfront.net	delivery	primary	confiant-adint-2026
+d1x4e580sn23dn.cloudfront.net	delivery	primary	confiant-adint-2026
+d2epnp0vokbtl7.cloudfront.net	delivery	primary	confiant-adint-2026
+pagead.trustlayersdk.com	delivery	primary	confiant-adint-2026
+
+# Source: microsoft-devilstongue-2021; published 2021-07-15
+# https://www.microsoft.com/en-us/security/blog/2021/07/15/protecting-customers-from-a-private-sector-offensive-actor-using-0-day-exploits-and-devilstongue-malware/
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+noc-service-streamer.com	historical	secondary	microsoft-devilstongue-2021
+fbcdnads.live	historical	secondary	microsoft-devilstongue-2021
+hilocake.info	historical	secondary	microsoft-devilstongue-2021
+backxercise.com	historical	secondary	microsoft-devilstongue-2021
+winmslaf.xyz	historical	secondary	microsoft-devilstongue-2021
+service-deamon.com	historical	secondary	microsoft-devilstongue-2021
+online-affiliate-mon.com	historical	secondary	microsoft-devilstongue-2021
+codeingasmylife.com	historical	secondary	microsoft-devilstongue-2021
+kenoratravels.com	historical	secondary	microsoft-devilstongue-2021
+weathercheck.digital	historical	secondary	microsoft-devilstongue-2021
+colorpallatess.com	historical	secondary	microsoft-devilstongue-2021
+library-update.com	historical	secondary	microsoft-devilstongue-2021
+online-source-validate.com	historical	secondary	microsoft-devilstongue-2021
+grayhornet.com	historical	secondary	microsoft-devilstongue-2021
+johnshopkin.net	historical	secondary	microsoft-devilstongue-2021
+eulenformacion.com	historical	secondary	microsoft-devilstongue-2021
+
+# Source: avast-2022; published 2022-07-21
+# https://github.com/gendigitalinc/ioc/blob/95f8e5920fa5b518801904099e603ec86fde95ba/Candiru/README.md
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+bad-shop.net	historical	secondary	avast-2022
+bestcarent.org	historical	secondary	avast-2022
+core-update.com	historical	secondary	avast-2022
+datanalytic.org	historical	secondary	avast-2022
+expertglobal.org	historical	secondary	avast-2022
+only-music.net	historical	secondary	avast-2022
+popsonglist.com	historical	secondary	avast-2022
+querylight.net	historical	secondary	avast-2022
+smartstand.org	historical	secondary	avast-2022
+webs-update.com	historical	secondary	avast-2022
+
+# Source: citizenlab-candiru-2021; published 2021-07-15
+# https://citizenlab.ca/research/hooking-candiru-another-mercenary-spyware-vendor-comes-into-focus/
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+refugeeinternational.org	historical	secondary	citizenlab-candiru-2021
+genderconference.org	historical	secondary	citizenlab-candiru-2021
+un-asia.co	historical	secondary	citizenlab-candiru-2021
+armenpress.net	historical	secondary	citizenlab-candiru-2021
+tehrantimes.org	historical	secondary	citizenlab-candiru-2021
+total-slovenia-news.net	historical	secondary	citizenlab-candiru-2021
+
+# Source: citizenlab-catalangate-2022; published 2022-04-18
+# https://citizenlab.ca/research/catalangate-extensive-mercenary-spyware-operation-against-catalans-using-pegasus-candiru/
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+stat.email	historical	secondary	citizenlab-catalangate-2022
+adtrack.link	historical	secondary	citizenlab-catalangate-2022
+cortana.cloud	historical	secondary	citizenlab-catalangate-2022
+rbtlnk.net	historical	secondary	citizenlab-catalangate-2022
+
+# Source: google-tag-candiru-2021; published 2021-07-14
+# https://blog.google/threat-analysis-group/how-we-protect-users-0-day-attacks/
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+lragir.org	historical	secondary	google-tag-candiru-2021
+armradio.org	historical	secondary	google-tag-candiru-2021
+asbares.com	historical	secondary	google-tag-candiru-2021
+armtimes.net	historical	secondary	google-tag-candiru-2021
+armlur.org	historical	secondary	google-tag-candiru-2021
+armenpress.org	historical	secondary	google-tag-candiru-2021
+hraparak.org	historical	secondary	google-tag-candiru-2021
+armtimes.org	historical	secondary	google-tag-candiru-2021
+hetq.org	historical	secondary	google-tag-candiru-2021
+lioiamcount.com	historical	secondary	google-tag-candiru-2021
+db-control-uplink.com	historical	secondary	google-tag-candiru-2021
+kidone.xyz	historical	secondary	google-tag-candiru-2021
+workaj.com	historical	secondary	google-tag-candiru-2021
+wordzmncount.com	historical	secondary	google-tag-candiru-2021
+
+# Source: amnesty-candiru-indonesia-2024; published 2024-05-01
+# https://securitylab.amnesty.org/latest/2024/05/a-web-of-surveillance/
+# Older Candiru campaign evidence. Historical attribution does not establish
+# current ownership or activity; interpret dated artifacts in source context.
+aqaf.net	historical	secondary	amnesty-candiru-indonesia-2024
+gelora.org	historical	secondary	amnesty-candiru-indonesia-2024
+nusantaraqurban.com	historical	secondary	amnesty-candiru-indonesia-2024

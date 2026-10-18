@@ -109,7 +109,8 @@ A('  browser cache and cookies, file fingerprints, auto-start registrations, the
 A('  DNS resolver cache - for {} indicators published by The Citizen Lab,'.format(
     len([l for l in ioc_text.split("\n")
          if l.strip() and not l.strip().startswith("#")])))
-A('  Recorded Future, ESET and Avast / Gen. The original citations are embedded.')
+A('  Confiant, Recorded Future, Microsoft, ESET, Avast / Gen, Google TAG and')
+A('  Amnesty Security Lab. The original citations are embedded.')
 A('')
 A('WHAT IT WILL NOT DO')
 A('  - It does not change source files, registry entries or system settings.')

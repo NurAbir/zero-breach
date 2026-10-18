@@ -8,8 +8,10 @@ Pi-hole or AdGuard Home, or a browser content blocker. One curated dataset, the
 formats people's tools actually accept.
 
 Which indicators go in a BLOCKLIST, and which do NOT:
-  - Domains are included. Blocking a domain is safe and reversible, and boundary
-    is exact (blocking controlium.net does not touch a different domain).
+  - Reviewed domains are included, except explicit exclusions below. Historical
+    attribution does not establish current ownership: a domain may have expired,
+    been reassigned, or also support legitimate activity. Rules are reversible,
+    but blocking can still cause disruption.
   - IP addresses are DELIBERATELY EXCLUDED. Almost all of them are shared cloud
     addresses (Vultr/DigitalOcean) that are very likely reassigned to innocent
     tenants by now; a DNS blocklist cannot carry an IP anyway, and null-routing a
@@ -40,14 +42,31 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
 from adint_scan import iocs as iocmod  # noqa: E402
 
 SOURCE_NOTE = ("AdFection / Candiru indicators. Curated from public reporting "
-               "(The Citizen Lab, Recorded Future, ESET, Avast). Public domain "
+               "(The Citizen Lab, Confiant, Recorded Future, Microsoft, ESET, "
+               "Avast, Google TAG, Amnesty Security Lab). Public domain "
                "(CC0). Blocking is a stopgap; it is not proof of anything and "
                "does not detect infection. https://github.com/interplains/zero-breach")
+
+# Scanner evidence and live blocking have different membership decisions. Keep
+# adtimizer.co in the scanner's historical evidence set, but block only the named
+# operational hosts: Citizen Lab records Adtimizer's denial of involvement in
+# Discover-Tech's separate infrastructure. A blanket rule can affect other uses.
+BLOCKLIST_EXCLUSIONS = {
+    "adtimizer.co": "Only named Discover-Tech operational subdomains are blocked.",
+}
+
+# Never promote shared hosting parents into rules when curating a tenant host.
+SHARED_HOSTING_PARENTS = frozenset({
+    "cloudfront.net", "amazonaws.com", "azure.com", "cloudapp.azure.com",
+    "herokuapp.com",
+})
 
 
 def _domains(ioc_set, include_historical):
     out = []
     for ind in ioc_set.domains:
+        if ind.value in BLOCKLIST_EXCLUSIONS or ind.value in SHARED_HOSTING_PARENTS:
+            continue
         if ind.tier == "historical" and not include_historical:
             continue
         out.append(ind.value)
@@ -73,12 +92,15 @@ def _asof_stamp(ioc_set):
 
 
 def _header(fmt, comment, domains, include_historical, stamp):
-    scope = "all tiers" if include_historical else "current campaign only"
+    scope = "reviewed domains, all tiers" if include_historical else "historical tier excluded"
     lines = [
         "{} adint-scan denylist ({}) - generated {}".format(comment, fmt, stamp),
         "{} {}".format(comment, SOURCE_NOTE),
         "{} {} domains; {}. IP addresses are intentionally omitted (see the "
         "emitter).".format(comment, len(domains), scope),
+        "{} Historical attribution does not establish current ownership or "
+        "activity. Bare adtimizer.co is excluded; named operational hosts remain."
+        .format(comment),
         "{}".format(comment),
     ]
     return lines

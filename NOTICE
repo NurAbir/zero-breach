@@ -23,6 +23,10 @@ or connected to any of the organisations whose published research it draws on:
     Recorded Future / Insikt Group
     Amnesty International Security Lab
     Access Now
+    Microsoft
+    ESET
+    Avast / Gen
+    Google Threat Analysis Group
 
 Their names appear here only to cite the source of an indicator or to point a
 user at help. Any error in this software, and any error in how a published
@@ -44,6 +48,11 @@ Primary sources for the indicator set:
 
   Recorded Future / Insikt Group, "Devil's Tongue" infrastructure reporting,
   CTA-2025-0805, August 2025.
+
+  Additional Candiru research from The Citizen Lab (2021, 2022), Confiant
+  (2026), Microsoft (2021), ESET (2021), Avast / Gen (2022), Google Threat
+  Analysis Group (2021) and Amnesty International Security Lab (2024).
+  Full report titles, dates and links: iocs/LICENSE.md.
 
 --------------------------------------------------------------------------------
 WHAT THIS SOFTWARE DOES NOT PROMISE
