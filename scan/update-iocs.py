@@ -24,10 +24,10 @@ targeted, so be clear about what the check does and does not prove:
     the file.
   - The new list is loaded and validated before it can replace your copy, so a
     malformed or empty download can never silently wipe out your indicators.
-  - Detached signing is not configured for the current release. SIGNING.md is
-    a maintainer setup guide, not evidence that a signature exists. This updater
-    does not verify signatures. Do not treat its SHA-256 check as independent
-    publisher authentication.
+  - Tagged release artifacts have detached GPG signatures; see SIGNING.md.
+    This updater does not verify signatures, and the signed release manifest
+    does not authenticate later development-branch downloads. Do not treat its
+    SHA-256 check as independent publisher authentication.
 
   For reproducibility, download a tagged release and compare its published hash
   with a build from that same tag.

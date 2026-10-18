@@ -1,65 +1,82 @@
-# Signing the indicator set
+# Verifying ArchiveGenocide release signatures
 
-**Current status:** detached signing has not been configured. No maintainer
-public key or detached signature is supplied with the current release. The
-instructions below describe setup; users currently rely on HTTPS and published
-hashes, which do not independently authenticate the publisher.
+Zero Breach v0.1.1 supplies detached GPG signatures for the exact released
+scanner and its SHA256SUMS.txt manifest. They use ArchiveGenocide's existing
+Ed25519 release-signing key, also published on the archive's verification page.
 
-The updater (`scan/update-iocs.py`) fetches a fresh indicator list over HTTPS and
-checks it against a published SHA-256. That proves the file arrived intact from
-GitHub, but not — on its own — that *you* published it, because the hash is served
-from the same place as the file. A **detached signature** closes that gap: it lets
-anyone confirm the list was signed by the key you control, even if GitHub itself
-were compromised.
+Official repository: https://github.com/interplains/zero-breach
+Official release: https://github.com/interplains/zero-breach/releases/tag/v0.1.1
+Independent publisher page: https://archivegenocide.com/scan/#verify-download
+Established key identity: https://archivegenocide.com/verify.html
 
-This is optional. The tool works without it. But for a security tool used by
-people who may be targeted, it is worth doing.
+## Check the publisher and file
 
-## Why the maintainer must generate the key, not a tool
+Download these three files from the v0.1.1 release into one directory:
 
-The private key is the thing an adversary would want: whoever holds it can publish
-an indicator list that every user trusts. **Generate it yourself, on a machine you
-control, and never paste it anywhere** — not into a chat, an issue, a CI secret you
-are unsure of, or a tool. If the private key is ever exposed, rotate it (generate a
-new pair, publish the new public key, re-sign).
+- zero-breach.py
+- zero-breach.py.asc
+- archivegenocide-signing-key.asc
 
-## One-time setup
+The public key is also available at https://archivegenocide.com/key.asc.
+Before trusting a supplied key, compare its complete fingerprint with the
+official verification page or a previously trusted record:
 
-Install [minisign](https://jedisct1.github.io/minisign/) (it is a single small
-binary; packages exist for Windows, macOS and Linux). Then:
+    C24E C92B 12D6 670A 2516 065F 9B4D 5754 99AF A53C
 
-```
-minisign -G -p minisign.pub -s minisign.key
-```
+With GnuPG installed, run:
 
-- Commit **`minisign.pub`** to the repository root. It is public; it is how users
-  verify. Put its contents in this file too (below) so it is easy to find.
-- Keep **`minisign.key`** secret and backed up offline. It never goes in the repo.
+    gpg --show-keys --with-fingerprint archivegenocide-signing-key.asc
 
-## Signing a release of the indicator file
+Only after confirming that full fingerprint, import the public key and verify:
 
-Each time you update `iocs/adfection_iocs.txt` (and run `python build/build.py`):
+    gpg --import archivegenocide-signing-key.asc
+    gpg --verify zero-breach.py.asc zero-breach.py
 
-```
-minisign -S -s minisign.key -m iocs/adfection_iocs.txt
-```
+Verification must succeed using the expected ArchiveGenocide key. A warning
+that the key is not certified by your own web of trust is different from a
+bad signature; do not ignore a fingerprint mismatch or failed verification.
 
-This writes `iocs/adfection_iocs.txt.minisig`. Commit it alongside the updated
-indicator file and its `.sha256`.
+The expected SHA-256 of zero-breach.py v0.1.1 is:
 
-## How a user verifies (documented for them in the README/updater)
+    9c947d6ba23f4308b4d1512596e44b2ec2b34c3cba4139b4cb4d8774e77d08aa
 
-```
-minisign -Vm adfection_iocs.txt -P <the public key below>
-```
+A signature verifies which key signed these exact bytes. It does not establish
+that the program has no bugs. A checksum alone is not publisher authentication.
+Signatures also do not establish that an older signed release is the latest one.
 
-If it reports a good signature, the list was signed by your key. The scanner's
-`update-iocs.py` points here for this step; it does not run minisign itself,
-because verifying a signature needs a cryptography library and the scanner has a
-strict no-dependencies rule. The one manual command above is the whole step.
+## Verify the other release content
 
-## Public key
+Download SHA256SUMS.txt and SHA256SUMS.txt.asc from the same release. Verify
+the manifest before using its checksums:
 
-```
-(paste the contents of minisign.pub here once generated)
-```
+    gpg --verify SHA256SUMS.txt.asc SHA256SUMS.txt
+
+Then compare the files with the signed manifest (for example,
+sha256sum -c SHA256SUMS.txt on Linux, or
+shasum -a 256 -c SHA256SUMS.txt on macOS).
+The manifest lists the ten release-content files. The manifest itself and
+the added public key/signatures are not self-listed.
+
+Public verification artifacts are also retained in release-signatures/v0.1.1/.
+No private key is stored in this repository or in its project backups.
+
+## Indicator updates are a separate trust path
+
+The manually run scan/update-iocs.py still checks HTTPS, a published SHA-256,
+and indicator-file validity. It does not automatically verify GPG signatures.
+The signed release manifest covers the indicator file shipped with v0.1.1;
+it does not authenticate later files fetched from the development branch.
+
+## Maintainer release procedure
+
+Use the existing ArchiveGenocide release key only through its configured
+keyring. Never export a private key into this project, GitHub, a chat, or logs.
+For each new version, first finish and test the immutable release artifacts,
+then create detached signatures for its scanner and checksum manifest.
+Verify with a separate keyring containing only the published public key;
+confirm that a modified-file fixture is rejected.
+
+Publish the matching files and signatures, update the pinned release/hash on
+the ArchiveGenocide page, invalidate only affected cached URLs, and verify
+fresh public downloads. Keep the release tag and tested scanner bytes unchanged
+when adding signatures to an existing release.

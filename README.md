@@ -86,9 +86,16 @@ set up (e.g. a bad indicator file).
 
 ## Verifying what you downloaded
 
-You should not run a security script on faith. Two independent checks:
+Use the official repository above and check the downloaded file before running it.
 
-**1. Match the published hash.** Every release lists the SHA-256 of `zero-breach.py`.
+**1. Verify the publisher's signature.** Release v0.1.1 includes detached GPG
+signatures for the scanner and its checksum manifest, using ArchiveGenocide's
+established release key. Follow [SIGNING.md](SIGNING.md), and compare the full
+key fingerprint with [ArchiveGenocide's verification page](https://archivegenocide.com/verify.html).
+The [ArchiveGenocide download panel](https://archivegenocide.com/scan/#verify-download)
+also publishes the version-specific checksum separately from GitHub.
+
+**2. Match the published hash.** Every release lists the SHA-256 of `zero-breach.py`.
 Confirm your download matches it:
 
 ```
@@ -98,7 +105,7 @@ Get-FileHash zero-breach.py -Algorithm SHA256
 shasum -a 256 zero-breach.py
 ```
 
-**2. Rebuild it yourself and compare.** The single file is generated from this
+**3. Rebuild it yourself and compare.** The single file is generated from this
 repository, deterministically — the matching release tag rebuilds a byte-identical file. So
 you do not have to trust the download at all; you can reproduce it:
 
@@ -236,8 +243,9 @@ python scan/update-iocs.py --apply    # also replace the local list
 
 It downloads over HTTPS, checks the file against a published SHA-256, confirms it
 parses before replacing anything, and shows a diff first. The trust model and the
-current signing limitations are documented at the top of the script. Detached
-signing is not configured for this release.
+updater limitations are documented at the top of the script. It does not verify
+GPG signatures automatically. The signed release manifest authenticates the IOC
+file shipped with v0.1.1, not later development-branch updates; see [SIGNING.md](SIGNING.md).
 
 ## Design principles
 
