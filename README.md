@@ -58,7 +58,10 @@ connection evidence so that each finding can be interpreted in context.
 
 Requires Python 3.8 or newer. No administrator. No third-party packages.
 
-**Single file (simplest):** download `zero-breach.py` and run
+**Single file (simplest):** [download zero-breach.py](https://github.com/interplains/zero-breach/releases/latest/download/zero-breach.py),
+verify it using the [release checksums](https://github.com/interplains/zero-breach/releases/latest),
+then open a terminal in the download folder. On Windows use `python`; on macOS
+or Linux use `python3` in place of `python` in the commands below.
 
 ```
 python -X utf8 zero-breach.py            # full scan
@@ -100,11 +103,14 @@ repository, deterministically — the matching release tag rebuilds a byte-ident
 you do not have to trust the download at all; you can reproduce it:
 
 ```
-git clone <this repo> && cd zero-breach
-git checkout <the-tag-of-the-release-you-downloaded>
+git clone https://github.com/interplains/zero-breach.git
+cd zero-breach
+git checkout v0.1.1
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
+These commands reproduce v0.1.1; substitute the matching tag for another release.
+On macOS or Linux use `python3` for the build command.
 Compare the hash with that release's published hash. The development branch may
 contain later changes and is not expected to reproduce an earlier release.
 
