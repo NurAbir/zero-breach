@@ -75,7 +75,28 @@ parts = []
 A = parts.append
 
 ioc_text = read(IOC)
-ioc_mtime = os.path.getmtime(IOC)
+
+
+def _asof_epoch(text):
+    """The '# as-of: YYYY-MM-DD' date from the IOC header, as a UTC epoch.
+
+    Using the committed date instead of os.path.getmtime makes the build
+    REPRODUCIBLE: git does not preserve file modification times across a clone,
+    so stamping the mtime meant a fresh checkout rebuilt to a different file and
+    'rebuild from source and compare' - the whole point of an auditable security
+    tool - would fail. The date is content, so every checkout agrees on it.
+    """
+    import datetime as _dt
+    import re as _re
+    m = _re.search(r"^#\s*as-of:\s*(\d{4})-(\d{2})-(\d{2})\s*$", text, _re.M)
+    if not m:
+        raise SystemExit("iocs file is missing a '# as-of: YYYY-MM-DD' line; "
+                         "the reproducible build needs it")
+    y, mo, d = (int(g) for g in m.groups())
+    return _dt.datetime(y, mo, d, tzinfo=_dt.timezone.utc).timestamp()
+
+
+ioc_mtime = _asof_epoch(ioc_text)
 
 A('#!/usr/bin/env python3')
 A('# -*- coding: utf-8 -*-')
@@ -139,7 +160,7 @@ A('')
 A('# --- embedded indicator data ------------------------------------------------')
 A('# The real file is iocs/adfection_iocs.txt in the project. Its provenance')
 A('# comments are kept verbatim so every indicator can be traced to its report.')
-A('IOC_BUILD_EPOCH = {!r}  # mtime of the indicator file at build time'.format(
+A('IOC_BUILD_EPOCH = {!r}  # the IOC set\'s "as-of" date (deterministic)'.format(
     ioc_mtime))
 A("IOC_DATA = r'''")
 A(ioc_text.replace("'''", "' ' '"))

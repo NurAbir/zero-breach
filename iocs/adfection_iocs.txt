@@ -1,5 +1,12 @@
 # AdFection / Discover-Tech / Candiru - indicators of compromise
 #
+# as-of: 2026-10-18
+# ^ The date this indicator set was last curated. It is the tool's staleness
+#   reference AND it makes the single-file build reproducible: the build embeds
+#   THIS date, not the file's modification time, so anyone can rebuild the
+#   standalone from a fresh checkout and get a byte-identical file. Update this
+#   line (and only deliberately) whenever the indicators below change.
+#
 # Source: The Citizen Lab, "Exposing AdFection: How Discover-Tech Turned Targeted Ads
 # Into a Pipeline for Zero-Click Mercenary Spyware", published 2026-10-15.
 # https://citizenlab.ca/research/how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/

@@ -178,6 +178,11 @@ def render_human(document: Dict[str, Any]) -> str:
     w(_RULE)
     w("  Zero Breach {}  —  AdFection / Candiru indicator check".format(
         document["tool"]["version"]))
+    # The name must not be read as a promise. The tagline carries the tool's one
+    # non-negotiable caveat right next to it, so a screenshot of the top of the
+    # report cannot imply "you are safe".
+    w("  Checks for TRACES of ad-delivered spyware. A clean result is NOT a")
+    w("  clean bill of health - see what could not be checked, below.")
     w("  {}   {} {}".format(document["timestamp"],
                             document["platform"]["system"],
                             document["platform"]["release"]))

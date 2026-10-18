@@ -1,5 +1,8 @@
 # Zero Breach
 
+*Checks for traces of ad-delivered spyware. The name is a goal, not a guarantee —
+a clean result is not a clean bill of health.*
+
 A local, read-only scanner that checks a computer for traces of the **AdFection /
 Candiru** spyware campaign — the operation in which an ad-tech company used
 real-time ad bidding to deliver zero-click spyware to targeted people.
@@ -75,6 +78,38 @@ operates the infrastructure.
 Exit codes: `0` nothing found, `2` an indicator matched, `1` the scan could not be
 set up (e.g. a bad indicator file).
 
+## Verifying what you downloaded
+
+You should not run a security script on faith. Two independent checks:
+
+**1. Match the published hash.** Every release lists the SHA-256 of `zero-breach.py`.
+Confirm your download matches it:
+
+```
+# Windows PowerShell
+Get-FileHash zero-breach.py -Algorithm SHA256
+# macOS / Linux
+shasum -a 256 zero-breach.py
+```
+
+**2. Rebuild it yourself and compare.** The single file is generated from this
+repository, deterministically — a fresh clone rebuilds a byte-identical file. So
+you do not have to trust the download at all; you can reproduce it:
+
+```
+git clone <this repo> && cd zero-breach
+python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
+```
+
+The hash it prints will match the release. If it ever does not, do not run the file.
+
+**Antivirus note.** `zero-breach.py` is plain-text Python — you can read every line
+in a text editor. Some antivirus products flag *any* script that reads browser
+databases, because that behaviour resembles an infostealer. Zero Breach reads
+cookie **host names** only, never cookie values, and never the credential-decryption
+paths an infostealer uses — a line the test suite enforces. If your antivirus
+objects, read the source, check the hash, and decide for yourself.
+
 ## Reading the result
 
 The report opens with a plain-language summary: what was found, how serious it is,
@@ -89,6 +124,39 @@ what to do, and **what could not be checked**. Findings are ranked strongest-fir
 Domain and IP matches are printed defanged (`example[.]com`) so that forwarding a
 report to a help organisation cannot cause a mail gateway to contact the
 indicator on the reader's behalf.
+
+### Example: a "nothing found" result
+
+The most common outcome, and the one where reading carefully matters most — note
+that it leads with the caveat and lists what it could *not* check:
+
+```
+========================================================================
+  Zero Breach 0.1.0  —  AdFection / Candiru indicator check
+  Checks for TRACES of ad-delivered spyware. A clean result is NOT a
+  clean bill of health - see what could not be checked, below.
+  2026-10-18T14:30:00   Windows 11
+========================================================================
+  SUMMARY  —  read this part
+========================================================================
+  RESULT: no known indicator was found in anything that could be
+          checked.
+
+  This is NOT a clean bill of health. See the two sections below for
+  what was searched and, more importantly, what could not be.
+
+  WHAT COULD NOT BE CHECKED  (2 gaps)
+    - hash/file-fingerprints: skipped by --quick. Re-run without --quick
+      to include it
+    - host/dns-log: DNS-Client/Operational log is disabled (the Windows
+      default) - there is no queryable DNS history, so past activity
+      cannot be checked retrospectively from this host
+========================================================================
+```
+
+A real match is shown under a `>> ` heading stating plainly what it is (a file on
+disk, an auto-start entry, a proven connection), with the account and date, and a
+numbered "what to do" that starts with *do not delete the evidence*.
 
 ## Indicator data and interoperability
 

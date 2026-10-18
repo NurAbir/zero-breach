@@ -1,5 +1,5 @@
 # adint-scan denylist (hosts) - generated 2026-10-18
-# AdFection / Candiru indicators. Curated from public reporting (The Citizen Lab, Recorded Future, ESET, Avast). Public domain (CC0). Blocking is a stopgap; it is not proof of anything and does not detect infection. https://github.com/interplains/adint-scan
+# AdFection / Candiru indicators. Curated from public reporting (The Citizen Lab, Recorded Future, ESET, Avast). Public domain (CC0). Blocking is a stopgap; it is not proof of anything and does not detect infection. https://github.com/interplains/zero-breach
 # 225 domains; all tiers. IP addresses are intentionally omitted (see the emitter).
 #
 0.0.0.0 addthis.events

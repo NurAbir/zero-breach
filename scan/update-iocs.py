@@ -26,8 +26,8 @@ targeted, so be clear about what the check does and does not prove:
     malformed or empty download can never silently wipe out your indicators.
   - For STRONGER assurance than "trust GitHub over HTTPS", the maintainer also
     publishes a detached signature (adfection_iocs.txt.minisig) made with a key
-    whose public half is in the repo. Verify it out of band with `minisign`:
-        minisign -Vm adfection_iocs.txt -P <public key from the repo>
+    whose public half is in the repo (see SIGNING.md). Verify it out of band:
+        minisign -Vm adfection_iocs.txt -P <public key from SIGNING.md>
     This script does not verify that signature itself, because doing so needs a
     cryptography library and the scanner has a strict no-dependencies rule; the
     verification is a one-line manual step for anyone who wants it.
