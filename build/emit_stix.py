@@ -169,7 +169,11 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
 
     ioc_set = iocmod.load(args.iocs)
-    bundle = build_bundle(ioc_set, datetime.datetime.utcnow())
+    # Use the indicator set's committed 'as-of' date, not the wall clock, so the
+    # bundle is byte-identical on every build (reproducible; no spurious churn).
+    stamp = datetime.datetime.strptime(ioc_set.asof, "%Y-%m-%d") if ioc_set.asof \
+        else datetime.datetime.utcnow()
+    bundle = build_bundle(ioc_set, stamp)
 
     out = os.path.abspath(args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)

@@ -71,6 +71,7 @@ TYPE_SHA256 = "sha256"
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _IPV4_RE = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
+_ASOF_RE = re.compile(r"^#\s*as-of:\s*(\d{4}-\d{2}-\d{2})\s*$")
 
 
 def infer_type(indicator: str) -> str:
@@ -219,6 +220,7 @@ class IocSet:
         self.indicators = indicators
         self.source_path = source_path
         self.source_mtime = source_mtime
+        self.asof = None  # "YYYY-MM-DD" from the header, set by load()
         self._by_value = {i.value: i for i in indicators}
         self._net_cache = None
         self._needle_cache = {}
@@ -352,6 +354,7 @@ def load(path: str) -> IocSet:
     if not os.path.exists(path):
         raise IocError("IOC file not found: {}".format(path))
     seen: Dict[str, Indicator] = {}
+    asof: Optional[str] = None
     # utf-8-sig, not utf-8: Windows editors save a byte-order mark, and U+FEFF is
     # not whitespace to str.strip(). With plain utf-8 the first indicator in a
     # user's own list silently became "﻿controlium.net", matched nothing,
@@ -360,6 +363,12 @@ def load(path: str) -> IocSet:
         for lineno, raw in enumerate(fh, 1):
             line = raw.strip()
             if not line or line.startswith("#"):
+                # The '# as-of: YYYY-MM-DD' header is the set's curated date. It
+                # is the deterministic timestamp every generated artifact uses,
+                # so the whole build is reproducible from committed content.
+                m = _ASOF_RE.match(line)
+                if m:
+                    asof = m.group(1)
                 continue
             parts = [p.strip() for p in line.split("\t") if p.strip() != ""]
             if len(parts) < 3:
@@ -401,5 +410,7 @@ def load(path: str) -> IocSet:
         mtime = os.path.getmtime(path)
     except OSError:
         mtime = None
-    return IocSet(sorted(seen.values(), key=lambda i: i.value),
-                  os.path.abspath(path), mtime)
+    s = IocSet(sorted(seen.values(), key=lambda i: i.value),
+               os.path.abspath(path), mtime)
+    s.asof = asof
+    return s

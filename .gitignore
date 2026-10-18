@@ -26,3 +26,7 @@ zero-breach.py
 HANDOVER.md
 DESIGN.md
 SPEC-scanner.md
+
+# CI workflow: held out of git until the GitHub token has the `workflow` scope
+# (grant with: gh auth refresh -s workflow), then remove this line and add it.
+.github/workflows/tests.yml

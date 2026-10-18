@@ -130,7 +130,11 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
 
     ioc_set = iocmod.load(args.iocs)
-    event = build_event(ioc_set, datetime.datetime.utcnow())
+    # Deterministic: use the committed 'as-of' date, not the wall clock, so the
+    # event is byte-identical on every build (reproducible; no spurious churn).
+    stamp = datetime.datetime.strptime(ioc_set.asof, "%Y-%m-%d") if ioc_set.asof \
+        else datetime.datetime.utcnow()
+    event = build_event(ioc_set, stamp)
 
     out = os.path.abspath(args.out)
     os.makedirs(os.path.dirname(out), exist_ok=True)
