@@ -76,7 +76,7 @@ def _parse(argv: List[str]) -> argparse.Namespace:
     p.add_argument("--iocs", metavar="PATH", default=_default_ioc_path(),
                    help="indicator file (default: bundled adfection_iocs.txt).")
     p.add_argument("--version", action="version",
-                   version="adint-scan {}".format(__version__))
+                   version="Zero Breach {}".format(__version__))
     return p.parse_args(argv)
 
 

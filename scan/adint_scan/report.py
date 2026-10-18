@@ -176,7 +176,7 @@ def render_human(document: Dict[str, Any]) -> str:
     w = out.append
 
     w(_RULE)
-    w("  adint-scan {}  —  AdFection / Candiru indicator check".format(
+    w("  Zero Breach {}  —  AdFection / Candiru indicator check".format(
         document["tool"]["version"]))
     w("  {}   {} {}".format(document["timestamp"],
                             document["platform"]["system"],

@@ -79,7 +79,7 @@ ioc_mtime = os.path.getmtime(IOC)
 
 A('#!/usr/bin/env python3')
 A('# -*- coding: utf-8 -*-')
-A('"""adint-scan (single-file build) - local check for published AdFection /')
+A('"""Zero Breach (single-file build) - local check for published AdFection /')
 A('Candiru spyware indicators.')
 A('')
 A('WHAT THIS IS')
@@ -116,7 +116,7 @@ A('LICENCE')
 A('  Software: Apache License 2.0. Indicator data: CC0 1.0 (public domain).')
 A('  Copyright 2026 archivegenocide.com. Provided AS IS, without warranty.')
 A('  Full text, and the sources every indicator came from:')
-A('    https://github.com/interplains/adint-scan')
+A('    https://github.com/interplains/zero-breach')
 A('  NOT affiliated with, and NOT endorsed by, The Citizen Lab, Confiant,')
 A('  Recorded Future, Amnesty International or Access Now.')
 A('')
@@ -218,7 +218,7 @@ def _force_utf8_io():
 def main(argv=None):
     _force_utf8_io()
     p = argparse.ArgumentParser(
-        prog="adint-scan-standalone",
+        prog="zero-breach",
         description="Read-only check for published AdFection / Candiru "
                     "indicators. A clean result is NOT a clean bill of health.")
     p.add_argument("--json", metavar="PATH",
@@ -227,7 +227,7 @@ def main(argv=None):
                    help="use an external indicator file instead of the "
                         "embedded one")
     p.add_argument("--version", action="version",
-                   version="adint-scan " + __version__)
+                   version="Zero Breach " + __version__)
     p.add_argument("--quick", action="store_true",
                    help="skip fingerprinting every file (roughly halves the "
                         "runtime). The skipped check is reported as a gap, not "

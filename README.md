@@ -1,4 +1,4 @@
-# adint-scan
+# Zero Breach
 
 A local, read-only scanner that checks a computer for traces of the **AdFection /
 Candiru** spyware campaign — the operation in which an ad-tech company used
@@ -53,12 +53,12 @@ about this topic never produces a false alarm, and a real contact is never burie
 
 Requires Python 3.7 or newer. No administrator. No third-party packages.
 
-**Single file (simplest):** download `adint-scan-standalone.py` and run
+**Single file (simplest):** download `zero-breach.py` and run
 
 ```
-python -X utf8 adint-scan-standalone.py            # full scan
-python -X utf8 adint-scan-standalone.py --quick    # faster; skips file fingerprinting
-python -X utf8 adint-scan-standalone.py --json report.json
+python -X utf8 zero-breach.py            # full scan
+python -X utf8 zero-breach.py --quick    # faster; skips file fingerprinting
+python -X utf8 zero-breach.py --json report.json
 ```
 
 **From source:**

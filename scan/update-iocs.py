@@ -59,7 +59,7 @@ sys.path.insert(0, HERE)
 
 from adint_scan.iocs import IocError, load  # noqa: E402
 
-DEFAULT_BASE = ("https://raw.githubusercontent.com/interplains/adint-scan/"
+DEFAULT_BASE = ("https://raw.githubusercontent.com/interplains/zero-breach/"
                 "main/iocs/")
 IOC_NAME = "adfection_iocs.txt"
 LOCAL_IOC = os.path.join(os.path.dirname(HERE), "iocs", IOC_NAME)

@@ -42,7 +42,7 @@ from adint_scan import iocs as iocmod  # noqa: E402
 SOURCE_NOTE = ("AdFection / Candiru indicators. Curated from public reporting "
                "(The Citizen Lab, Recorded Future, ESET, Avast). Public domain "
                "(CC0). Blocking is a stopgap; it is not proof of anything and "
-               "does not detect infection. https://github.com/interplains/adint-scan")
+               "does not detect infection. https://github.com/interplains/zero-breach")
 
 
 def _domains(ioc_set, include_historical):
