@@ -1,8 +1,11 @@
 # Zero Breach
 
+[![tests](https://github.com/interplains/zero-breach/actions/workflows/tests.yml/badge.svg)](https://github.com/interplains/zero-breach/actions/workflows/tests.yml)
+
 A local, read-only scanner that checks a computer for traces of the **AdFection /
 Candiru** spyware campaign — the operation in which an ad-tech company used
-real-time ad bidding to deliver zero-click spyware to targeted people.
+real-time ad bidding to deliver zero-click spyware to targeted people. Tested on
+Windows, macOS and Linux (Python 3.8–3.12) in CI.
 
 It searches the machine's own leftover records — browser history, cookies, caches
 and connection records, file fingerprints, auto-start registrations, known

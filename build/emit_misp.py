@@ -131,9 +131,13 @@ def main(argv=None) -> int:
 
     ioc_set = iocmod.load(args.iocs)
     # Deterministic: use the committed 'as-of' date, not the wall clock, so the
-    # event is byte-identical on every build (reproducible; no spurious churn).
-    stamp = datetime.datetime.strptime(ioc_set.asof, "%Y-%m-%d") if ioc_set.asof \
-        else datetime.datetime.utcnow()
+    # event is byte-identical on every build. It MUST be UTC-aware - the event's
+    # integer timestamp comes from .timestamp(), which interprets a naive
+    # datetime in the machine's LOCAL timezone, so a naive stamp made the MISP
+    # file differ between a Windows build and a UTC CI runner.
+    stamp = (datetime.datetime.strptime(ioc_set.asof, "%Y-%m-%d").replace(
+                 tzinfo=datetime.timezone.utc)
+             if ioc_set.asof else datetime.datetime.now(datetime.timezone.utc))
     event = build_event(ioc_set, stamp)
 
     out = os.path.abspath(args.out)

@@ -3,7 +3,7 @@
     "uuid": "488ca63a-d3c3-5f39-a764-2d806c4686a7",
     "info": "AdFection / Discover-Tech / Candiru — zero-click spyware delivered through real-time ad bidding",
     "date": "2026-10-18",
-    "timestamp": "1792270800",
+    "timestamp": "1792281600",
     "analysis": "2",
     "threat_level_id": "1",
     "published": false,
@@ -14,7 +14,7 @@
         "category": "Network activity",
         "value": "104.207.153.0",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -31,7 +31,7 @@
         "category": "Network activity",
         "value": "107.170.37.216",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -48,7 +48,7 @@
         "category": "Network activity",
         "value": "107.170.42.32",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -65,7 +65,7 @@
         "category": "Network activity",
         "value": "107.170.42.56",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -82,7 +82,7 @@
         "category": "Network activity",
         "value": "134.209.220.157",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -99,7 +99,7 @@
         "category": "Network activity",
         "value": "134.209.3.89",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -116,7 +116,7 @@
         "category": "Network activity",
         "value": "136.244.69.219",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -133,7 +133,7 @@
         "category": "Network activity",
         "value": "137.184.254.107",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -150,7 +150,7 @@
         "category": "Network activity",
         "value": "138.197.43.97",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -167,7 +167,7 @@
         "category": "Network activity",
         "value": "139.59.14.26",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -184,7 +184,7 @@
         "category": "Network activity",
         "value": "139.84.208.188",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -201,7 +201,7 @@
         "category": "Network activity",
         "value": "140.82.5.20",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -218,7 +218,7 @@
         "category": "Network activity",
         "value": "143.198.64.22",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -235,7 +235,7 @@
         "category": "Network activity",
         "value": "146.70.102.108",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -252,7 +252,7 @@
         "category": "Network activity",
         "value": "146.70.102.110",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -269,7 +269,7 @@
         "category": "Network activity",
         "value": "146.70.102.121",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -286,7 +286,7 @@
         "category": "Network activity",
         "value": "146.70.102.134",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -303,7 +303,7 @@
         "category": "Network activity",
         "value": "146.70.116.7",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -320,7 +320,7 @@
         "category": "Network activity",
         "value": "146.70.131.224",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -337,7 +337,7 @@
         "category": "Network activity",
         "value": "146.70.147.9",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -354,7 +354,7 @@
         "category": "Network activity",
         "value": "146.70.160.49",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -371,7 +371,7 @@
         "category": "Network activity",
         "value": "146.70.169.165",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -388,7 +388,7 @@
         "category": "Network activity",
         "value": "146.70.20.203",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -405,7 +405,7 @@
         "category": "Network activity",
         "value": "146.70.29.228",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -422,7 +422,7 @@
         "category": "Network activity",
         "value": "146.70.53.156",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -439,7 +439,7 @@
         "category": "Network activity",
         "value": "146.70.81.218",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -456,7 +456,7 @@
         "category": "Network activity",
         "value": "146.70.86.251",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -473,7 +473,7 @@
         "category": "Network activity",
         "value": "147.182.161.167",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -490,7 +490,7 @@
         "category": "Network activity",
         "value": "149.248.1.147",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -507,7 +507,7 @@
         "category": "Network activity",
         "value": "149.28.142.211",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -524,7 +524,7 @@
         "category": "Network activity",
         "value": "149.28.242.133",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -541,7 +541,7 @@
         "category": "Network activity",
         "value": "149.28.250.35",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -558,7 +558,7 @@
         "category": "Network activity",
         "value": "149.28.253.112",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -575,7 +575,7 @@
         "category": "Network activity",
         "value": "149.28.57.173",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -592,7 +592,7 @@
         "category": "Network activity",
         "value": "149.28.71.25",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -609,7 +609,7 @@
         "category": "Network activity",
         "value": "149.28.77.207",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -626,7 +626,7 @@
         "category": "Network activity",
         "value": "152.42.226.197",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -643,7 +643,7 @@
         "category": "Network activity",
         "value": "155.138.163.117",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -660,7 +660,7 @@
         "category": "Network activity",
         "value": "155.138.202.66",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -677,7 +677,7 @@
         "category": "Network activity",
         "value": "155.138.240.74",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -694,7 +694,7 @@
         "category": "Network activity",
         "value": "157.230.128.10",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -711,7 +711,7 @@
         "category": "Network activity",
         "value": "157.245.176.133",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -728,7 +728,7 @@
         "category": "Network activity",
         "value": "158.247.194.199",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -745,7 +745,7 @@
         "category": "Network activity",
         "value": "159.223.151.126",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -762,7 +762,7 @@
         "category": "Network activity",
         "value": "159.223.208.191",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -779,7 +779,7 @@
         "category": "Network activity",
         "value": "159.89.14.225",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -796,7 +796,7 @@
         "category": "Network activity",
         "value": "161.35.150.79",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -813,7 +813,7 @@
         "category": "Network activity",
         "value": "164.92.225.66",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -830,7 +830,7 @@
         "category": "Network activity",
         "value": "164.92.235.125",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -847,7 +847,7 @@
         "category": "Network activity",
         "value": "165.22.5.231",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -864,7 +864,7 @@
         "category": "Network activity",
         "value": "165.22.51.81",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -881,7 +881,7 @@
         "category": "Network activity",
         "value": "165.22.71.71",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -898,7 +898,7 @@
         "category": "Network activity",
         "value": "165.227.145.109",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -915,7 +915,7 @@
         "category": "Network activity",
         "value": "167.99.3.150",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -932,7 +932,7 @@
         "category": "Network activity",
         "value": "167.99.85.48",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -949,7 +949,7 @@
         "category": "Network activity",
         "value": "174.138.34.46",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -966,7 +966,7 @@
         "category": "Network activity",
         "value": "178.128.49.106",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -983,7 +983,7 @@
         "category": "Network activity",
         "value": "185.181.8.155",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1000,7 +1000,7 @@
         "category": "Network activity",
         "value": "185.234.52.230",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1017,7 +1017,7 @@
         "category": "Network activity",
         "value": "188.208.141.190",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1034,7 +1034,7 @@
         "category": "Network activity",
         "value": "194.180.158.45",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1051,7 +1051,7 @@
         "category": "Network activity",
         "value": "194.180.158.71",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1068,7 +1068,7 @@
         "category": "Network activity",
         "value": "194.180.191.84",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1085,7 +1085,7 @@
         "category": "Network activity",
         "value": "194.37.97.159",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1102,7 +1102,7 @@
         "category": "Network activity",
         "value": "198.211.98.248",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1119,7 +1119,7 @@
         "category": "Network activity",
         "value": "199.247.10.38",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1136,7 +1136,7 @@
         "category": "Network activity",
         "value": "206.81.14.237",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1153,7 +1153,7 @@
         "category": "Network activity",
         "value": "207.246.105.206",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1170,7 +1170,7 @@
         "category": "Network activity",
         "value": "207.246.113.7",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1187,7 +1187,7 @@
         "category": "Network activity",
         "value": "207.246.87.188",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1204,7 +1204,7 @@
         "category": "Network activity",
         "value": "207.246.90.6",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1221,7 +1221,7 @@
         "category": "Network activity",
         "value": "208.76.221.167",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1238,7 +1238,7 @@
         "category": "Network activity",
         "value": "208.76.223.59",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1255,7 +1255,7 @@
         "category": "Network activity",
         "value": "208.85.18.104",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1272,7 +1272,7 @@
         "category": "Network activity",
         "value": "213.252.232.129",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1289,7 +1289,7 @@
         "category": "Network activity",
         "value": "213.252.232.141",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1306,7 +1306,7 @@
         "category": "Network activity",
         "value": "216.128.178.12",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1323,7 +1323,7 @@
         "category": "Network activity",
         "value": "216.238.77.17",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1340,7 +1340,7 @@
         "category": "Network activity",
         "value": "216.238.80.164",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1357,7 +1357,7 @@
         "category": "Network activity",
         "value": "216.238.86.164",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1374,7 +1374,7 @@
         "category": "Network activity",
         "value": "216.238.91.249",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1391,7 +1391,7 @@
         "category": "Network activity",
         "value": "217.69.10.11",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1408,7 +1408,7 @@
         "category": "Network activity",
         "value": "217.69.6.58",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1425,7 +1425,7 @@
         "category": "Network activity",
         "value": "23.227.198.196",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1442,7 +1442,7 @@
         "category": "Network activity",
         "value": "23.29.115.188",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1459,7 +1459,7 @@
         "category": "Payload delivery",
         "value": "255869de85e2a171993fc5eb8a556d873a1b8966e040f6f55926f2fa2d595cc8",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=sample confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1476,7 +1476,7 @@
         "category": "Network activity",
         "value": "38.132.101.35",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1493,7 +1493,7 @@
         "category": "Network activity",
         "value": "45.32.109.170",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1510,7 +1510,7 @@
         "category": "Network activity",
         "value": "45.32.150.100",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1527,7 +1527,7 @@
         "category": "Network activity",
         "value": "45.76.252.109",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1544,7 +1544,7 @@
         "category": "Network activity",
         "value": "45.76.31.6",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1561,7 +1561,7 @@
         "category": "Network activity",
         "value": "45.77.105.76",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1578,7 +1578,7 @@
         "category": "Network activity",
         "value": "45.77.57.173",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1595,7 +1595,7 @@
         "category": "Network activity",
         "value": "5.181.159.109",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1612,7 +1612,7 @@
         "category": "Network activity",
         "value": "5.252.178.158",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1629,7 +1629,7 @@
         "category": "Network activity",
         "value": "52.174.65.77",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1646,7 +1646,7 @@
         "category": "Network activity",
         "value": "64.225.3.138",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1663,7 +1663,7 @@
         "category": "Network activity",
         "value": "64.226.103.163",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1680,7 +1680,7 @@
         "category": "Network activity",
         "value": "65.20.105.177",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1697,7 +1697,7 @@
         "category": "Network activity",
         "value": "65.20.106.49",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1714,7 +1714,7 @@
         "category": "Network activity",
         "value": "65.20.96.9",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1731,7 +1731,7 @@
         "category": "Network activity",
         "value": "66.42.126.125",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1748,7 +1748,7 @@
         "category": "Network activity",
         "value": "66.42.73.169",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1765,7 +1765,7 @@
         "category": "Network activity",
         "value": "68.183.169.21",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1782,7 +1782,7 @@
         "category": "Network activity",
         "value": "68.183.186.185",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1799,7 +1799,7 @@
         "category": "Payload delivery",
         "value": "6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=sample confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1816,7 +1816,7 @@
         "category": "Network activity",
         "value": "70.34.194.5",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1833,7 +1833,7 @@
         "category": "Network activity",
         "value": "70.34.251.208",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1850,7 +1850,7 @@
         "category": "Network activity",
         "value": "84.247.51.183",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1867,7 +1867,7 @@
         "category": "Network activity",
         "value": "88.119.175.56",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1884,7 +1884,7 @@
         "category": "Network activity",
         "value": "88.119.175.75",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1901,7 +1901,7 @@
         "category": "Network activity",
         "value": "91.207.173.115",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1918,7 +1918,7 @@
         "category": "Network activity",
         "value": "95.179.215.54",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru-ip confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1935,7 +1935,7 @@
         "category": "Network activity",
         "value": "addthis.events",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1952,7 +1952,7 @@
         "category": "Network activity",
         "value": "ads-impressions.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1969,7 +1969,7 @@
         "category": "Network activity",
         "value": "ads-monitor.xyz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -1986,7 +1986,7 @@
         "category": "Network activity",
         "value": "adtimizer.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2003,7 +2003,7 @@
         "category": "Network activity",
         "value": "adtracker.link",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2020,7 +2020,7 @@
         "category": "Network activity",
         "value": "akedo.gg",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2037,7 +2037,7 @@
         "category": "Network activity",
         "value": "amazon-cz.eu",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2054,7 +2054,7 @@
         "category": "Network activity",
         "value": "ambiguouscommerce.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2071,7 +2071,7 @@
         "category": "Network activity",
         "value": "amnestyreports.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2088,7 +2088,7 @@
         "category": "Network activity",
         "value": "antperspective.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2105,7 +2105,7 @@
         "category": "Network activity",
         "value": "aperturebelt.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2122,7 +2122,7 @@
         "category": "Network activity",
         "value": "apple-updates.online",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2139,7 +2139,7 @@
         "category": "Network activity",
         "value": "archer.westeurope.cloudapp.azure.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2156,7 +2156,7 @@
         "category": "Network activity",
         "value": "asknapkin.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2173,7 +2173,7 @@
         "category": "Network activity",
         "value": "barnsecret.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2190,7 +2190,7 @@
         "category": "Network activity",
         "value": "baseagriculture.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2207,7 +2207,7 @@
         "category": "Network activity",
         "value": "basicstraw.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2224,7 +2224,7 @@
         "category": "Network activity",
         "value": "basinapposite.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2241,7 +2241,7 @@
         "category": "Network activity",
         "value": "bd-mainserver.herokuapp.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2258,7 +2258,7 @@
         "category": "Network activity",
         "value": "beneathbreadth.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2275,7 +2275,7 @@
         "category": "Network activity",
         "value": "bit-ly.site",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2292,7 +2292,7 @@
         "category": "Network activity",
         "value": "bitly.bz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2309,7 +2309,7 @@
         "category": "Network activity",
         "value": "bitly.tel",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2326,7 +2326,7 @@
         "category": "Network activity",
         "value": "bitly.tw",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2343,7 +2343,7 @@
         "category": "Network activity",
         "value": "bitly.zone",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2360,7 +2360,7 @@
         "category": "Network activity",
         "value": "bizarreclassify.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2377,7 +2377,7 @@
         "category": "Network activity",
         "value": "blacklivesmatters.info",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2394,7 +2394,7 @@
         "category": "Network activity",
         "value": "blockroster.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2411,7 +2411,7 @@
         "category": "Network activity",
         "value": "bondmuscle.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2428,7 +2428,7 @@
         "category": "Network activity",
         "value": "bootstrapcdn.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2445,7 +2445,7 @@
         "category": "Network activity",
         "value": "breadgroomer.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2462,7 +2462,7 @@
         "category": "Network activity",
         "value": "bronzemonth.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2479,7 +2479,7 @@
         "category": "Network activity",
         "value": "browniebell.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2496,7 +2496,7 @@
         "category": "Network activity",
         "value": "bypassbirch.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2513,7 +2513,7 @@
         "category": "Network activity",
         "value": "bypasscalculate.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2530,7 +2530,7 @@
         "category": "Network activity",
         "value": "bypasscommerce.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2547,7 +2547,7 @@
         "category": "Network activity",
         "value": "calmbase.org",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2564,7 +2564,7 @@
         "category": "Network activity",
         "value": "cartoondrop.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2581,7 +2581,7 @@
         "category": "Network activity",
         "value": "cdnmobile.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2598,7 +2598,7 @@
         "category": "Network activity",
         "value": "checkmyimp.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2615,7 +2615,7 @@
         "category": "Network activity",
         "value": "chickenstrawberry.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2632,7 +2632,7 @@
         "category": "Network activity",
         "value": "citecivilization.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2649,7 +2649,7 @@
         "category": "Network activity",
         "value": "clickcease.app",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2666,7 +2666,7 @@
         "category": "Network activity",
         "value": "closetmeat.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2683,7 +2683,7 @@
         "category": "Network activity",
         "value": "cnn24-7.online",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2700,7 +2700,7 @@
         "category": "Network activity",
         "value": "code-afsanalytics.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2717,7 +2717,7 @@
         "category": "Network activity",
         "value": "commonclever.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2734,7 +2734,7 @@
         "category": "Network activity",
         "value": "concretebottle.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2751,7 +2751,7 @@
         "category": "Network activity",
         "value": "conquerconfess.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2768,7 +2768,7 @@
         "category": "Network activity",
         "value": "containsnow.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2785,7 +2785,7 @@
         "category": "Network activity",
         "value": "contradictionblindness.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2802,7 +2802,7 @@
         "category": "Network activity",
         "value": "controlium.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2819,7 +2819,7 @@
         "category": "Network activity",
         "value": "convincechaotic.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2836,7 +2836,7 @@
         "category": "Network activity",
         "value": "cookie-sync.xyz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2853,7 +2853,7 @@
         "category": "Network activity",
         "value": "cookiesurfer.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2870,7 +2870,7 @@
         "category": "Network activity",
         "value": "cooperatedisinfect.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2887,7 +2887,7 @@
         "category": "Network activity",
         "value": "cortanaupdates.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2904,7 +2904,7 @@
         "category": "Network activity",
         "value": "cottonbread.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2921,7 +2921,7 @@
         "category": "Network activity",
         "value": "cranberrybear.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2938,7 +2938,7 @@
         "category": "Network activity",
         "value": "cropcritique.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2955,7 +2955,7 @@
         "category": "Network activity",
         "value": "crossoverdue.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2972,7 +2972,7 @@
         "category": "Network activity",
         "value": "cuturl.app",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -2989,7 +2989,7 @@
         "category": "Network activity",
         "value": "cuturl.space",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3006,7 +3006,7 @@
         "category": "Network activity",
         "value": "cyprusnet.tk",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3023,7 +3023,7 @@
         "category": "Network activity",
         "value": "d1fcoizt7mje85.cloudfront.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3040,7 +3040,7 @@
         "category": "Network activity",
         "value": "damageconsider.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3057,7 +3057,7 @@
         "category": "Network activity",
         "value": "deardrill.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3074,7 +3074,7 @@
         "category": "Network activity",
         "value": "dediccatedconsideration.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3091,7 +3091,7 @@
         "category": "Network activity",
         "value": "deducedefend.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3108,7 +3108,7 @@
         "category": "Network activity",
         "value": "deliverconcern.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3125,7 +3125,7 @@
         "category": "Network activity",
         "value": "densefoot.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3142,7 +3142,7 @@
         "category": "Network activity",
         "value": "desireeclipse.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3159,7 +3159,7 @@
         "category": "Network activity",
         "value": "detaincharity.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3176,7 +3176,7 @@
         "category": "Network activity",
         "value": "deterdiffusion.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3193,7 +3193,7 @@
         "category": "Network activity",
         "value": "devotionbelief.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3210,7 +3210,7 @@
         "category": "Network activity",
         "value": "discover-tech.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3227,7 +3227,7 @@
         "category": "Network activity",
         "value": "discovertech-alb-100966113.us-east-1.elb.amazonaws.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3244,7 +3244,7 @@
         "category": "Network activity",
         "value": "distractionfar.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3261,7 +3261,7 @@
         "category": "Network activity",
         "value": "doubleclick.ac",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3278,7 +3278,7 @@
         "category": "Network activity",
         "value": "drivesplash.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3295,7 +3295,7 @@
         "category": "Network activity",
         "value": "drpbx-update.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3312,7 +3312,7 @@
         "category": "Network activity",
         "value": "drummerjourney.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3329,7 +3329,7 @@
         "category": "Network activity",
         "value": "dtech.adtimizer.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3346,7 +3346,7 @@
         "category": "Network activity",
         "value": "dumplingbell.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3363,7 +3363,7 @@
         "category": "Network activity",
         "value": "dw-arabic.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3380,7 +3380,7 @@
         "category": "Network activity",
         "value": "electric-prime.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3397,7 +3397,7 @@
         "category": "Network activity",
         "value": "elifluousscintillam.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3414,7 +3414,7 @@
         "category": "Network activity",
         "value": "eminententwine.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3431,7 +3431,7 @@
         "category": "Network activity",
         "value": "engagebaay.app",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3448,7 +3448,7 @@
         "category": "Network activity",
         "value": "engagebay.app",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3465,7 +3465,7 @@
         "category": "Network activity",
         "value": "euro-news.online",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3482,7 +3482,7 @@
         "category": "Network activity",
         "value": "events.myweb3id.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3499,7 +3499,7 @@
         "category": "Network activity",
         "value": "events.platc-tester.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3516,7 +3516,7 @@
         "category": "Network activity",
         "value": "exhibitexpanse.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3533,7 +3533,7 @@
         "category": "Network activity",
         "value": "faceb00k-live.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3550,7 +3550,7 @@
         "category": "Network activity",
         "value": "fallaciousessential.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3567,7 +3567,7 @@
         "category": "Network activity",
         "value": "fearevolve.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3584,7 +3584,7 @@
         "category": "Network activity",
         "value": "fileswaper.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3601,7 +3601,7 @@
         "category": "Network activity",
         "value": "finalsalami.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3618,7 +3618,7 @@
         "category": "Network activity",
         "value": "flexibleelevator.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3635,7 +3635,7 @@
         "category": "Network activity",
         "value": "foamdirection.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3652,7 +3652,7 @@
         "category": "Network activity",
         "value": "fonts-gstatic.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3669,7 +3669,7 @@
         "category": "Network activity",
         "value": "forecastgarden.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3686,7 +3686,7 @@
         "category": "Network activity",
         "value": "france-24.news",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3703,7 +3703,7 @@
         "category": "Network activity",
         "value": "goatsandals.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3720,7 +3720,7 @@
         "category": "Network activity",
         "value": "golfconcert.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3737,7 +3737,7 @@
         "category": "Network activity",
         "value": "googlplay.store",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3754,7 +3754,7 @@
         "category": "Network activity",
         "value": "groundbreakinginitative.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3771,7 +3771,7 @@
         "category": "Network activity",
         "value": "guitarcalculate.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3788,7 +3788,7 @@
         "category": "Network activity",
         "value": "hostilefauna.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3805,7 +3805,7 @@
         "category": "Network activity",
         "value": "hotjar.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3822,7 +3822,7 @@
         "category": "Network activity",
         "value": "indoprogress.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3839,7 +3839,7 @@
         "category": "Network activity",
         "value": "infinoas.mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3856,7 +3856,7 @@
         "category": "Network activity",
         "value": "insightenterprisells.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3873,7 +3873,7 @@
         "category": "Network activity",
         "value": "instagrarn.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3890,7 +3890,7 @@
         "category": "Network activity",
         "value": "isolatelecture.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3907,7 +3907,7 @@
         "category": "Network activity",
         "value": "jellybat.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3924,7 +3924,7 @@
         "category": "Network activity",
         "value": "jobmarcher.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3941,7 +3941,7 @@
         "category": "Network activity",
         "value": "journeyjest.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3958,7 +3958,7 @@
         "category": "Network activity",
         "value": "kartingrumble.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3975,7 +3975,7 @@
         "category": "Network activity",
         "value": "keyadapter.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=validator confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -3992,7 +3992,7 @@
         "category": "Network activity",
         "value": "konferenciya-zoom.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4009,7 +4009,7 @@
         "category": "Network activity",
         "value": "kupony-rohlik.cz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4026,7 +4026,7 @@
         "category": "Network activity",
         "value": "labyrinthextravagance.org",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4043,7 +4043,7 @@
         "category": "Network activity",
         "value": "leafconfuse.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4060,7 +4060,7 @@
         "category": "Network activity",
         "value": "lenovo-setup.tk",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4077,7 +4077,7 @@
         "category": "Network activity",
         "value": "lessonhandle.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4094,7 +4094,7 @@
         "category": "Network activity",
         "value": "linkedin-jobs.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4111,7 +4111,7 @@
         "category": "Network activity",
         "value": "livesesion.bid",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4128,7 +4128,7 @@
         "category": "Network activity",
         "value": "livesession.bid",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4145,7 +4145,7 @@
         "category": "Network activity",
         "value": "llink.link",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4162,7 +4162,7 @@
         "category": "Network activity",
         "value": "lwaeh-iteham-alasra.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4179,7 +4179,7 @@
         "category": "Network activity",
         "value": "macrodrop.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4196,7 +4196,7 @@
         "category": "Network activity",
         "value": "macromint.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4213,7 +4213,7 @@
         "category": "Network activity",
         "value": "maturitygenesis.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4230,7 +4230,7 @@
         "category": "Network activity",
         "value": "mbsmetoo.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4247,7 +4247,7 @@
         "category": "Network activity",
         "value": "measurecabin.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4264,7 +4264,7 @@
         "category": "Network activity",
         "value": "medica-tradefair.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4281,7 +4281,7 @@
         "category": "Network activity",
         "value": "minstagram.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4298,7 +4298,7 @@
         "category": "Network activity",
         "value": "moatads.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4315,7 +4315,7 @@
         "category": "Network activity",
         "value": "msstore.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4332,7 +4332,7 @@
         "category": "Network activity",
         "value": "mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4349,7 +4349,7 @@
         "category": "Network activity",
         "value": "mushroompalm.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4366,7 +4366,7 @@
         "category": "Network activity",
         "value": "mydsp.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4383,7 +4383,7 @@
         "category": "Network activity",
         "value": "myipinfo.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4400,7 +4400,7 @@
         "category": "Network activity",
         "value": "myweb3id.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4417,7 +4417,7 @@
         "category": "Network activity",
         "value": "noas.adtimizer.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4434,7 +4434,7 @@
         "category": "Network activity",
         "value": "noas.impchkdsp.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4451,7 +4451,7 @@
         "category": "Network activity",
         "value": "noas.mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4468,7 +4468,7 @@
         "category": "Network activity",
         "value": "noas.powerium.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4485,7 +4485,7 @@
         "category": "Network activity",
         "value": "noas.trakking.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4502,7 +4502,7 @@
         "category": "Network activity",
         "value": "notableexam.org",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4519,7 +4519,7 @@
         "category": "Network activity",
         "value": "notionnowadays.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4536,7 +4536,7 @@
         "category": "Network activity",
         "value": "nutralove.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4553,7 +4553,7 @@
         "category": "Network activity",
         "value": "osesgy-unmissions.org",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4570,7 +4570,7 @@
         "category": "Network activity",
         "value": "outdooutcome.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4587,7 +4587,7 @@
         "category": "Network activity",
         "value": "parkourbus.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4604,7 +4604,7 @@
         "category": "Network activity",
         "value": "patternperiod.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4621,7 +4621,7 @@
         "category": "Network activity",
         "value": "penslice.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4638,7 +4638,7 @@
         "category": "Network activity",
         "value": "pepperdominate.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4655,7 +4655,7 @@
         "category": "Network activity",
         "value": "piwiks.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4672,7 +4672,7 @@
         "category": "Network activity",
         "value": "plasticbells.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4689,7 +4689,7 @@
         "category": "Network activity",
         "value": "platc-tester.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4706,7 +4706,7 @@
         "category": "Network activity",
         "value": "pochtarossiy.info",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4723,7 +4723,7 @@
         "category": "Network activity",
         "value": "powerium.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4740,7 +4740,7 @@
         "category": "Network activity",
         "value": "ppv2.mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4757,7 +4757,7 @@
         "category": "Network activity",
         "value": "pqv2.mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4774,7 +4774,7 @@
         "category": "Network activity",
         "value": "prawnbasket.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4791,7 +4791,7 @@
         "category": "Network activity",
         "value": "predictproper.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4808,7 +4808,7 @@
         "category": "Network activity",
         "value": "pressaviation.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4825,7 +4825,7 @@
         "category": "Network activity",
         "value": "profligatecensure.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4842,7 +4842,7 @@
         "category": "Network activity",
         "value": "qa-noas.powerium.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4859,7 +4859,7 @@
         "category": "Network activity",
         "value": "rasef22.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4876,7 +4876,7 @@
         "category": "Network activity",
         "value": "rebrandly.site",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4893,7 +4893,7 @@
         "category": "Network activity",
         "value": "rollstrech.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4910,7 +4910,7 @@
         "category": "Network activity",
         "value": "romancedrum.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4927,7 +4927,7 @@
         "category": "Network activity",
         "value": "sacrificeprincipal.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4944,7 +4944,7 @@
         "category": "Network activity",
         "value": "salmonpride.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4961,7 +4961,7 @@
         "category": "Network activity",
         "value": "scoreparade.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4978,7 +4978,7 @@
         "category": "Network activity",
         "value": "selectedpazzle.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -4995,7 +4995,7 @@
         "category": "Network activity",
         "value": "shareitwork.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5012,7 +5012,7 @@
         "category": "Network activity",
         "value": "sharethere.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=validator confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5029,7 +5029,7 @@
         "category": "Network activity",
         "value": "sherathis.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5046,7 +5046,7 @@
         "category": "Network activity",
         "value": "shortlinkcut.link",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5063,7 +5063,7 @@
         "category": "Network activity",
         "value": "signifyslight.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5080,7 +5080,7 @@
         "category": "Network activity",
         "value": "sincereaccertain.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5097,7 +5097,7 @@
         "category": "Network activity",
         "value": "site-improve.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5114,7 +5114,7 @@
         "category": "Network activity",
         "value": "sitei-mprove.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5131,7 +5131,7 @@
         "category": "Network activity",
         "value": "spongefruit.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5148,7 +5148,7 @@
         "category": "Network activity",
         "value": "stablesurface.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5165,7 +5165,7 @@
         "category": "Network activity",
         "value": "static-doubleclick.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5182,7 +5182,7 @@
         "category": "Network activity",
         "value": "strangegarden.org",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5199,7 +5199,7 @@
         "category": "Network activity",
         "value": "stylebrakedown.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5216,7 +5216,7 @@
         "category": "Network activity",
         "value": "stylishblock.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5233,7 +5233,7 @@
         "category": "Network activity",
         "value": "suggestutterly.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=cc confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5250,7 +5250,7 @@
         "category": "Network activity",
         "value": "sunsetpotential.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5267,7 +5267,7 @@
         "category": "Network activity",
         "value": "tacticscheap.net",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5284,7 +5284,7 @@
         "category": "Network activity",
         "value": "tidalscreen.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5301,7 +5301,7 @@
         "category": "Network activity",
         "value": "tinyurl.bz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5318,7 +5318,7 @@
         "category": "Network activity",
         "value": "tinyurl.ist",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5335,7 +5335,7 @@
         "category": "Network activity",
         "value": "tinyurl.one",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5352,7 +5352,7 @@
         "category": "Network activity",
         "value": "tinyurl.photos",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5369,7 +5369,7 @@
         "category": "Network activity",
         "value": "tinyurl.plus",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5386,7 +5386,7 @@
         "category": "Network activity",
         "value": "tracker.mtrtb.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5403,7 +5403,7 @@
         "category": "Network activity",
         "value": "tracookiepixel.xyz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5420,7 +5420,7 @@
         "category": "Network activity",
         "value": "tubeshape.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5437,7 +5437,7 @@
         "category": "Network activity",
         "value": "twitt-live.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5454,7 +5454,7 @@
         "category": "Network activity",
         "value": "ultimatematter.info",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5471,7 +5471,7 @@
         "category": "Network activity",
         "value": "url-tiny.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5488,7 +5488,7 @@
         "category": "Network activity",
         "value": "useproof.cc",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5505,7 +5505,7 @@
         "category": "Network activity",
         "value": "velvetpremier.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5522,7 +5522,7 @@
         "category": "Network activity",
         "value": "vesteldefnce.io",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5539,7 +5539,7 @@
         "category": "Network activity",
         "value": "visitortrack.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5556,7 +5556,7 @@
         "category": "Network activity",
         "value": "volasim.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=delivery confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5573,7 +5573,7 @@
         "category": "Network activity",
         "value": "webfex.bz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5590,7 +5590,7 @@
         "category": "Network activity",
         "value": "webffx.bz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5607,7 +5607,7 @@
         "category": "Network activity",
         "value": "webfx.bz",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5624,7 +5624,7 @@
         "category": "Network activity",
         "value": "whoint.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5641,7 +5641,7 @@
         "category": "Network activity",
         "value": "wikipediaathome.net",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5658,7 +5658,7 @@
         "category": "Network activity",
         "value": "windomination.com",
         "to_ids": true,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=candiru confidence=primary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5675,7 +5675,7 @@
         "category": "Network activity",
         "value": "womanstudies.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5692,7 +5692,7 @@
         "category": "Network activity",
         "value": "yektenet.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5709,7 +5709,7 @@
         "category": "Network activity",
         "value": "yeni-safak.com",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5726,7 +5726,7 @@
         "category": "Network activity",
         "value": "youtubee.life",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
@@ -5743,7 +5743,7 @@
         "category": "Network activity",
         "value": "zcombinator.co",
         "to_ids": false,
-        "timestamp": "1792270800",
+        "timestamp": "1792281600",
         "comment": "tier=historical confidence=secondary (Citizen Lab, Exposing AdFection, 2026-10-15)",
         "Tag": [
           {
