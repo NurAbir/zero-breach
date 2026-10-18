@@ -1,8 +1,5 @@
 # Zero Breach
 
-*Checks for traces of ad-delivered spyware. The name is a goal, not a guarantee —
-a clean result is not a clean bill of health.*
-
 A local, read-only scanner that checks a computer for traces of the **AdFection /
 Candiru** spyware campaign — the operation in which an ad-tech company used
 real-time ad bidding to deliver zero-click spyware to targeted people.
