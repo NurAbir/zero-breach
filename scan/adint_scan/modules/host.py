@@ -47,7 +47,7 @@ import platform
 import subprocess
 
 from ..result import (Hit, ModuleResult, EV_CONTACTED, EV_PERSISTENCE,
-                      EV_CONFIGURED, EV_REFERENCED)
+                      EV_CONFIGURED, EV_REFERENCED, EV_ON_DISK)
 
 NAME = "host"
 
@@ -657,6 +657,77 @@ def _check_hosts(r: ModuleResult, ctx) -> None:
              .format(len(active), hits, blocked))
 
 
+# --- 5. known fixed-path file drops -----------------------------------------
+
+# Files this campaign and its tooling drop at a FIXED path, where the path itself
+# is the lead. HW.sys is the signed-but-vulnerable kernel driver Candiru brings to
+# disable protections (bring-your-own-vulnerable-driver); Avast documented its
+# path and the exact hash. The path is a generic name, so presence alone is only a
+# pointer - the check hashes the file and says whether it is the KNOWN-BAD build
+# (hash in the IOC set) or merely a same-named file to look at.
+_KNOWN_DROPS = [
+    (r"System32\drivers\HW.sys",
+     "the signed-but-vulnerable driver Candiru uses to disable protections "
+     "(bring-your-own-vulnerable-driver); documented by Avast, CVE-2022-2294"),
+]
+
+
+def _check_known_paths(r: ModuleResult, ctx) -> None:
+    import hashlib
+    root = os.environ.get("SystemRoot", r"C:\Windows")
+    known_hashes = {h.value for h in ctx.iocs.hashes}
+    found = 0
+    for rel, why in _KNOWN_DROPS:
+        path = os.path.join(root, rel)
+        try:
+            present = os.path.isfile(path)
+        except OSError:
+            present = False
+        if not present:
+            continue
+        found += 1
+        digest = ""
+        try:
+            h = hashlib.sha256()
+            with io.open(path, "rb") as fh:
+                for chunk in iter(lambda: fh.read(1024 * 1024), b""):
+                    h.update(chunk)
+            digest = h.hexdigest()
+        except OSError:
+            # Present but unreadable (locked / permissions): still report it, but
+            # say the hash could not be taken so the grade is honest.
+            r.note("known-paths: {} exists but could not be read to fingerprint "
+                   "it".format(path))
+        if digest and digest in known_hashes:
+            ind = ctx.iocs.lookup(digest)
+            r.add_hit(Hit(
+                indicator=digest, location=path,
+                detail="the file at {} is the KNOWN-BAD build - {}. Its SHA-256 "
+                       "matches a published indicator. Do not delete it; it is "
+                       "evidence.".format(path, why),
+                tier=ind.tier if ind else "sample",
+                confidence=ind.confidence if ind else "secondary",
+                source=ind.source if ind else "", evidence=EV_ON_DISK))
+        else:
+            # Present, but not the known-bad hash (or unreadable). A legitimate
+            # driver of the same name exists, so this is a POINTER, not a hit:
+            # recorded as a note, graded nowhere, so it never alarms on its own.
+            r.note("known-paths: a file exists at {} ({}). This path is {}. "
+                   "Its fingerprint does NOT match the known-bad build{}, so it "
+                   "is most likely a legitimate same-named file - but given the "
+                   "path it is worth a look.".format(
+                       path, "SHA-256 " + digest[:16] + "..." if digest else
+                       "unreadable", why,
+                       "" if digest else " (could not read it)"))
+    r.checked += len(_KNOWN_DROPS)
+    r.submetrics["known_paths_checked"] = len(_KNOWN_DROPS)
+    if found:
+        r.submetrics["known_paths_present"] = found
+    r.ran("known-paths")
+    ctx.emit("[host] known fixed-path drops: {} checked, {} present".format(
+        len(_KNOWN_DROPS), found))
+
+
 # --- module entry point -----------------------------------------------------
 
 def run(ctx) -> ModuleResult:
@@ -666,15 +737,17 @@ def run(ctx) -> ModuleResult:
     if system != "Windows" or winreg is None:
         # Never a fake CLEAN on a platform where nothing was observed.
         reason = "not supported on {}".format(system or "unknown platform")
-        for name in ("com-persistence", "dns-cache", "dns-log", "hosts-file"):
+        for name in ("com-persistence", "dns-cache", "dns-log", "hosts-file",
+                     "known-paths"):
             r.could_not_run(name, reason)
         return r
 
-    # Each check is isolated: one failure must not cost the other three.
+    # Each check is isolated: one failure must not cost the others.
     for name, fn in (("com-persistence", _check_com),
                      ("dns-cache", _check_dns_cache),
                      ("dns-log", _check_dns_log),
-                     ("hosts-file", _check_hosts)):
+                     ("hosts-file", _check_hosts),
+                     ("known-paths", _check_known_paths)):
         try:
             fn(r, ctx)
         except Exception as exc:

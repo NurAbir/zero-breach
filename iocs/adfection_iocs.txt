@@ -12,9 +12,11 @@
 #
 # Format: indicator <TAB> tier <TAB> confidence
 #   tier       = cc | validator | delivery | historical | sample
-#   confidence = primary   (read out of the Citizen Lab report body or its appendix)
-#                secondary (reported by a third-party summary of the report - VERIFY
-#                           against the report's own appendix before acting on it)
+#   confidence = primary   (read out of the Citizen Lab AdFection report body or its
+#                           appendix)
+#                secondary (from a third-party summary of that report, OR from a
+#                           primary report of a separate/older campaign - verify
+#                           currency before acting; the source column says which)
 #
 # The indicator TYPE is inferred from its shape, so this file stays three columns:
 #   64 hex chars -> sha256 sample hash   dotted quad -> IP   otherwise -> domain
@@ -380,3 +382,88 @@ windomination.com	candiru	primary	recordedfuture-2025-08
 216.238.91.249	candiru-ip	primary	recordedfuture-2025-08
 217.69.6.58	candiru-ip	primary	recordedfuture-2025-08
 217.69.10.11	candiru-ip	primary	recordedfuture-2025-08
+
+# --- Historical Candiru infrastructure (separate, older campaigns) --------
+# Added 2026-10-18 from PRIMARY reports (not news coverage). Attacker-
+# controlled infrastructure only; compromised victim sites, real-org look-
+# alikes, decayed IPs and SHA-1 hashes were deliberately excluded. A hit is
+# tier=historical: significant if dated, but these domains are old and some
+# may since have lapsed and been re-registered, so confidence is secondary.
+#   eset-swc-2021            ESET, 'Strategic web compromises ... Candiru' (2021-11-16)
+#   avast-2022               Avast/Gen, 'The Return of Candiru' (CVE-2022-2294, 2022)
+#   citizenlab-candiru-2021  The Citizen Lab, 'Hooking Candiru' (2021-07)
+piwiks.com	historical	secondary	eset-swc-2021
+static-doubleclick.net	historical	secondary	eset-swc-2021
+fonts-gstatic.net	historical	secondary	eset-swc-2021
+bootstrapcdn.net	historical	secondary	eset-swc-2021
+hotjar.net	historical	secondary	eset-swc-2021
+moatads.co	historical	secondary	eset-swc-2021
+doubleclick.ac	historical	secondary	eset-swc-2021
+code-afsanalytics.com	historical	secondary	eset-swc-2021
+site-improve.net	historical	secondary	eset-swc-2021
+sitei-mprove.net	historical	secondary	eset-swc-2021
+addthis.events	historical	secondary	eset-swc-2021
+sherathis.com	historical	secondary	eset-swc-2021
+webfx.bz	historical	secondary	eset-swc-2021
+webffx.bz	historical	secondary	eset-swc-2021
+webfex.bz	historical	secondary	eset-swc-2021
+visitortrack.net	historical	secondary	eset-swc-2021
+livesession.bid	historical	secondary	eset-swc-2021
+livesesion.bid	historical	secondary	eset-swc-2021
+engagebay.app	historical	secondary	eset-swc-2021
+engagebaay.app	historical	secondary	eset-swc-2021
+clickcease.app	historical	secondary	eset-swc-2021
+useproof.cc	historical	secondary	eset-swc-2021
+yektenet.com	historical	secondary	eset-swc-2021
+rebrandly.site	historical	secondary	eset-swc-2021
+medica-tradefair.co	historical	secondary	eset-swc-2021
+bitly.bz	historical	secondary	eset-swc-2021
+bitly.tw	historical	secondary	eset-swc-2021
+bitly.zone	historical	secondary	eset-swc-2021
+bitly.tel	historical	secondary	eset-swc-2021
+bit-ly.site	historical	secondary	eset-swc-2021
+tinyurl.ist	historical	secondary	eset-swc-2021
+tinyurl.bz	historical	secondary	eset-swc-2021
+tinyurl.one	historical	secondary	eset-swc-2021
+tinyurl.photos	historical	secondary	eset-swc-2021
+tinyurl.plus	historical	secondary	eset-swc-2021
+shortlinkcut.link	historical	secondary	eset-swc-2021
+cuturl.app	historical	secondary	eset-swc-2021
+cuturl.space	historical	secondary	eset-swc-2021
+url-tiny.co	historical	secondary	eset-swc-2021
+llink.link	historical	secondary	eset-swc-2021
+instagrarn.co	historical	secondary	eset-swc-2021
+stylishblock.com	historical	secondary	avast-2022
+cnn24-7.online	historical	secondary	citizenlab-candiru-2021
+dw-arabic.com	historical	secondary	citizenlab-candiru-2021
+euro-news.online	historical	secondary	citizenlab-candiru-2021
+rasef22.com	historical	secondary	citizenlab-candiru-2021
+france-24.news	historical	secondary	citizenlab-candiru-2021
+amnestyreports.com	historical	secondary	citizenlab-candiru-2021
+blacklivesmatters.info	historical	secondary	citizenlab-candiru-2021
+womanstudies.co	historical	secondary	citizenlab-candiru-2021
+cortanaupdates.com	historical	secondary	citizenlab-candiru-2021
+googlplay.store	historical	secondary	citizenlab-candiru-2021
+apple-updates.online	historical	secondary	citizenlab-candiru-2021
+amazon-cz.eu	historical	secondary	citizenlab-candiru-2021
+drpbx-update.net	historical	secondary	citizenlab-candiru-2021
+lenovo-setup.tk	historical	secondary	citizenlab-candiru-2021
+konferenciya-zoom.com	historical	secondary	citizenlab-candiru-2021
+zcombinator.co	historical	secondary	citizenlab-candiru-2021
+linkedin-jobs.com	historical	secondary	citizenlab-candiru-2021
+faceb00k-live.com	historical	secondary	citizenlab-candiru-2021
+minstagram.net	historical	secondary	citizenlab-candiru-2021
+twitt-live.com	historical	secondary	citizenlab-candiru-2021
+youtubee.life	historical	secondary	citizenlab-candiru-2021
+wikipediaathome.net	historical	secondary	citizenlab-candiru-2021
+osesgy-unmissions.org	historical	secondary	citizenlab-candiru-2021
+whoint.co	historical	secondary	citizenlab-candiru-2021
+vesteldefnce.io	historical	secondary	citizenlab-candiru-2021
+pochtarossiy.info	historical	secondary	citizenlab-candiru-2021
+kupony-rohlik.cz	historical	secondary	citizenlab-candiru-2021
+yeni-safak.com	historical	secondary	citizenlab-candiru-2021
+cyprusnet.tk	historical	secondary	citizenlab-candiru-2021
+lwaeh-iteham-alasra.com	historical	secondary	citizenlab-candiru-2021
+mbsmetoo.com	historical	secondary	citizenlab-candiru-2021
+indoprogress.co	historical	secondary	citizenlab-candiru-2021
+6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5	sample	secondary	avast-2022

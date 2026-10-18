@@ -5,9 +5,10 @@ Candiru** spyware campaign — the operation in which an ad-tech company used
 real-time ad bidding to deliver zero-click spyware to targeted people.
 
 It searches the machine's own leftover records — browser history, cookies, caches
-and connection records, file fingerprints, auto-start registrations and the DNS
-resolver cache — for 263 published indicators, and reports what it found, how
-strong the evidence is, and just as importantly **what it could not check**.
+and connection records, file fingerprints, auto-start registrations, known
+malware file-paths and the DNS resolver cache — for 338 published indicators, and
+reports what it found, how strong the evidence is, and just as importantly
+**what it could not check**.
 
 > **A clean result is not a clean bill of health.** Spyware of this grade is built
 > to defeat exactly this kind of check, most of the evidence it leaves expires
@@ -40,7 +41,7 @@ or gateway) and to look for traces of contact — which is what this tool does.
 |---|---|
 | **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Chromium and Firefox, every profile |
 | **Files** | SHA-256 of candidate files under the user-writable locations spyware drops into, against known sample hashes |
-| **Host** (Windows) | per-user COM registrations (this campaign's documented persistence), the DNS resolver cache, whether DNS history logging is even enabled, and the hosts file |
+| **Host** (Windows) | per-user COM registrations (this campaign's documented persistence), the DNS resolver cache, whether DNS history logging is even enabled, the hosts file, and known fixed-path driver drops (e.g. the `HW.sys` vulnerable driver) |
 
 Every match is **evidence-graded**, because the artifact decides the meaning. A
 cookie the browser set, or an HSTS record it stored, proves the device *contacted*
@@ -91,17 +92,34 @@ indicator on the reader's behalf.
 
 ## Indicator data and interoperability
 
-The 263 indicators live in [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt),
-one per line with its tier, confidence and source. They are also exported as a
-STIX 2.1 bundle and a MISP event in [`dist/`](dist/), so they can be loaded into
-MISP, a SIEM, or Amnesty International's Mobile Verification Toolkit for mobile
-forensics:
+The 338 indicators live in [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt),
+one per line with its tier, confidence and source. They cover the AdFection
+campaign plus curated historical Candiru infrastructure (ESET 2021, Avast 2022,
+Citizen Lab 2021), and are exported to [`dist/`](dist/) in several formats:
+
+- **STIX 2.1** and **MISP** — for MISP, a SIEM, or Amnesty International's Mobile
+  Verification Toolkit: `mvt-ios check-backup --iocs dist/adfection.stix.json <backup>`
+- **DNS/ad blocklists** — `hosts`, Adblock/uBlock/AdGuard, dnsmasq, and a plain
+  domain list, for a phone's or router's DNS filter, Pi-hole or AdGuard Home.
+  Only domains are blocked; shared cloud IPs are deliberately excluded.
+
+Regenerate the exports with `python build/emit_stix.py`, `build/emit_misp.py` and
+`build/emit_denylist.py`.
+
+### Updating the indicators
+
+The list goes stale — new infrastructure appears and old domains lapse. Refresh
+it from this repository with a separate, explicitly-run script (the scanner itself
+never touches the network):
 
 ```
-mvt-ios check-backup --iocs dist/adfection.stix.json <backup folder>
+python scan/update-iocs.py            # fetch, verify, show what changed (dry run)
+python scan/update-iocs.py --apply    # also replace the local list
 ```
 
-Regenerate the exports with `python build/emit_stix.py` and `python build/emit_misp.py`.
+It downloads over HTTPS, checks the file against a published SHA-256, confirms it
+parses before replacing anything, and shows a diff first. The trust model and the
+optional out-of-band signature check are documented at the top of the script.
 
 ## Design principles
 
