@@ -43,15 +43,16 @@ updates or establish that a device is safe.
 
 | area | what it reads |
 |---|---|
-| **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Chromium and Firefox, every profile |
+| **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Chromium and Firefox, for discovered profiles in supported locations |
 | **Files** | SHA-256 of candidate files under the user-writable locations spyware drops into, against known sample hashes — and, kept deliberately separate, the hash of a legitimate signed driver this actor abuses, which is reported as a lead rather than as proof |
 | **Host** (Windows) | per-user COM registrations (this campaign's documented persistence), the DNS resolver cache, whether DNS history logging is even enabled, the hosts file, and known fixed-path driver drops (e.g. the `HW.sys` vulnerable driver) |
 
-Every match is **evidence-graded**, because the artifact decides the meaning. A
-cookie the browser set, or an HSTS record it stored, proves the device *contacted*
-a host. A domain merely appearing in a cached web page usually means the person
-*read an article about* the campaign. The tool keeps those apart so that reading
-about this topic never produces a false alarm, and a real contact is never buried.
+Every match is **evidence-graded**, because the artifact decides the meaning.
+Cookie metadata and stored connection records can support a contact finding,
+but do not establish infection or explain how the record arrived. A domain
+merely appearing in a cached web page may be a saved reference, such as an
+article about the campaign. The tool distinguishes saved references from
+connection evidence so that each finding can be interpreted in context.
 
 ## Install and run
 
@@ -74,7 +75,8 @@ python -X utf8 scan/adint-scan.py
 The scan changes no system settings and needs no administrator. It makes no
 intentional network requests or indicator lookups. Remote and redirected paths
 are skipped, and online certificate verification is disabled. Locked database
-snapshots are temporary and removed after use; `--json` writes the requested report.
+snapshots are temporary; cleanup is attempted after use, and any cleanup failure
+is reported with the retained location. `--json` writes the requested report.
 
 Exit codes: `0` nothing found, `2` an indicator matched, `1` the scan could not be
 set up (e.g. a bad indicator file).
@@ -219,7 +221,7 @@ of spyware.
 
 The list goes stale — new infrastructure appears and old domains lapse. Refresh
 it from this repository with a separate, explicitly-run script (the scanner itself
-never touches the network):
+makes no intentional network requests):
 
 ```
 python scan/update-iocs.py            # fetch, verify, show what changed (dry run)
@@ -256,8 +258,9 @@ cd scan && python -m unittest discover -s tests
 
 The suite covers the network guard, the evidence grading, the boundary matching
 (so a longer name or number that merely contains an indicator does not match), the
-loader's failure modes, and behavioural proofs that the tool never reads cookie
-values or the browser's master key.
+loader's failure modes, and behavioural checks that cookie queries exclude values
+and that the scanner does not read the browser's master key. Snapshot copies still
+contain the database bytes, as described above.
 
 ## Contact
 

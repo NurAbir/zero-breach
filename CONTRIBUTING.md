@@ -49,13 +49,16 @@ person to a crisis helpline. So:
 
 These are enforced by tests, not convention. A change that breaks one will fail CI.
 
-- **Never contact an indicator.** The scan runs inside a guard that makes any
-  network access raise. The one network feature, `update-iocs.py`, is a separate
-  script, never invoked during a scan.
+- **Never contact an indicator.** The scan's Python socket guard blocks direct
+  DNS and network calls. It is not an OS network sandbox: POSIX network mounts
+  and concurrent filesystem changes require OS isolation for strict offline use.
+  The network feature, `update-iocs.py`, is a separate script, never invoked
+  during a scan.
 - **Measured, never inferred.** A check that could not run is a reported gap, never
   a clean result.
-- **Read only what is needed.** Cookie host names, never cookie values; never the
-  credential-decryption paths an infostealer uses.
+- **Query only what is needed.** Cookie queries select host metadata and
+  timestamps, not values. Temporary snapshots copy complete database bytes;
+  the scanner does not decrypt browser credentials.
 - **Precision over coverage.** An unsigned binary in a user-writable path is not a
   finding. Alarms that mean nothing teach people to ignore the tool.
 - **Read-only, no administrator, no telemetry, no third-party dependencies,

@@ -46,7 +46,8 @@ source and confirm it matches. See "Verifying what you downloaded" in the README
 ## Handling indicators responsibly
 
 The indicator set is curated to avoid false alarms against real people — it
-excludes compromised victim sites and domains that could belong to a real
-organisation. If you believe an indicator here is wrong, or would match legitimate
-traffic, that is worth reporting: a false positive from this tool can send an
+excludes known compromised victim sites and ambiguous legitimate domains during
+curation. Historical domains can later change ownership. If you believe an
+indicator here is wrong, or would match legitimate traffic, that is worth
+reporting: a false positive from this tool can send an
 innocent person to a crisis helpline.
