@@ -51,10 +51,10 @@ def _chromium_roots():
 
     The label names the browser in each per-artifact sub-check, so an
     installed-but-clean browser is recorded distinctly from an absent one, and a
-    locked artifact names the browser it belongs to. Windows roots are derived
-    from the module globals LOCAL/ROAMING, which the test-suite overrides; the
-    macOS and Linux branches never run on a Windows machine, so the real profile
-    is never read under test.
+    locked artifact names the browser it belongs to. Tests override the roots by
+    patching CHROMIUM_ROOTS / FIREFOX_ROOTS directly (not by patching LOCAL /
+    ROAMING), so the suite is hermetic on every platform, never the tester's own
+    browser.
     """
     home = os.path.expanduser("~")
     if sys.platform == "win32":
@@ -75,16 +75,35 @@ def _chromium_roots():
         ]
     if sys.platform.startswith("linux"):
         cfg = os.path.join(home, ".config")
+        var = os.path.join(home, ".var", "app")
+        snap = os.path.join(home, "snap")
         return [
             ("chrome", os.path.join(cfg, "google-chrome")),
             ("chromium", os.path.join(cfg, "chromium")),
             ("brave", os.path.join(cfg, "BraveSoftware", "Brave-Browser")),
+            ("edge", os.path.join(cfg, "microsoft-edge")),
+            # snap packaging
+            ("chromium-snap", os.path.join(snap, "chromium", "common", "chromium")),
+            # flatpak packaging
+            ("chrome-flatpak", os.path.join(var, "com.google.Chrome", "config",
+                                            "google-chrome")),
+            ("brave-flatpak", os.path.join(var, "com.brave.Browser", "config",
+                                           "BraveSoftware", "Brave-Browser")),
+            ("chromium-flatpak", os.path.join(var, "org.chromium.Chromium",
+                                              "config", "chromium")),
         ]
     return []
 
 
 # Computed at import so the test-suite can monkeypatch this attribute directly.
 CHROMIUM_ROOTS = _chromium_roots()
+
+# Firefox (profiles_dir, cache_dir) pairs. None means "derive from the platform
+# at run() time"; tests set an explicit list so the suite never reads the real
+# profile on any OS (the Windows branch of _firefox_roots used to be the only one
+# the tests could neutralise, which let the suite read the tester's real Firefox
+# on macOS/Linux).
+FIREFOX_ROOTS = None
 
 
 def _firefox_roots():
@@ -174,31 +193,61 @@ def _chromium_profile_names(user_data):
     return out
 
 
-def _firefox_profile_names(profiles_dir):
-    """Same idea for Firefox, whose names live in profiles.ini one level up."""
-    out = {}
-    ini = os.path.join(os.path.dirname(profiles_dir), "profiles.ini")
-    section = {}
+# Files that mark a directory as a real Firefox profile (as opposed to a sibling
+# folder like Crash Reports / Pending Pings / Profile Groups that lives in the
+# same root on Linux). Any one is enough.
+_FF_PROFILE_MARKERS = ("prefs.js", "places.sqlite", "cookies.sqlite",
+                       "favicons.sqlite", "SiteSecurityServiceState.txt",
+                       "cert9.db", "key4.db", "logins.json")
+
+
+def _firefox_ini(profiles_dir):
+    """Parse Firefox's profiles.ini. Returns ({folder_basename: display_name},
+    {folder basenames that profiles.ini lists as profiles}).
+
+    profiles.ini sits INSIDE profiles_dir on Linux (~/.mozilla/firefox) but one
+    level ABOVE it on Windows/macOS (...\\Firefox\\Profiles). Try both, so names
+    resolve on every platform; the first readable one wins.
+    """
+    names, known = {}, set()
 
     def flush(sec):
-        path, name = sec.get("Path"), sec.get("Name")
-        if path and name:
-            out[os.path.basename(path.replace("/", os.sep).rstrip(os.sep))] = name
+        path = sec.get("Path")
+        if path:
+            base = os.path.basename(path.replace("/", os.sep).rstrip(os.sep))
+            known.add(base)
+            if sec.get("Name"):
+                names[base] = sec["Name"]
 
+    for ini in (os.path.join(profiles_dir, "profiles.ini"),
+                os.path.join(os.path.dirname(profiles_dir), "profiles.ini")):
+        section = {}
+        try:
+            with io.open(ini, encoding="utf-8", errors="replace") as fh:
+                for raw in fh:
+                    line = raw.strip()
+                    if line.startswith("["):
+                        flush(section)
+                        section = {}
+                    elif "=" in line:
+                        key, value = line.split("=", 1)
+                        section[key.strip()] = value.strip()
+            flush(section)
+            break
+        except OSError:
+            continue
+    return names, known
+
+
+def _is_ff_profile_dir(path):
+    """True if `path` looks like a real Firefox profile (holds a marker file)."""
     try:
-        with io.open(ini, encoding="utf-8", errors="replace") as fh:
-            for raw in fh:
-                line = raw.strip()
-                if line.startswith("["):
-                    flush(section)
-                    section = {}
-                elif "=" in line:
-                    key, value = line.split("=", 1)
-                    section[key.strip()] = value.strip()
-        flush(section)
+        for marker in _FF_PROFILE_MARKERS:
+            if os.path.exists(os.path.join(path, marker)):
+                return True
     except OSError:
         pass
-    return out
+    return False
 
 
 def _fmt_time(conv, raw):
@@ -880,7 +929,7 @@ def run(ctx) -> ModuleResult:
 
     # No browser profile location is known for this platform at all: say so as a
     # gap rather than returning an empty, falsely-clean result.
-    ff_roots = _firefox_roots()
+    ff_roots = FIREFOX_ROOTS if FIREFOX_ROOTS is not None else _firefox_roots()
     if not CHROMIUM_ROOTS and not ff_roots:
         r.could_not_run("browser", "no browser profile locations are known for "
                         "{}".format(sys.platform))
@@ -932,7 +981,7 @@ def run(ctx) -> ModuleResult:
         cache_is_dir = os.path.isdir(cache_dir)
         if not prof_is_dir and not cache_is_dir:
             continue
-        ff_names = _firefox_profile_names(profiles_dir) if prof_is_dir else {}
+        ff_names, ff_known = _firefox_ini(profiles_dir) if prof_is_dir else ({}, set())
         ctx.emit("[*] {}".format(profiles_dir if prof_is_dir else cache_dir))
 
         folders = set()
@@ -952,6 +1001,12 @@ def run(ctx) -> ModuleResult:
             prof = os.path.join(profiles_dir, name)
             cprof = os.path.join(cache_dir, name)
             if not os.path.isdir(prof) and not os.path.isdir(cprof):
+                continue
+            # On Linux the profiles root also holds non-profile folders (Crash
+            # Reports, Pending Pings, Profile Groups). Only treat a folder as a
+            # profile if profiles.ini lists it or it holds a profile marker file,
+            # so those are not scanned and mislabelled as profiles.
+            if name not in ff_known and not _is_ff_profile_dir(prof):
                 continue
             display = ff_names.get(name, "")
             current["name"] = ("{} ({})".format(display, name) if display

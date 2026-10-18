@@ -158,14 +158,16 @@ class TestBrowserModuleSyntheticPositive(SyntheticBase):
         # read from the environment AT IMPORT TIME, so os.environ is useless.
         self.empty = os.path.join(self.tmp, "empty")
         os.makedirs(self.empty)
-        self._saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL)
+        self._saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+                       browser.FIREFOX_ROOTS)
         browser.CHROMIUM_ROOTS = [("test", self.root)]
         browser.ROAMING = self.empty
         browser.LOCAL = self.empty
+        browser.FIREFOX_ROOTS = []   # hermetic: never read the real Firefox
 
     def tearDown(self):
-        (browser.CHROMIUM_ROOTS, browser.ROAMING,
-         browser.LOCAL) = self._saved
+        (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+         browser.FIREFOX_ROOTS) = self._saved
         super().tearDown()
 
     def test_detects_the_domain_in_both_sqlite_and_blob_artifacts(self):

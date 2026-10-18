@@ -665,8 +665,11 @@ def _check_hosts(r: ModuleResult, ctx) -> None:
 # path and the exact hash. The path is a generic name, so presence alone is only a
 # pointer - the check hashes the file and says whether it is the KNOWN-BAD build
 # (hash in the IOC set) or merely a same-named file to look at.
+# Path parts, not a backslash string: os.path.join builds the right separator on
+# every OS. A literal "System32\\drivers\\HW.sys" would be one filename with
+# embedded backslashes on POSIX, so the check (and its test) only worked on Windows.
 _KNOWN_DROPS = [
-    (r"System32\drivers\HW.sys",
+    (("System32", "drivers", "HW.sys"),
      "the signed-but-vulnerable driver Candiru uses to disable protections "
      "(bring-your-own-vulnerable-driver); documented by Avast, CVE-2022-2294"),
 ]
@@ -677,8 +680,8 @@ def _check_known_paths(r: ModuleResult, ctx) -> None:
     root = os.environ.get("SystemRoot", r"C:\Windows")
     known_hashes = {h.value for h in ctx.iocs.hashes}
     found = 0
-    for rel, why in _KNOWN_DROPS:
-        path = os.path.join(root, rel)
+    for parts, why in _KNOWN_DROPS:
+        path = os.path.join(root, *parts)
         try:
             present = os.path.isfile(path)
         except OSError:

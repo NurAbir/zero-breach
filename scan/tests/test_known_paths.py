@@ -32,8 +32,6 @@ def _ioc_set_with_hash(tmp, digest):
 
 
 class TestKnownPaths(unittest.TestCase):
-    @unittest.skipUnless(sys.platform == "win32" or True,
-                         "the check reads SystemRoot; the logic is platform-neutral")
     def _run_with_fake_sysroot(self, sysroot, ioc_set):
         r = host.ModuleResult("host")
         ctx = ScanContext(iocs=ioc_set, emit=lambda _m: None)

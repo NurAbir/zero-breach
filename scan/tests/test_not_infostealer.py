@@ -147,14 +147,17 @@ class TestNeverDecryptsSecrets(unittest.TestCase):
 
         empty = os.path.join(tmp, "empty")
         os.makedirs(empty)
-        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL)
+        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+                 browser.FIREFOX_ROOTS)
         try:
             browser.CHROMIUM_ROOTS = [("test", os.path.join(tmp, "User Data"))]
             browser.ROAMING = empty
             browser.LOCAL = empty
+            browser.FIREFOX_ROOTS = []
             result = browser.run(ctx)
         finally:
-            browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL = saved
+            (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+             browser.FIREFOX_ROOTS) = saved
 
         # The indicator must still be found - we are not testing that it reads
         # nothing, only that it never reads the secret.
@@ -211,14 +214,17 @@ class TestLocalStateMasterKey(unittest.TestCase):
 
         empty = os.path.join(tmp, "empty")
         os.makedirs(empty)
-        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL)
+        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+                 browser.FIREFOX_ROOTS)
         try:
             browser.CHROMIUM_ROOTS = [("test", ud)]
             browser.ROAMING = empty
             browser.LOCAL = empty
+            browser.FIREFOX_ROOTS = []
             result = browser.run(ctx)
         finally:
-            browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL = saved
+            (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+             browser.FIREFOX_ROOTS) = saved
 
         blob = repr(result.to_dict())
         self.assertNotIn(key_sentinel, blob,

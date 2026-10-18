@@ -445,10 +445,17 @@ def _render_reach(w, document: Dict[str, Any]) -> None:
                 w("      {}: {:,} cache file(s)".format(y, merged.get(y, 0)))
         w("")
 
-    # The actionable part: if any check reported how to extend its window, print it.
+    # The actionable part, rendered as its own ruled-off section so the one thing
+    # a reader can act on does not get lost at the tail of the reach block.
+    howto = []
     for _mod_name, _label, info in entries:
-        for line in info.get("how_to_enable") or []:
-            w("  " + line)
+        howto.extend(info.get("how_to_enable") or [])
+    if howto:
+        w("")
+        w(_RULE)
+        for line in howto:
+            w(line)
+        w(_RULE)
     w("")
 
 
