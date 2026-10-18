@@ -65,3 +65,7 @@ These are enforced by tests, not convention. A change that breaks one will fail 
 
 Match the surrounding code. Comments explain *why*, not *what*. Keep the plain
 language of the report text — a frightened non-technical person reads it.
+
+## Questions
+
+Not sure about something, or want to talk through a change before you build it? Reach the project on **Telegram** — https://t.me/+t9gq13mSKcE4NGI0.
