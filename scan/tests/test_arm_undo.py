@@ -22,8 +22,8 @@ SAFETY — this test suite must not change the real machine.
   * The dry-run tests additionally replace `arm._run` with a tripwire that
     fails the test if anything shells out, so a dry run provably cannot touch
     wevtutil or schtasks.
-  * The real `collect_inventory()` shells out to schtasks, so it runs in exactly
-    one test (a shape check); the round-trip tests use a fixed stub.
+  * The inventory shape check supplies synthetic collector inputs. No test
+    enumerates the real registry, hashes registered targets, or invokes schtasks.
 """
 
 from __future__ import annotations
@@ -36,6 +36,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -357,12 +358,17 @@ class TestUndoEdgeCases(ArmSandbox):
 
 
 class TestRealInventoryShape(ArmSandbox):
-    """The only test that runs the real collector (it shells out to schtasks,
-    so it runs exactly once). Read-only: it enumerates registry keys and tasks
-    and hashes files, and changes nothing."""
+    """The real inventory aggregator receives hermetic collector results."""
 
     def test_collect_inventory_returns_the_documented_shape(self):
-        inv = arm.collect_inventory()
+        def row(kind):
+            return [{"kind": kind, "id": kind + "-synthetic", "target": None,
+                     "sha256": None}]
+        with patch.object(arm, "_iter_com_registrations", return_value=row("com")), \
+             patch.object(arm, "_iter_run_keys", return_value=row("run")), \
+             patch.object(arm, "_iter_scheduled_tasks", return_value=row("task")), \
+             self.no_subprocess():
+            inv = arm.collect_inventory()
         self.assertEqual(sorted(inv), ["counts", "entries", "host", "taken_at"])
         self.assertIsInstance(inv["taken_at"], str)
         self.assertIsInstance(inv["host"], str)

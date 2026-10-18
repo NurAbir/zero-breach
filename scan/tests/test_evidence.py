@@ -22,6 +22,7 @@ import sqlite3
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -239,6 +240,90 @@ class TestReportWording(unittest.TestCase):
         text = report.render_human(self.doc([
             Hit("a.example", "loc", "d", "cc", "primary", "s", "contacted")]))
         self.assertIn("evidence: CONTACTED", text)
+
+    def test_the_detail_line_is_defanged_not_only_the_indicator(self):
+        """The detail field quotes saved page content, so it carries whole URLs.
+        This report is written to be forwarded to a helpline, through mail
+        gateways and link scanners that fetch anything fetchable - which would
+        contact the attacker's infrastructure from the victim's organisation."""
+        location = r"C:\Users\x\AppData\Local\Cache\f_000001"
+        text = report.render_human(self.doc([
+            Hit("a.example", location,
+                "history: https://A.EXAMPLE/landing.php some page title",
+                "cc", "primary", "s", "referenced")]))
+        detail = [ln for ln in text.splitlines()
+                  if ln.strip().startswith("detail :")]
+        self.assertEqual(len(detail), 1)
+        self.assertNotIn("https://", detail[0])
+        self.assertIn("hxxps://a[.]example/landing.php", detail[0])
+        # The path must survive intact: a reader who cannot find the file the
+        # report names cannot act on it.
+        at = [ln for ln in text.splitlines() if ln.strip().startswith("at     :")]
+        self.assertEqual(at[0].strip(), "at     : " + location)
+
+
+class TestBlockedDnsLookupIsNotContact(unittest.TestCase):
+    """A sink cache entry can be preloaded from hosts without any lookup.
+
+    This project publishes hosts-file blocklists that map these very domains to
+    0.0.0.0. Grading such a cache entry as `contacted` would tell every user who
+    installed our own blocklist that their device demonstrably communicated with
+    israeli spyware infrastructure - a false alarm aimed at exactly the people
+    the tool exists for.
+    """
+
+    def _cache_result(self, data):
+        from adint_scan.modules import host
+        tmp = tempfile.mkdtemp(prefix="dnscache_")
+        ctx = make_ctx(tmp)
+        rows = [{"Entry": TEST_DOMAIN, "Name": TEST_DOMAIN,
+                 "Data": data, "Type": 1}]
+        r = host.ModuleResult("host")
+        saved = (host._ps_json, host._boot_time)
+        host._ps_json = lambda _cmd, timeout=60: (rows, "")
+        host._boot_time = lambda: ("2026-01-01T00:00:00", "")
+        try:
+            host._check_dns_cache(r, ctx)
+        finally:
+            host._ps_json, host._boot_time = saved
+        return r
+
+    def test_sink_address_is_protective_state_without_a_finding(self):
+        for sink in ("0.0.0.0", "127.0.0.1", "::", "::1"):
+            r = self._cache_result(sink)
+            self.assertEqual(r.hits, [], sink)
+            self.assertEqual(r.submetrics["dns_cache_blocked_indicators"], 1)
+            self.assertTrue(any("without any lookup" in note for note in r.notes))
+
+    def test_real_address_is_a_dns_record_without_proof_of_contact(self):
+        from adint_scan.result import EV_DNS
+        r = self._cache_result("192.0.2.10")
+        self.assertEqual(len(r.hits), 1)
+        self.assertEqual(r.hits[0].evidence, EV_DNS)
+        self.assertIn("endpoint contact is unverified", r.hits[0].detail)
+        self.assertNotIn("BLOCKED", r.hits[0].detail)
+
+
+class TestDnsLogIsNotProofOfContact(unittest.TestCase):
+    def test_failed_nxdomain_lookup_remains_dns_evidence(self):
+        from adint_scan.modules import host
+        from adint_scan.result import EV_DNS
+        with tempfile.TemporaryDirectory(prefix="dnslog_") as tmp:
+            ctx = make_ctx(tmp)
+            result = ModuleResult("host")
+            fixture = [
+                ([{"IsEnabled": True, "RecordCount": 1}], ""),
+                ([{"Time": "2025-03-04T12:00:00Z",
+                   "Message": "DNS query for " + TEST_DOMAIN
+                   + " failed: status 9003 (NXDOMAIN)"}], ""),
+            ]
+            with patch.object(host, "_ps_json", side_effect=fixture):
+                host._check_dns_log(result, ctx)
+        self.assertEqual(len(result.hits), 1)
+        self.assertEqual(result.hits[0].evidence, EV_DNS)
+        self.assertFalse(result.hits[0].is_contact)
+        self.assertEqual(result.hits[0].observed, "2025-03-04T12:00:00Z")
+        self.assertIn("does not establish successful resolution", result.hits[0].detail)
 
 
 if __name__ == "__main__":

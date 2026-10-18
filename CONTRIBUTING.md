@@ -59,7 +59,7 @@ These are enforced by tests, not convention. A change that breaks one will fail 
 - **Precision over coverage.** An unsigned binary in a user-writable path is not a
   finding. Alarms that mean nothing teach people to ignore the tool.
 - **Read-only, no administrator, no telemetry, no third-party dependencies,
-  Python 3.7+.**
+  Python 3.8+.**
 
 ## Style
 

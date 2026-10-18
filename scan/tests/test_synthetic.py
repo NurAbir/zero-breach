@@ -258,14 +258,17 @@ class TestNoModuleReportsCleanWhenItFoundSomething(SyntheticBase):
             fh.write(TEST_DOMAIN.encode("ascii"))
         empty = os.path.join(self.tmp, "none")
         os.makedirs(empty)
-        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL)
+        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+                 browser.FIREFOX_ROOTS)
         browser.CHROMIUM_ROOTS = [("test", root)]
         browser.ROAMING = empty
         browser.LOCAL = empty
+        browser.FIREFOX_ROOTS = []
         try:
             results.append(browser.run(quiet_ctx(self.iocs)))
         finally:
-            (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL) = saved
+            (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+             browser.FIREFOX_ROOTS) = saved
 
         for r in results:
             self.assertTrue(r.hits, "{}: synthetic positive not detected"

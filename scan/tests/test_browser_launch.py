@@ -15,7 +15,8 @@ could_not_run (a gap the verdict surfaces). These tests pin that behaviour:
   - all artifacts locked           -> UNKNOWN, never CLEAN, with gaps
   - one kind readable, one locked  -> PARTIAL, naming the locked kind
   - absent artifacts               -> NOT gaps (nothing to look at is not a gap)
-  - one profile OK, one locked     -> the kind ran; the lock is a note, not a gap
+  - one profile OK, one locked     -> the kind ran for the profile that was read,
+                                      AND the locked profile is its own named gap
   - the temp copy is always cleaned up, including when the copy itself fails
   - the new Firefox favicons / HSTS artifacts are found and graded contacted
 
@@ -176,7 +177,18 @@ class TestAbsentArtifactsAreNotGaps(BrowserLaunchBase):
 
 
 class TestOneProfileSucceedsRollsUpToRan(BrowserLaunchBase):
-    def test_kind_read_in_one_profile_is_not_a_gap_because_another_was_locked(self):
+    """A readable profile must not stand in for an unreadable one.
+
+    This originally asserted that a locked profile was "a note, not a gap" as
+    long as some OTHER profile of the same browser read fine. A review showed
+    that is the D3 violation the rest of this file exists to prevent: the locked
+    profile was never searched, so nothing has been cleared for it, yet the scan
+    reported no gap at all and a reader saw an unqualified clean sweep. The
+    readable profile is now reported as a check that ran AND the locked one as
+    its own gap, named with the account so the report can say which was missed.
+    """
+
+    def test_a_locked_profile_is_a_gap_even_when_another_profile_reads(self):
         ud = os.path.join(self.tmp, "User Data")
         chromium_cookie_db(os.path.join(ud, "Default", "Network", "Cookies"),
                            host="." + TEST_DOMAIN)
@@ -187,13 +199,15 @@ class TestOneProfileSucceedsRollsUpToRan(BrowserLaunchBase):
 
         r = self.run_chromium(ud)
 
-        # The cookies kind was read in at least one profile, so it is a check
-        # that ran - not a gap - even though another profile was locked.
+        # The profile that WAS read is a check that ran.
         self.assertTrue(any(c.name == "test:cookies" and c.ran for c in r.checks))
-        self.assertFalse(any(c.name == "test:cookies" and not c.ran
-                             for c in r.checks))
-        # The lock is still visible: it is counted and noted, just not promoted
-        # to a whole-kind gap.
+        # The profile that was NOT read is a gap, named with its account, so the
+        # report can never present this scan as full coverage of this browser.
+        gaps = [c for c in r.checks
+                if not c.ran and c.name.startswith("test:cookies")]
+        self.assertTrue(gaps, "the locked profile must surface as its own gap")
+        self.assertTrue(any("Profile 1" in c.name for c in gaps),
+                        "the gap must name the profile that was not covered")
         self.assertGreaterEqual(r.skipped, 1)
         self.assertTrue(any("locked" in n.lower() for n in r.notes))
         # The readable profile's indicator cookie is still found.

@@ -11,15 +11,17 @@ Doctrine enforced here:
 from __future__ import annotations
 
 import datetime
+import copy
 import json
 import platform as _platform
+import re
 from typing import Any, Dict, List
 
 from . import __version__
 from .iocs import IocSet
 from .result import (CLEAN, HITS, PARTIAL, UNKNOWN, ModuleResult, is_serious,
                      EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_ATTEMPTED,
-                     EV_CONFIGURED, EV_REFERENCED)
+                     EV_CONFIGURED, EV_REFERENCED, EV_DNS)
 
 # The exact text required by D1. Do not reword.
 D1_LINE = ("No known indicators were found in the places that can be checked. "
@@ -113,6 +115,7 @@ def build_document(iocs: IocSet, modules: List[ModuleResult],
         "_dns_howto": any(
             info.get("how_to_enable")
             for m in modules for info in (m.reach or {}).values()),
+        "_indicators": iocs.network_strings,
     }
 
 
@@ -172,6 +175,7 @@ def _describe_metrics(metrics: Dict[str, int]) -> List[str]:
 
 
 def render_human(document: Dict[str, Any]) -> str:
+    document = _human_document(document)
     out: List[str] = []
     w = out.append
 
@@ -201,6 +205,10 @@ def render_human(document: Dict[str, Any]) -> str:
           "before trusting a clean result. **")
     w("")
 
+    # Put the full indicator evidence after the coverage/DNS-history instructions.
+    # The concise result and urgent next steps remain visible in the summary.
+    _render_reach(w, document)
+
     w("DETAIL  —  what was examined, and the evidence behind the summary")
     w("")
     for name, m in document["modules"].items():
@@ -219,26 +227,28 @@ def render_human(document: Dict[str, Any]) -> str:
             # on disk or a proven contact before a string that merely appeared in
             # cached page text.
             order = {EV_ON_DISK: 0, EV_PERSISTENCE: 1, EV_CONTACTED: 2,
-                     EV_ATTEMPTED: 3, EV_CONFIGURED: 4, EV_REFERENCED: 5, "": 0}
+                     EV_DNS: 3, EV_ATTEMPTED: 4, EV_CONFIGURED: 5,
+                     EV_REFERENCED: 6, "": 0}
             for h in sorted(m["hits"], key=lambda x: order.get(x.get("evidence", ""), 0)):
                 prov = "{}/{}".format(h["tier"], h["confidence"]) if h["tier"] else "?"
                 ev = h.get("evidence") or "unclassified"
                 w("    !! HIT  {}  [{}]  evidence: {}".format(
                     _defang(h["indicator"]), prov, ev.upper()))
-                gloss = EVIDENCE_MEANING.get(ev)
+                gloss = _evidence_gloss(h)
                 if gloss:
                     w("            meaning: {}".format(gloss))
                 if h.get("profile"):
                     w("            account: {}".format(h["profile"]))
-                w("            at     : {}".format(h["location"]))
-                w("            detail : {}".format(h["detail"]))
+                w("            at     : {}".format(
+                    _defang_text(h["location"], h["indicator"])))
+                w("            detail : {}".format(
+                    _defang_text(h["detail"], h["indicator"])))
                 if h.get("observed"):
-                    w("            when   : {}".format(h["observed"]))
+                    w("            when   : {}".format(
+                        _defang_text(h["observed"], h["indicator"])))
                 if h.get("source"):
                     w("            source : {}".format(h["source"]))
         w("")
-
-    _render_reach(w, document)
 
     v = document["verdict"]
     w(_RULE)
@@ -257,8 +267,8 @@ def render_human(document: Dict[str, Any]) -> str:
         if serious_n:
             w("  {} of these {} SERIOUS - a file on disk, an auto-start entry, a".format(
                 serious_n, "is" if serious_n == 1 else "are"))
-            w("  proven connection, or a blocked attempt. Read those first; they")
-            w("  are marked >> in the summary above. The rest are reference-only.")
+            w("  connection record, DNS record, or blocked attempt. Read those first;")
+            w("  they are marked >> above. The rest are reference-only.")
         else:
             w("  ALL of these are reference-only: a string in cached page content,")
             w("  history or a blocklist - most often a page ABOUT this campaign (a")
@@ -289,16 +299,16 @@ def render_human(document: Dict[str, Any]) -> str:
         w("check. If you are at risk, contact people who do this properly:")
         _referrals(w)
     w(_RULE)
-    return "\n".join(out)
+    return _defang_report("\n".join(out), document)
 
 
 # The window the AdFection campaign was actually active, from the Citizen Lab
-# report: 45 compromised Windows devices at Al Jazeera during 2024-2025. If the
+# report: at least 45 targeted devices at Al Jazeera during 2024-2025. If the
 # evidence on this machine does not reach back that far, the honest thing is to say
 # the check could not have covered it, rather than let a clean result imply it did.
 CAMPAIGN_FROM = datetime.date(2024, 1, 1)
 CAMPAIGN_TO = datetime.date(2025, 12, 31)
-CAMPAIGN_LABEL = "2024-2025 (the period in which the confirmed compromises happened)"
+CAMPAIGN_LABEL = "2024-2025 (the documented campaign period)"
 
 
 def overlap_statement(earliest: datetime.date, source: str) -> List[str]:
@@ -464,10 +474,10 @@ def _render_reach(w, document: Dict[str, Any]) -> None:
 # contact with a command-and-control server are different events, and a report
 # that renders them identically has failed the person reading it.
 TIER_MEANING = {
-    "delivery": ("An advertising/tracking server belonging to this network "
-                 "reached this device. That is the mass-profiling layer: it "
-                 "happened to millions of people. It is NOT evidence of "
-                 "infection."),
+    "delivery": ("Advertising/tracking infrastructure belonging to this network. "
+                 "The evidence grade says what was observed; a DNS record or "
+                 "saved reference does not prove an ad reached this device. "
+                 "An ad impression is NOT evidence of infection."),
     "cc": ("A Candiru command-and-control server. This is the most serious "
            "class of indicator - it is the address an active implant talks to."),
     "validator": ("A Candiru validator server. These profiled a device and "
@@ -482,14 +492,31 @@ TIER_MEANING = {
                    "campaign. A hit would still be significant."),
     "sample": ("The file fingerprint of a published Candiru sample. A match "
                "here is conclusive, not circumstantial."),
+    "vuln-driver": ("A LEGITIMATE, signed third-party driver that this actor "
+                    "abuses to disable protections (bring-your-own-vulnerable-"
+                    "driver). The file itself is not spyware and is present on "
+                    "clean machines that genuinely use that hardware or "
+                    "software. This is a lead worth checking - who installed "
+                    "it, and when - NOT evidence that spyware is on this "
+                    "machine."),
 }
+
+# Tiers whose file hashes identify legitimate software this actor abuses, rather
+# than the spyware itself. A match must never be reported as proof of infection:
+# the same file sits on clean machines for honest reasons (see `vuln-driver`).
+NOT_MALWARE_TIERS = {"vuln-driver"}
 
 EVIDENCE_MEANING = {
     EV_ON_DISK: ("a file on this machine has the fingerprint of a published "
                  "spyware sample - this is conclusive, not circumstantial"),
+    # Same grade, different claim: see _on_disk_gloss(). A legitimate-but-abused
+    # driver sits on disk too, and saying "conclusive" about it would be false.
     EV_PERSISTENCE: ("the name is registered to run automatically on this "
                      "machine - a hallmark of installed spyware"),
     EV_CONTACTED: "this device demonstrably communicated with it",
+    EV_DNS: ("the name or address appears in local DNS data; this does not "
+             "establish communication with the indicated server, and a logged "
+             "lookup may have failed"),
     EV_ATTEMPTED: ("something on this device looked the name up, but a filter "
                    "blocked the connection"),
     EV_CONFIGURED: ("the name is in local configuration pointing at a real "
@@ -505,9 +532,35 @@ EVIDENCE_HEADLINE = {
     EV_ON_DISK: "A KNOWN SPYWARE FILE IS ON THIS MACHINE",
     EV_PERSISTENCE: "SOMETHING IS SET TO RUN AUTOMATICALLY FROM THIS INFRASTRUCTURE",
     EV_CONTACTED: "THIS DEVICE CONTACTED THIS INFRASTRUCTURE",
+    EV_DNS: "THIS INDICATOR APPEARS IN LOCAL DNS RECORDS",
     EV_ATTEMPTED: "THIS DEVICE TRIED TO REACH THIS INFRASTRUCTURE (a filter blocked it)",
     EV_CONFIGURED: "THIS INFRASTRUCTURE IS CONFIGURED ON THIS MACHINE",
 }
+
+
+# A file-on-disk hit means two very different things depending on what the file
+# IS. The grade (EV_ON_DISK) is the same either way, so the claim has to be
+# chosen from the tier, not from the grade alone.
+ON_DISK_NOT_MALWARE_HEADLINE = (
+    "A LEGITIMATE FILE THIS ATTACKER IS KNOWN TO ABUSE IS ON THIS MACHINE")
+ON_DISK_NOT_MALWARE_GLOSS = (
+    "this file is NOT spyware - it is signed, legitimate software that this "
+    "actor loads to disable protections. It is also installed for honest "
+    "reasons. Worth establishing how it got here; not proof of anything")
+
+
+def _headline_for(hit) -> str:
+    """The summary headline for one serious hit, chosen by grade AND tier."""
+    if hit.get("tier") in NOT_MALWARE_TIERS and hit.get("evidence") == EV_ON_DISK:
+        return ON_DISK_NOT_MALWARE_HEADLINE
+    return EVIDENCE_HEADLINE.get(hit.get("evidence"), "A SERIOUS INDICATOR MATCHED")
+
+
+def _evidence_gloss(hit) -> str:
+    """What this grade establishes for this hit (tier-aware, same reason)."""
+    if hit.get("tier") in NOT_MALWARE_TIERS and hit.get("evidence") == EV_ON_DISK:
+        return ON_DISK_NOT_MALWARE_GLOSS
+    return EVIDENCE_MEANING.get(hit.get("evidence") or "", "")
 
 
 def _defang(indicator: str) -> str:
@@ -524,11 +577,84 @@ def _defang(indicator: str) -> str:
     return out.replace(".", "[.]")
 
 
+# A URL scheme is all a mail gateway, link preview or security scanner needs in
+# order to fetch the thing. ftp:// is covered too, because a detail line quotes
+# whatever was in the saved page.
+_SCHEMES = {"https://": "hxxps://", "http://": "hxxp://", "ftp://": "fxp://"}
+_SCHEME_RE = re.compile("|".join(_SCHEMES), re.IGNORECASE)
+
+
+def _defang_text(text: str, indicator: str) -> str:
+    """Defang the indicator traces inside a free-text field - a detail line, a
+    path - and change nothing else about it.
+
+    Two passes, and only two. Schemes are neutered wherever they appear, because
+    a detail line quotes saved page content and a live https:// in there is
+    fetchable straight out of the report. Then the indicator's own value is
+    swapped for whatever _defang() renders it as, so the two places a reader
+    sees the same name agree. That match is case-insensitive: the browser module
+    lowercases the text it quotes, while the indicator need not be lowercase.
+
+    Deliberately NOT a general "wrap every dot" pass. A location is usually a
+    Windows path - "C:\\Users\\x\\AppData\\...\\Network\\Cookies" - and blanket
+    dot-wrapping would mangle real file and folder names into something the
+    person acting on this report can no longer find on their own disk.
+    """
+    out = _SCHEME_RE.sub(lambda m: _SCHEMES[m.group(0).lower()], str(text))
+    defanged = _defang(indicator) if indicator else indicator
+    if indicator and defanged != indicator:
+        out = re.sub(re.escape(indicator), lambda _m: defanged, out,
+                     flags=re.IGNORECASE)
+    return out
+
+
+def _human_document(document):
+    """Sanitize artifact-derived fields without changing the JSON evidence.
+
+    Notes and gaps can quote remote paths just as hits can. Published source
+    citations and the fixed help links remain usable.
+    """
+    doc = copy.deepcopy(document)
+
+    def scrub(value):
+        if isinstance(value, str):
+            return _defang_text(value, "")
+        if isinstance(value, list):
+            return [scrub(item) for item in value]
+        if isinstance(value, dict):
+            return {key: scrub(item) for key, item in value.items()}
+        return value
+
+    for module in doc["modules"].values():
+        for key in ("notes", "checks", "reach"):
+            if key in module:
+                module[key] = scrub(module[key])
+        for hit in module["hits"]:
+            for key in ("location", "detail", "observed", "profile"):
+                if key in hit:
+                    hit[key] = scrub(hit[key])
+    doc["verdict"]["gaps"] = scrub(doc["verdict"].get("gaps", []))
+    return doc
+
+
+def _defang_report(text, document):
+    """Cover every occurrence, including notes and another hit's details."""
+    indicators = set(document.get("_indicators", []))
+    indicators.update(hit["indicator"] for module in document["modules"].values()
+                      for hit in module["hits"])
+    for indicator in sorted(indicators, key=len, reverse=True):
+        if indicator and _defang(indicator) != indicator:
+            text = re.sub(re.escape(indicator), lambda m: _defang(m.group(0)),
+                          text, flags=re.IGNORECASE)
+    return text
+
+
 def render_summary(document: Dict[str, Any]) -> str:
     """The part a person actually reads. Answers, in order: what was found, what
     it means, what to do, and what this scan could not check.
 
     Everything below this in the report is the evidence for these few lines."""
+    document = _human_document(document)
     out: List[str] = []
     w = out.append
     v = document["verdict"]
@@ -562,7 +688,7 @@ def render_summary(document: Dict[str, Any]) -> str:
         # Strongest grade first; collapse repeats of the same indicator+grade so
         # one domain in three cache files is not three lines.
         for h in _dedup_serious(serious):
-            headline = EVIDENCE_HEADLINE.get(h["evidence"], "A SERIOUS INDICATOR MATCHED")
+            headline = _headline_for(h)
             w("    >> {}".format(headline))
             w("       {}  [{}]".format(_defang(h["indicator"]), h["tier"]))
             meaning = TIER_MEANING.get(h["tier"])
@@ -573,7 +699,8 @@ def render_summary(document: Dict[str, Any]) -> str:
                 w("          Account: {}".format(h["profile"]))
             if h.get("observed"):
                 w("          When: {}".format(h["observed"][:19].replace("T", " ")))
-            w("          Where: {}".format(_short_path(h["location"])))
+            w("          Where: {}".format(
+                _defang_text(_short_path(h["location"]), h["indicator"])))
             w("")
         w("  WHAT TO DO")
         w("    1. Do NOT delete, move or \"clean\" anything named above. It is the")
@@ -639,14 +766,14 @@ def render_summary(document: Dict[str, Any]) -> str:
             w("       actually answer the question.")
     w(_RULE)
     w("")
-    return "\n".join(out)
+    return _defang_report("\n".join(out), document)
 
 
 def _dedup_serious(hits: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Collapse repeats of the same indicator at the same grade, strongest grade
     first, so one domain found in three cache files is one line, not three."""
     order = {g: i for i, g in enumerate(
-        [EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_ATTEMPTED, EV_CONFIGURED])}
+        [EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_DNS, EV_ATTEMPTED, EV_CONFIGURED])}
     seen = {}
     for h in hits:
         key = (h["indicator"], h.get("evidence", ""))

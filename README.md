@@ -27,13 +27,14 @@ reports what it found, how strong the evidence is, and just as importantly
 In October 2026 The Citizen Lab documented how the ad-tech firm Discover-Tech used
 its **Controlium** platform to fingerprint and infect devices the moment an
 advertisement was rendered, delivering Candiru spyware with no click required.
-At least 45 devices at Al Jazeera were compromised across 2024–2025. The indicator
+At least 45 devices at Al Jazeera were targeted across 2024–2025. The indicator
 set here is drawn from that reporting and from Recorded Future's independent
 tracking of the same infrastructure.
 
-There is nothing to patch: the delivery vector is real-time ad bidding working as
-designed. The practical defences are to reduce exposure (block ads at the device
-or gateway) and to look for traces of contact — which is what this tool does.
+The delivery vector abuses real-time ad bidding. Keep operating systems and
+browsers updated, reduce exposure with ad filtering, and investigate surviving
+traces where appropriate. This tool checks those traces; it does not replace
+updates or establish that a device is safe.
 
 - The Citizen Lab, *Exposing AdFection* (2026-10-15)
 - Recorded Future / Insikt Group, *Tracking Candiru's DevilsTongue Spyware* (CTA-2025-0805)
@@ -43,7 +44,7 @@ or gateway) and to look for traces of contact — which is what this tool does.
 | area | what it reads |
 |---|---|
 | **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Chromium and Firefox, every profile |
-| **Files** | SHA-256 of candidate files under the user-writable locations spyware drops into, against known sample hashes |
+| **Files** | SHA-256 of candidate files under the user-writable locations spyware drops into, against known sample hashes — and, kept deliberately separate, the hash of a legitimate signed driver this actor abuses, which is reported as a lead rather than as proof |
 | **Host** (Windows) | per-user COM registrations (this campaign's documented persistence), the DNS resolver cache, whether DNS history logging is even enabled, the hosts file, and known fixed-path driver drops (e.g. the `HW.sys` vulnerable driver) |
 
 Every match is **evidence-graded**, because the artifact decides the meaning. A
@@ -54,7 +55,7 @@ about this topic never produces a false alarm, and a real contact is never burie
 
 ## Install and run
 
-Requires Python 3.7 or newer. No administrator. No third-party packages.
+Requires Python 3.8 or newer. No administrator. No third-party packages.
 
 **Single file (simplest):** download `zero-breach.py` and run
 
@@ -70,10 +71,10 @@ python -X utf8 zero-breach.py --json report.json
 python -X utf8 scan/adint-scan.py
 ```
 
-The scan is read-only: it changes nothing, needs no administrator, and never
-touches the network — it will not even resolve an indicator, because resolving a
-command-and-control domain would announce the person running it to whoever
-operates the infrastructure.
+The scan changes no system settings and needs no administrator. It makes no
+intentional network requests or indicator lookups. Remote and redirected paths
+are skipped, and online certificate verification is disabled. Locked database
+snapshots are temporary and removed after use; `--json` writes the requested report.
 
 Exit codes: `0` nothing found, `2` an indicator matched, `1` the scan could not be
 set up (e.g. a bad indicator file).
@@ -93,21 +94,24 @@ shasum -a 256 zero-breach.py
 ```
 
 **2. Rebuild it yourself and compare.** The single file is generated from this
-repository, deterministically — a fresh clone rebuilds a byte-identical file. So
+repository, deterministically — the matching release tag rebuilds a byte-identical file. So
 you do not have to trust the download at all; you can reproduce it:
 
 ```
 git clone <this repo> && cd zero-breach
+git checkout <the-tag-of-the-release-you-downloaded>
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
-The hash it prints will match the release. If it ever does not, do not run the file.
+Compare the hash with that release's published hash. The development branch may
+contain later changes and is not expected to reproduce an earlier release.
 
 **Antivirus note.** `zero-breach.py` is plain-text Python — you can read every line
 in a text editor. Some antivirus products flag *any* script that reads browser
 databases, because that behaviour resembles an infostealer. Zero Breach reads
-cookie **host names** only, never cookie values, and never the credential-decryption
-paths an infostealer uses — a line the test suite enforces. If your antivirus
+cookie **host names and timestamps** through its SQL queries, never cookie values,
+and does not decrypt credentials. A locked database snapshot necessarily copies
+the database bytes before querying that metadata. If your antivirus
 objects, read the source, check the hash, and decide for yourself.
 
 ## Reading the result
@@ -115,15 +119,25 @@ objects, read the source, check the hash, and decide for yourself.
 The report opens with a plain-language summary: what was found, how serious it is,
 what to do, and **what could not be checked**. Findings are ranked strongest-first:
 
-- **on-disk** — a file matches a known sample's fingerprint (conclusive)
+- **on-disk** — a file matches a published fingerprint. A spyware-sample match
+  identifies that sample; a `vuln-driver` match identifies legitimate software
+  known to be abused and is not proof of infection.
 - **persistence** — a name is registered to run automatically (serious)
 - **contacted** — the device demonstrably communicated with the host (serious)
+- **dns-record** — a name or address appears in local resolver data; a lookup
+  may have failed, and resolution alone does not prove contact with the server
 - **configured** — a name is mapped to a real address in local configuration
 - **referenced** — the name only appeared in saved page text (usually benign)
 
 Domain and IP matches are printed defanged (`example[.]com`) so that forwarding a
 report to a help organisation cannot cause a mail gateway to contact the
 indicator on the reader's behalf.
+
+DNS cache entries pointing at a blocking/sink address are described as protective
+configuration, not attempted contact: the hosts file can preload them without
+any lookup. For a more consistent SQLite snapshot, close browsers before scanning.
+Local-path checks are not an OS sandbox: POSIX network mounts and concurrent
+filesystem changes require an external isolation boundary for strict offline use.
 
 ### Example: a "nothing found" result
 
@@ -163,7 +177,9 @@ numbered "what to do" that starts with *do not delete the evidence*.
 The 338 indicators live in [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt),
 one per line with its tier, confidence and source. They cover the AdFection
 campaign plus curated historical Candiru infrastructure (ESET 2021, Avast 2022,
-Citizen Lab 2021), and are exported to [`dist/`](dist/) in several formats:
+Citizen Lab 2021). Each indicator is exported with its own citation, so an
+indicator that came from ESET or Recorded Future is not attributed to anyone else.
+They are exported to [`dist/`](dist/) in several formats:
 
 - **STIX 2.1** and **MISP** — for MISP, a SIEM, or Amnesty International's Mobile
   Verification Toolkit: `mvt-ios check-backup --iocs dist/adfection.stix.json <backup>`
@@ -173,6 +189,18 @@ Citizen Lab 2021), and are exported to [`dist/`](dist/) in several formats:
 
 Regenerate the exports with `python build/emit_stix.py`, `build/emit_misp.py` and
 `build/emit_denylist.py`.
+
+**Correction for existing STIX users:** the legitimate driver hash
+`6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5`
+is excluded from active STIX indicators. If you imported an earlier feed, process
+`dist/adfection.withdrawals.stix.json` in a consumer that supports STIX revocation,
+or explicitly remove the old driver rule and its relationship:
+`indicator--80275ed1-64f2-58c7-97dc-9cdacac0ff5d` and
+`relationship--66b188af-2489-5b41-a84f-b90c34f5fc73`.
+The withdrawal file is for removing earlier objects, **not a detection/MVT feed**.
+Continue using `dist/adfection.stix.json` for scanning. The scanner and MISP retain
+the driver as a clearly labelled investigation lead; its presence is not proof
+of spyware.
 
 ### Updating the indicators
 
@@ -187,21 +215,24 @@ python scan/update-iocs.py --apply    # also replace the local list
 
 It downloads over HTTPS, checks the file against a published SHA-256, confirms it
 parses before replacing anything, and shows a diff first. The trust model and the
-optional out-of-band signature check are documented at the top of the script.
+current signing limitations are documented at the top of the script. Detached
+signing is not configured for this release.
 
 ## Design principles
 
-- **Never contact an indicator.** The entire scan runs inside a guard that makes
-  any network access raise an error; a bug that tried to resolve a domain crashes
-  loudly rather than leaking a signal.
+- **Never contact an indicator.** A Python socket guard blocks direct DNS and
+  network calls. Local-path checks reject remote and redirected paths, and
+  Authenticode checks that could retrieve certificates are disabled. The socket
+  guard is not an operating-system network sandbox; use OS isolation when a
+  strict offline execution boundary is required.
 - **Measured, never inferred.** A check that could not run is reported as a gap,
   never as clean. This is enforced structurally, not by convention.
 - **Precision over coverage.** An unsigned binary in a user-writable path is not a
   finding; plenty of honest software looks like that. Alarms that mean nothing
   teach people to ignore the tool.
-- **Reads nothing it does not need.** It reads cookie *host names*, never cookie
-  *values*, and never touches the credential-decryption paths that an infostealer
-  would — a distinction asserted by the test suite, not just promised here.
+- **Queries only required metadata.** Cookie queries select host names and
+  timestamps, not values. Temporary snapshots copy entire locked database files;
+  the scanner does not decrypt browser credentials.
 - **Read-only, no administrator, no telemetry, no dependencies.**
 
 ## Tests

@@ -36,6 +36,8 @@ import shutil
 import sqlite3
 import sys
 import tempfile
+from urllib.parse import urlsplit
+from ..localpaths import local_temp_dir, path_problem, walk_local
 
 from ..result import (Hit, ModuleResult, EV_ON_DISK, EV_PERSISTENCE,
                       EV_CONTACTED, EV_ATTEMPTED, EV_CONFIGURED, EV_REFERENCED)
@@ -146,23 +148,66 @@ def copy_locked(path):
     its write-ahead-log / journal siblings into the system temp dir and open the
     copy read-only. The caller removes the temp dir in a finally once it has the
     returned path; if the snapshot itself fails the caller never receives a path,
-    so this function removes its own temp dir before re-raising (no leak)."""
-    tmpdir = tempfile.mkdtemp(prefix="bscan_")
+    so this function removes its own temp dir before re-raising (no leak).
+
+    Returns (path_to_copy, incomplete) where `incomplete` lists the sibling
+    suffixes that existed but could not be copied. A non-empty list means the
+    snapshot is missing data the live database has."""
+    problem = path_problem(path)
+    if problem:
+        raise PermissionError(13, problem, path)
+    tmpdir = tempfile.mkdtemp(prefix="bscan_", dir=local_temp_dir())
     try:
         base = os.path.join(tmpdir, os.path.basename(path))
         shutil.copy2(path, base)
+        # A failed sibling copy is NOT cosmetic. A write-ahead log holds rows
+        # that are committed but not yet folded into the main file, so losing it
+        # silently drops the MOST RECENT evidence - exactly the rows that matter
+        # for a campaign someone is checking for right now. Report which ones
+        # failed so the caller can record a gap instead of reading a short file
+        # and calling it clean (D3).
+        incomplete = []
         for suffix in ("-wal", "-shm", "-journal"):
+            if path_problem(path + suffix):
+                incomplete.append(suffix)
+                continue
             if os.path.exists(path + suffix):
                 try:
                     shutil.copy2(path + suffix, base + suffix)
                 except OSError:
-                    pass
-        return base
-    except BaseException:
+                    incomplete.append(suffix)
+        return base, incomplete
+    except BaseException as exc:
         # The one place that makes the temp dir is also the one place that
-        # removes it when it never hands it over.
-        shutil.rmtree(tmpdir, ignore_errors=True)
+        # removes it when it never hands it over. A failed copy may already
+        # contain cookie values, so deletion failure must reach the report.
+        if not _discard_snapshot(tmpdir):
+            exc.snapshot_leftover = tmpdir
         raise
+
+
+def _discard_snapshot(tmpdir, con=None):
+    """Close the open handle, then delete the snapshot - and check it is gone.
+
+    These temp copies are byte-for-byte duplicates of browser databases, cookie
+    VALUES included, even though the queries only read metadata. Windows refuses
+    to delete a file that an open SQLite connection still holds, and
+    shutil.rmtree(ignore_errors=True) swallows that refusal without a word - so
+    the copies survived in %TEMP% after every scan. A tool that leaves copies of
+    your cookies behind is worse than no tool, so the handle is closed first and
+    the removal is verified rather than assumed. Returns True if the directory
+    is gone."""
+    if con is not None:
+        try:
+            con.close()
+        except Exception:
+            pass
+    shutil.rmtree(tmpdir, ignore_errors=True)
+    if os.path.exists(tmpdir):
+        # One retry: on Windows an antivirus or indexer can hold a file open for
+        # a moment after the handle closes.
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    return not os.path.exists(tmpdir)
 
 
 def _chromium_profile_names(user_data):
@@ -180,13 +225,19 @@ def _chromium_profile_names(user_data):
     """
     out = {}
     path = os.path.join(user_data, "Local State")
+    if path_problem(path):
+        return out
     try:
         with io.open(path, encoding="utf-8", errors="replace") as fh:
             data = json.load(fh)
     except (OSError, ValueError):
         return out
-    cache = ((data.get("profile") or {}).get("info_cache") or {}
-             ) if isinstance(data, dict) else {}
+    profile = data.get("profile", {}) if isinstance(data, dict) else {}
+    if not isinstance(profile, dict):
+        return out
+    cache = profile.get("info_cache", {})
+    if not isinstance(cache, dict):
+        return out
     for folder, info in cache.items():
         if isinstance(info, dict) and info.get("name"):
             out[folder] = str(info["name"])
@@ -221,6 +272,8 @@ def _firefox_ini(profiles_dir):
 
     for ini in (os.path.join(profiles_dir, "profiles.ini"),
                 os.path.join(os.path.dirname(profiles_dir), "profiles.ini")):
+        if path_problem(ini):
+            continue
         section = {}
         try:
             with io.open(ini, encoding="utf-8", errors="replace") as fh:
@@ -241,12 +294,16 @@ def _firefox_ini(profiles_dir):
 
 def _is_ff_profile_dir(path):
     """True if `path` looks like a real Firefox profile (holds a marker file)."""
-    try:
-        for marker in _FF_PROFILE_MARKERS:
-            if os.path.exists(os.path.join(path, marker)):
-                return True
-    except OSError:
-        pass
+    for marker in _FF_PROFILE_MARKERS:
+        full = os.path.join(path, marker)
+        problem = path_problem(full)
+        if problem:
+            raise PermissionError(13, problem, full)
+        try:
+            os.lstat(full)
+            return True
+        except FileNotFoundError:
+            continue
     return False
 
 
@@ -268,6 +325,11 @@ def _locked_note(path, exc):
     sharing violation (PermissionError / errno 13 on Windows), or SQLite reports
     "database is locked" when the copy is opened. Both mean the same thing to the
     person reading the report: close the browser and run again."""
+    leftover = getattr(exc, "snapshot_leftover", "")
+    cleanup_warning = (
+        " WARNING: temporary snapshot cleanup failed; a copy of browser data "
+        "may remain at {}. Remove this temporary directory when its files can "
+        "be released.".format(leftover) if leftover else "")
     browser_name = "the browser"
     for marker, label in (("BraveSoftware", "Brave"), ("Google", "Chrome"),
                           ("Microsoft", "Edge"), ("Mozilla", "Firefox")):
@@ -278,8 +340,9 @@ def _locked_note(path, exc):
             or "locked" in str(exc).lower()):
         return ("{} was running, so one of its databases was locked and could "
                 "not be checked ({}). Close {} and run again to cover it."
-                .format(browser_name, os.path.basename(path), browser_name))
-    return "could not read {}: {}".format(path, exc)
+                .format(browser_name, os.path.basename(path), browser_name)
+                + cleanup_warning)
+    return "could not read {}: {}".format(path, exc) + cleanup_warning
 
 
 def _is_schema_drift(exc):
@@ -316,13 +379,13 @@ def _hsts_fingerprint(host):
 
 def _host_of(origin):
     """Host part of an origin like "https://example.org:443"."""
-    s = str(origin)
-    if "://" in s:
-        s = s.split("://", 1)[1]
-    s = s.split("/", 1)[0]
-    if s.startswith("["):                      # IPv6 literal
-        return s.split("]", 1)[0].lstrip("[").lower()
-    return s.split(":", 1)[0].lower()
+    s = str(origin).strip()
+    try:
+        # urlsplit is a lexical parser; it never resolves or opens a URL.
+        parsed = urlsplit(s if "://" in s or s.startswith("//") else "//" + s)
+        return (parsed.hostname or "").lower()
+    except ValueError:
+        return ""
 
 
 def _host_matches(host, ioc_set):
@@ -332,10 +395,18 @@ def _host_matches(host, ioc_set):
     ind = ioc_set.lookup(host)
     if ind is not None:
         return ind
+    # MOST specific wins, not first-found. The indicator set holds both parents
+    # and children (powerium.net and qa-noas.powerium.net), and iteration order
+    # is the file's order, so returning the first match could hand back the
+    # parent while most_specific() - which callers use to pick the hit - keeps
+    # the child. The two then disagree, the "is this the host?" comparison
+    # fails, and a genuine contact is downgraded to a mere reference.
+    best = None
     for candidate in ioc_set.indicators:
         if candidate.type == "domain" and host.endswith("." + candidate.value):
-            return candidate
-    return None
+            if best is None or len(candidate.value) > len(best.value):
+                best = candidate
+    return best
 
 
 def chromium_profiles(user_data):
@@ -344,13 +415,15 @@ def chromium_profiles(user_data):
     Raises OSError if the root exists but cannot be enumerated (a bad ACL); the
     caller turns that into a gap for this one root rather than aborting the whole
     module."""
+    problem = path_problem(user_data)
+    if problem:
+        raise PermissionError(13, problem, user_data)
     if not os.path.isdir(user_data):
         return []
     out = []
     for name in os.listdir(user_data):
         p = os.path.join(user_data, name)
-        if os.path.isdir(p) and (name == "Default" or name == "Guest Profile"
-                                 or name.startswith("Profile")):
+        if name == "Default" or name == "Guest Profile" or name.startswith("Profile"):
             out.append(p)
     return out
 
@@ -359,6 +432,10 @@ def run(ctx) -> ModuleResult:
     r = ModuleResult(NAME)
     r.submetrics["sqlite"] = 0
     r.submetrics["blob"] = 0
+    # Publish the result straight away so that if anything below raises,
+    # the CLI can still recover whatever was found before the failure
+    # instead of discarding it (see ScanContext.partial).
+    ctx.partial = r
 
     # Matching itself lives in IocSet.search / search_bytes, so the boundary
     # rules (a domain must not match inside a longer name, an IP must not match
@@ -396,16 +473,23 @@ def run(ctx) -> ModuleResult:
     def _touch(label, kind):
         key = (label, kind)
         if key not in kinds:
-            kinds[key] = {"ok": False, "reason": ""}
+            kinds[key] = {"ok": False, "reason": "", "failures": []}
         return kinds[key]
 
     def mark_ok(label, kind):
         _touch(label, kind)["ok"] = True
 
     def mark_fail(label, kind, reason):
+        # Every failure is kept, with the profile it happened in. Keeping only a
+        # single flag let one readable profile mask another profile's locked
+        # database: the kind was reported as a check that ran, and the scan came
+        # out CLEAN with no gap at all. That is precisely the collapse of UNKNOWN
+        # into CLEAN that D3 forbids, so the failures are now carried through to
+        # the rollup individually.
         entry = _touch(label, kind)
         if not entry["reason"]:
             entry["reason"] = reason
+        entry["failures"].append((current["name"], reason))
 
     def chrome_time(us):
         # Chromium stores microseconds since 1601-01-01 (the Windows epoch).
@@ -431,6 +515,11 @@ def run(ctx) -> ModuleResult:
         other failure records a could-not-read for this (label, kind) - which is
         promoted to a gap only if no profile ever reads it. The db is not counted
         as checked here; that happens only once rows are actually read."""
+        problem = path_problem(path)
+        if problem:
+            r.skipped += 1
+            mark_fail(label, kind, "{}: {}".format(path, problem))
+            return None
         try:
             os.stat(path)
         except FileNotFoundError:
@@ -442,7 +531,7 @@ def run(ctx) -> ModuleResult:
             mark_fail(label, kind, note)
             return None
         try:
-            tmp = copy_locked(path)
+            tmp, incomplete = copy_locked(path)
         except OSError as exc:
             # A locked db we could not even snapshot is a gap, not a clean item.
             r.skipped += 1
@@ -453,12 +542,24 @@ def run(ctx) -> ModuleResult:
         try:
             con = sqlite3.connect(tmp)
         except sqlite3.Error as exc:
-            shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
+            if not _discard_snapshot(os.path.dirname(tmp)):
+                exc.snapshot_leftover = os.path.dirname(tmp)
             r.skipped += 1
             note = _locked_note(path, exc)
             r.note(note)
             mark_fail(label, kind, note)
             return None
+        if incomplete:
+            # The main file opened, but a write-ahead log or journal that the
+            # live database HAS could not be copied. Whatever was committed
+            # there is missing from this snapshot - and that is the newest
+            # evidence, not the oldest. Reading the short file and calling it
+            # clean would be a false negative, so this is a gap.
+            note = ("{}: snapshot is incomplete - could not copy {} alongside "
+                    "it, so recently written rows may be missing from this "
+                    "read".format(os.path.basename(path), ", ".join(incomplete)))
+            r.note(note)
+            mark_fail(label, kind, note)
         con.text_factory = lambda b: b.decode("utf-8", "replace")
         return con, tmp
 
@@ -497,12 +598,18 @@ def run(ctx) -> ModuleResult:
                     mark_fail(label, kind, _locked_note(path, exc))
                     failed = True
 
+            if not failed and "url" not in present:
+                mark_fail(label, kind, "the history store has no supported URL "
+                          "column, so navigation history could not be searched")
+                failed = True
             if not failed and "url" in present:
                 cols = ["url"]
                 if "title" in present:
                     cols.append("title")
                 if visit_col in present:
                     cols.append(visit_col)
+                if flavour == "firefox" and "visit_count" in present:
+                    cols.append("visit_count")
                 try:
                     rows = con.execute("SELECT {} FROM {}".format(
                         ", ".join(cols), table)).fetchall()
@@ -521,9 +628,19 @@ def run(ctx) -> ModuleResult:
                         title = str(rec.get("title") or "")
                         blob = (url + " " + title).lower()
                         observed = _fmt_time(conv, rec.get(visit_col))
+                        # Firefox's places database also stores never-visited
+                        # bookmarks. A URL row alone does not establish a visit.
+                        has_visit = flavour != "firefox"
+                        if flavour == "firefox":
+                            for raw in (rec.get(visit_col), rec.get("visit_count")):
+                                try:
+                                    has_visit = has_visit or int(raw or 0) > 0
+                                except (TypeError, ValueError, OverflowError):
+                                    pass
                         host_ind = _host_matches(_host_of(url), ctx.iocs)
                         for ind in ctx.iocs.most_specific(ctx.iocs.search(blob)):
-                            if host_ind is not None and host_ind.value == ind.value:
+                            if (has_visit and host_ind is not None
+                                    and host_ind.value == ind.value):
                                 record_hit(path, ind, "history: " + blob[:160],
                                            EV_CONTACTED, observed)
                             else:
@@ -555,7 +672,11 @@ def run(ctx) -> ModuleResult:
                 if read_ok:
                     _count_db()
         finally:
-            shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
+            # Close the handle BEFORE removing, or Windows keeps the copy.
+            if not _discard_snapshot(os.path.dirname(tmp), con):
+                r.note("could not remove the temporary snapshot of {} - a copy "
+                       "may remain in the system temp directory"
+                       .format(os.path.basename(path)))
 
     def scan_favicons(label, path, flavour):
         """Favicons. For Chromium, a favicon URL whose stored bitmap is present
@@ -584,8 +705,7 @@ def run(ctx) -> ModuleResult:
             try:
                 rows = con.execute(sql).fetchall()
             except sqlite3.Error as exc:
-                if not _is_schema_drift(exc):
-                    mark_fail(label, kind, _locked_note(path, exc))
+                mark_fail(label, kind, _locked_note(path, exc))
                 return
             mark_ok(label, kind)
             _count_db()
@@ -596,10 +716,23 @@ def run(ctx) -> ModuleResult:
                 else:
                     url, ev = row[0], EV_CONTACTED
                 blob = str(url or "").lower()
+                # Anchor to the HOST, the same way history does. A stored bitmap
+                # proves the browser fetched that icon - from the icon URL's own
+                # host. An indicator sitting in the query string of an otherwise
+                # innocent favicon URL proves contact with the innocent host, not
+                # with the indicator, so it must not be graded as contact.
+                host_ind = _host_matches(_host_of(blob), ctx.iocs)
                 for ind in ctx.iocs.most_specific(ctx.iocs.search(blob)):
-                    record_hit(path, ind, "favicon: " + blob[:160], ev)
+                    anchored = (host_ind is not None
+                                and host_ind.value == ind.value)
+                    record_hit(path, ind, "favicon: " + blob[:160],
+                               ev if anchored else EV_REFERENCED)
         finally:
-            shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
+            # Close the handle BEFORE removing, or Windows keeps the copy.
+            if not _discard_snapshot(os.path.dirname(tmp), con):
+                r.note("could not remove the temporary snapshot of {} - a copy "
+                       "may remain in the system temp directory"
+                       .format(os.path.basename(path)))
 
     def scan_cookies(label, path, flavour):
         """Cookies get their own reader because they are the richest artifact
@@ -644,11 +777,12 @@ def run(ctx) -> ModuleResult:
                 candidates = ["host", "name", "creationTime", "lastAccessed"]
                 conv = unix_us_time
             wanted = [c for c in candidates if c in present]
-            if not wanted:
+            host_column = "host_key" if flavour == "chromium" else "host"
+            if host_column not in wanted:
                 r.skipped += 1
                 mark_fail(label, kind,
-                          "the cookie store {} had none of the expected columns "
-                          "(host/name/timestamps), so it could not be read"
+                          "the cookie store {} had no supported host column, "
+                          "so its cookie origins could not be searched"
                           .format(os.path.basename(path)))
                 return
             sql = "SELECT {} FROM {}".format(", ".join(wanted), table)
@@ -701,21 +835,28 @@ def run(ctx) -> ModuleResult:
                 except (sqlite3.Error, ValueError, OverflowError, OSError):
                     pass
         finally:
-            shutil.rmtree(os.path.dirname(tmp), ignore_errors=True)
+            # Close the handle BEFORE removing, or Windows keeps the copy.
+            if not _discard_snapshot(os.path.dirname(tmp), con):
+                r.note("could not remove the temporary snapshot of {} - a copy "
+                       "may remain in the system temp directory"
+                       .format(os.path.basename(path)))
 
     def scan_blobs(label, root, evidence):
         """Substring-search binary files (HTTP cache, LevelDB) for the needles.
 
-        `evidence` is how strong a match in THIS store is: Local Storage, Session
-        Storage and Service Worker CacheStorage are keyed by origin, so a match
-        there means the origin executed (contacted); the HTTP cache and Code
-        Cache are response bodies that may merely mention a name (referenced).
+        Raw bytes do not distinguish origin keys from saved page content. Every
+        match here is referenced, even when it looks like a complete origin URL.
 
         A directory that exists and can be walked is a successful check of the
         "blobs" kind, even if it holds no files (a present-but-empty cache is a
         legitimately clean cache). A subtree that could not be walked at all, or a
         file too large to hold in memory, is a gap - never dropped silently."""
         kind = "blobs"
+        problem = path_problem(root)
+        if problem:
+            r.skipped += 1
+            mark_fail(label, kind, "{}: {}".format(root, problem))
+            return
         try:
             os.stat(root)
         except FileNotFoundError:
@@ -726,44 +867,50 @@ def run(ctx) -> ModuleResult:
             mark_fail(label, kind, _locked_note(root, exc))
             return
 
-        walk_errors = []
+        failures = []
 
         def onerror(exc):
             # os.walk swallows directory errors unless we catch them here.
-            walk_errors.append(exc)
+            failures.append("could not enumerate {}: {}".format(
+                getattr(exc, "filename", root), exc))
             r.skipped += 1
             r.note("could not enumerate {}: {}".format(
                 getattr(exc, "filename", root), exc))
 
         read_any = False
-        for dirpath, _dirs, files in os.walk(root, onerror=onerror):
+        for dirpath, _dirs, files in walk_local(root, onerror=onerror):
             for fn in files:
                 full = os.path.join(dirpath, fn)
                 try:
+                    problem = path_problem(full)
+                    if problem:
+                        raise PermissionError(13, problem, full)
                     st = os.stat(full)
                 except OSError as exc:
                     r.skipped += 1
                     r.note("could not read {}: {}".format(full, exc))
+                    failures.append("could not stat {}: {}".format(full, exc))
                     continue
                 if st.st_size > 400 * 1024 * 1024:
                     r.skipped += 1  # too large to search — a gap, not clean
                     r.note("{} is larger than 400 MB and was not searched"
                            .format(full))
+                    failures.append("{} exceeds the 400 MB search limit".format(full))
                     continue
                 try:
                     with io.open(full, "rb") as fh:
                         data = fh.read()
+                    lowered = data.lower()
                 except MemoryError:
                     # read() then .lower() needs two copies; a file that will not
                     # fit is recorded as a gap, not pretended to be searched.
                     r.skipped += 1
-                    mark_fail(label, kind,
-                              "{} was too large to load into memory and could "
-                              "not be searched".format(full))
+                    failures.append("{} could not fit in memory".format(full))
                     continue
                 except OSError as exc:
                     r.skipped += 1  # unreadable file — a gap, not clean
                     r.note("could not read {}: {}".format(full, exc))
+                    failures.append("could not read {}: {}".format(full, exc))
                     continue
                 # Oldest cache artifact = how far back this check can possibly see.
                 # Browsers recycle the cache continuously, so this is a measured
@@ -773,19 +920,29 @@ def run(ctx) -> ModuleResult:
                 r.submetrics["blob"] += 1
                 r.checked += 1
                 read_any = True
-                for ind in ctx.iocs.search_bytes(data.lower()):
-                    record_hit(full, ind, "binary match in cache/leveldb",
-                               evidence)
+                for ind in ctx.iocs.search_bytes(lowered):
+                    # Local Storage / Session Storage / Service Worker entries
+                    # are KEYED BY ORIGIN, which is why a match there was graded
+                    # as contact. But this is a raw byte search over the whole
+                    # file, and these stores also hold page CONTENT - a saved
+                    # article, a quoted report. An indicator inside a stored
+                    # value proves someone read about this campaign, not that
+                    # the device talked to it, and telling a journalist who read
+                    # the Citizen Lab report that their device "demonstrably
+                    # communicated with" spyware infrastructure is the worst
+                    # kind of false alarm. A URL-looking string is not enough
+                    # to identify a structured origin key, so retain a reference.
+                    record_hit(full, ind,
+                               "binary match in cache/leveldb; raw bytes do not "
+                               "establish whether this is an origin or saved content",
+                               EV_REFERENCED)
 
-        if read_any:
+        if read_any or not failures:
             mark_ok(label, kind)
-        elif walk_errors:
+        if failures:
             mark_fail(label, kind,
-                      "nothing under {} could be read ({} directory error(s))"
-                      .format(root, len(walk_errors)))
-        else:
-            # Present and walkable, just empty: a clean cache, not a gap.
-            mark_ok(label, kind)
+                      "{} item(s) under {} were not searched: {}"
+                      .format(len(failures), root, "; ".join(failures[:3])))
 
     def scan_connection_records(label, prof):
         """The two long-lived records of hosts the browser actually CONNECTED to.
@@ -807,6 +964,9 @@ def run(ctx) -> ModuleResult:
         ts_path = os.path.join(net_dir, "TransportSecurity")
         ts_present = True
         try:
+            problem = path_problem(ts_path)
+            if problem:
+                raise PermissionError(13, problem, ts_path)
             os.stat(ts_path)
         except FileNotFoundError:
             ts_present = False
@@ -818,7 +978,18 @@ def run(ctx) -> ModuleResult:
             try:
                 with io.open(ts_path, encoding="utf-8", errors="replace") as fh:
                     data = json.load(fh)
-                entries = data.get("sts", []) if isinstance(data, dict) else []
+                if not isinstance(data, dict):
+                    raise ValueError("HSTS state must be an object")
+                entries = data.get("sts", [])
+                # Shape-check rather than trust: a file whose "sts" is a number
+                # rather than a list made len() raise TypeError, which escaped
+                # the (OSError, ValueError) handler below, propagated out of the
+                # module and cost every hit already collected. A malformed
+                # artifact is a gap for THIS artifact, never a crash.
+                if not isinstance(entries, list):
+                    raise ValueError(
+                        "unexpected shape: 'sts' is {}, expected a list"
+                        .format(type(entries).__name__))
                 r.submetrics["hsts_entries"] = (
                     r.submetrics.get("hsts_entries", 0) + len(entries))
                 r.checked += len(entries)
@@ -826,8 +997,9 @@ def run(ctx) -> ModuleResult:
                 if entries:
                     held = {}
                     for e in entries:
-                        if isinstance(e, dict) and e.get("host"):
-                            held[e["host"]] = e
+                        if not isinstance(e, dict) or not isinstance(e.get("host"), str):
+                            raise ValueError("HSTS entry must contain a host string")
+                        held[e["host"]] = e
                     for ind in ctx.iocs.indicators:
                         if ind.type != "domain":
                             continue
@@ -839,7 +1011,7 @@ def run(ctx) -> ModuleResult:
                             when = datetime.datetime.fromtimestamp(
                                 float(e.get("sts_observed"))).isoformat(
                                     timespec="seconds")
-                        except (TypeError, ValueError, OSError):
+                        except (TypeError, ValueError, OverflowError, OSError):
                             pass
                         record_hit(
                             ts_path, ind,
@@ -854,6 +1026,9 @@ def run(ctx) -> ModuleResult:
         nps_path = os.path.join(net_dir, "Network Persistent State")
         nps_present = True
         try:
+            problem = path_problem(nps_path)
+            if problem:
+                raise PermissionError(13, problem, nps_path)
             os.stat(nps_path)
         except FileNotFoundError:
             nps_present = False
@@ -865,8 +1040,24 @@ def run(ctx) -> ModuleResult:
             try:
                 with io.open(nps_path, encoding="utf-8", errors="replace") as fh:
                     data = json.load(fh)
-                hsp = ((data.get("net") or {}).get("http_server_properties") or {}
-                       ) if isinstance(data, dict) else {}
+                if not isinstance(data, dict):
+                    raise ValueError("network state must be an object")
+                net = data.get("net", {})
+                if not isinstance(net, dict):
+                    raise ValueError("network state 'net' must be an object")
+                hsp = net.get("http_server_properties", {})
+                if not isinstance(hsp, dict):
+                    raise ValueError("http_server_properties must be an object")
+                for field, host_field in (("servers", "server"),
+                                          ("broken_alternative_services", "host")):
+                    entries = hsp.get(field, [])
+                    if not isinstance(entries, list):
+                        raise ValueError("{} must be a list".format(field))
+                    for row in entries:
+                        if not isinstance(row, dict) or not isinstance(
+                                row.get(host_field), str):
+                            raise ValueError("{} contains an invalid host record"
+                                             .format(field))
                 origins = []
                 for row in hsp.get("servers") or []:
                     if isinstance(row, dict) and row.get("server"):
@@ -902,6 +1093,9 @@ def run(ctx) -> ModuleResult:
         reaches the output.
         """
         try:
+            problem = path_problem(path)
+            if problem:
+                raise PermissionError(13, problem, path)
             os.stat(path)
         except FileNotFoundError:
             return
@@ -937,6 +1131,10 @@ def run(ctx) -> ModuleResult:
 
     # --- Chromium family: Chrome, Edge, Brave, Chromium ---------------------
     for label, root in CHROMIUM_ROOTS:
+        problem = path_problem(root)
+        if problem:
+            r.could_not_run(label + ":profiles", "{}: {}".format(root, problem))
+            continue
         if not os.path.isdir(root):
             continue  # browser not installed — absent, so no sub-check for it
         try:
@@ -948,6 +1146,12 @@ def run(ctx) -> ModuleResult:
         names = _chromium_profile_names(root)
         ctx.emit("[*] {} ({} profile(s))".format(root, len(profs)))
         for prof in profs:
+            problem = path_problem(prof)
+            if problem:
+                r.could_not_run(label + ":profile:" + os.path.basename(prof), problem)
+                continue
+            if not os.path.isdir(prof):
+                continue
             folder = os.path.basename(prof)
             display = names.get(folder, "")
             # Name the account in the hit, falling back to the folder when the
@@ -977,6 +1181,12 @@ def run(ctx) -> ModuleResult:
     # the loop, stamping every Firefox cache hit with the last Chrome profile).
     current["name"] = ""
     for profiles_dir, cache_dir in ff_roots:
+        refused = [(p, path_problem(p)) for p in (profiles_dir, cache_dir)]
+        if any(reason for _p, reason in refused):
+            for p, reason in refused:
+                if reason:
+                    r.could_not_run("firefox:profiles:" + p, reason)
+            continue
         prof_is_dir = os.path.isdir(profiles_dir)
         cache_is_dir = os.path.isdir(cache_dir)
         if not prof_is_dir and not cache_is_dir:
@@ -1000,14 +1210,25 @@ def run(ctx) -> ModuleResult:
         for name in sorted(folders):
             prof = os.path.join(profiles_dir, name)
             cprof = os.path.join(cache_dir, name)
+            refused = [(p, path_problem(p)) for p in (prof, cprof)]
+            if any(reason for _p, reason in refused):
+                for p, reason in refused:
+                    if reason:
+                        r.could_not_run("firefox:profile:" + p, reason)
+                continue
             if not os.path.isdir(prof) and not os.path.isdir(cprof):
                 continue
             # On Linux the profiles root also holds non-profile folders (Crash
             # Reports, Pending Pings, Profile Groups). Only treat a folder as a
             # profile if profiles.ini lists it or it holds a profile marker file,
             # so those are not scanned and mislabelled as profiles.
-            if name not in ff_known and not _is_ff_profile_dir(prof):
-                continue
+            if name not in ff_known:
+                try:
+                    if not _is_ff_profile_dir(prof):
+                        continue
+                except OSError as exc:
+                    r.could_not_run("firefox:profile:" + name, str(exc))
+                    continue
             display = ff_names.get(name, "")
             current["name"] = ("{} ({})".format(display, name) if display
                                else name)
@@ -1038,7 +1259,19 @@ def run(ctx) -> ModuleResult:
         check_name = "{}:{}".format(label, kind)
         if state["ok"]:
             r.ran(check_name)
+            # A profile that could not be read is still a gap when a DIFFERENT
+            # profile of the same browser read fine: the unread profile was
+            # never searched, so nothing has been cleared for it. Previously the
+            # successful profile set a single flag and these vanished, so a
+            # locked second profile came out CLEAN with no gap - the collapse of
+            # UNKNOWN into CLEAN that D3 exists to prevent. Each is named with
+            # its account so the report can say WHICH one was not covered.
+            for profile_name, reason in state["failures"]:
+                r.could_not_run(
+                    "{} [{}]".format(check_name, profile_name or "profile"),
+                    reason)
         else:
+            # Nothing anywhere read this kind: the kind itself is the gap.
             r.could_not_run(check_name, state["reason"] or "could not be read")
 
     # Report the measured window. Without this, "browser: CLEAN" invites the reader

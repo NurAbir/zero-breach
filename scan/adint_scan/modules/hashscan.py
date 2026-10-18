@@ -21,6 +21,7 @@ import io
 import os
 
 from ..result import Hit, ModuleResult, EV_ON_DISK
+from ..localpaths import path_problem, walk_local
 
 NAME = "hash"
 
@@ -61,9 +62,10 @@ def _roots():
     # coverage counts and reporting one real sample as two separate hits.
     resolved = []
     for raw in roots:
-        if not raw or not os.path.isdir(raw):
+        if not raw:
             continue
-        norm = os.path.normcase(os.path.realpath(raw))
+        # Do not resolve links or test existence before the locality guard.
+        norm = os.path.normcase(os.path.normpath(raw))
         if norm not in resolved:
             resolved.append(norm)
     kept = []
@@ -78,6 +80,9 @@ def _sha256(full):
     """SHA-256 of a file, read in 1 MiB chunks so a large file never loads whole
     into memory. Returns (hex_digest, size) or raises OSError for the caller to
     count as skipped."""
+    problem = path_problem(full)
+    if problem:
+        raise PermissionError(13, problem, full)
     size = os.path.getsize(full)
     h = hashlib.sha256()
     with io.open(full, "rb") as fh:
@@ -91,6 +96,10 @@ def _sha256(full):
 
 def run(ctx) -> ModuleResult:
     r = ModuleResult(NAME)
+    # Publish the result straight away so that if anything below raises,
+    # the CLI can still recover whatever was found before the failure
+    # instead of discarding it (see ScanContext.partial).
+    ctx.partial = r
 
     # Build the hex-digest -> Indicator map once so each file is a single dict
     # lookup. The hashes come from the IOC set, never hardcoded (ctx.iocs.hashes).
@@ -105,37 +114,56 @@ def run(ctx) -> ModuleResult:
     ctx.emit("[hash] looking for {} known sample hash(es)".format(len(targets)))
 
     for root in _roots():
-        # Each root actually walked is a sub-check that ran (even if it hashes
-        # nothing), so a clean root is reported as a check that truly executed.
+        problem = path_problem(root)
+        if problem:
+            r.could_not_run("root:" + root, problem)
+            continue
+        if not os.path.isdir(root):
+            continue
         # The full path, not the basename: %TEMP% and %SystemRoot%\Temp both end
         # in "Temp", and two roots collapsing to one name would make the check
         # list lie about what was actually covered.
-        r.ran("root:" + root)
+        #
+        # The verdict for this root is decided AFTER the walk, not before it.
+        # Marking it as a check that ran up front meant a root where every
+        # candidate file failed to open still counted as a clean, completed
+        # check: nothing was fingerprinted, nothing was reported, and the scan
+        # said CLEAN with no gap. A file that could not be read has not been
+        # cleared of anything (D3).
         ctx.emit("[hash] scanning {} ...".format(root))
+        tally = {"hashed": 0, "candidates": 0, "unreadable": 0}
 
-        def _walk_err(exc, _r=r):
+        def _walk_err(exc, _r=r, _t=tally):
             # An unreadable subtree would otherwise vanish silently from os.walk.
             _r.skipped += 1
+            _t["unreadable"] += 1
 
-        for dirpath, dirs, files in os.walk(root, onerror=_walk_err):
+        for dirpath, dirs, files in walk_local(root, onerror=_walk_err):
             # Prune noisy / huge subtrees in place so os.walk never descends them.
             dirs[:] = [d for d in dirs if d.lower() not in PRUNE_DIRS]
             for fn in files:
                 if not fn.lower().endswith(EXTS):
                     continue
                 full = os.path.join(dirpath, fn)
+                tally["candidates"] += 1
                 try:
+                    problem = path_problem(full)
+                    if problem:
+                        raise PermissionError(13, problem, full)
                     size = os.path.getsize(full)
                     # Over the size cap: skipped, not clean (D-never-crash).
                     if size > MAX_BYTES:
                         r.skipped += 1
+                        tally["unreadable"] += 1
                         continue
                     digest, size = _sha256(full)
                 except OSError:
                     # Locked / permission-denied / unreadable: skip and continue.
                     r.skipped += 1
+                    tally["unreadable"] += 1
                     continue
 
+                tally["hashed"] += 1
                 r.checked += 1
                 r.submetrics["files_hashed"] = r.submetrics.get("files_hashed", 0) + 1
                 r.submetrics["bytes_hashed"] = r.submetrics.get("bytes_hashed", 0) + size
@@ -158,5 +186,27 @@ def run(ctx) -> ModuleResult:
                         evidence=EV_ON_DISK,
                     ))
                     ctx.emit("[hash] !! MATCH {} ({})".format(full, ind.value))
+
+        # Now say honestly what this root amounted to.
+        name = "root:" + root
+        if tally["hashed"]:
+            r.ran(name)
+            if tally["unreadable"]:
+                r.could_not_run(
+                    name + " (partial)",
+                    "{} of {} candidate file(s) under this root could not be "
+                    "read or were too large to fingerprint, so they were not "
+                    "compared against the known hashes".format(
+                        tally["unreadable"], tally["candidates"]))
+        elif tally["candidates"] or tally["unreadable"]:
+            # Candidates existed but not one could be fingerprinted: this root
+            # was not searched at all, however many files it holds.
+            r.could_not_run(
+                name,
+                "no file under this root could be fingerprinted ({} candidate "
+                "file(s) unreadable)".format(tally["unreadable"]))
+        else:
+            # Walked cleanly, held nothing to fingerprint. Genuinely covered.
+            r.ran(name)
 
     return r

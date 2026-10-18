@@ -106,22 +106,21 @@ A('')
 A('WHAT THIS IS')
 A('  A read-only checker. It searches this computer\'s own leftover records -')
 A('  browser cache and cookies, file fingerprints, auto-start registrations, the')
-A('  DNS resolver cache - for {} indicators published by The Citizen Lab'.format(
+A('  DNS resolver cache - for {} indicators published by The Citizen Lab,'.format(
     len([l for l in ioc_text.split("\n")
          if l.strip() and not l.strip().startswith("#")])))
-A('  (Exposing AdFection, 2026-10-15) and Recorded Future (CTA-2025-0805).')
+A('  Recorded Future, ESET and Avast / Gen. The original citations are embedded.')
 A('')
 A('WHAT IT WILL NOT DO')
-A('  - It never changes anything. The only file it writes is its own report. No')
-A('    registry writes, no settings touched: it has no code path of any kind')
-A('    that can modify this machine.')
-A('  - It never uses the network. Not to check for updates, not for telemetry,')
-A('    and above all never to look up an indicator - resolving a spyware domain')
-A('    would announce the person running this to whoever operates it. The whole')
-A('    scan runs inside a guard that makes network access raise an error.')
-A('  - It never decrypts anything. It reads cookie HOST NAMES only, never cookie')
-A('    values. Decrypting those is what credential-stealing malware does; this')
-A('    has no need for it and no code to do it.')
+A('  - It does not change source files, registry entries or system settings.')
+A('    It writes temporary database snapshots and embedded indicator data,')
+A('    removes those after use, and retains a report only when requested.')
+A('  - It makes no intentional network requests or indicator lookups. Remote')
+A('    and redirected paths are skipped; Authenticode checks are disabled.')
+A('    Python network calls are blocked during the scan. This guard is not an')
+A('    operating-system network sandbox.')
+A('  - It does not decrypt credentials. Cookie queries select metadata, not')
+A('    cookie values; temporary snapshots copy the entire source database.')
 A('')
 A('IMPORTANT - WHAT A CLEAN RESULT MEANS')
 A('  "No known indicators found" means exactly that, and nothing more. It is not')
@@ -142,11 +141,11 @@ A('  NOT affiliated with, and NOT endorsed by, The Citizen Lab, Confiant,')
 A('  Recorded Future, Amnesty International or Access Now.')
 A('')
 A('USAGE')
-A('  python -X utf8 adint-scan-standalone.py')
-A('  python -X utf8 adint-scan-standalone.py --json report.json')
+A('  python -X utf8 zero-breach.py')
+A('  python -X utf8 zero-breach.py --json report.json')
 A('')
-A('Requires Python 3.7 or newer. Needs no administrator. Windows gets all four')
-A('checks; macOS and Linux get the browser and file checks.')
+A('Requires Python 3.8 or newer. Needs no administrator. All supported platforms')
+A('get browser and file checks; Windows also gets host checks.')
 A('"""')
 A('from __future__ import annotations')
 A('')
@@ -155,7 +154,7 @@ A('import datetime')
 A('import sys')
 A('import time')
 A('')
-A('__version__ = "0.1.0 (single-file build)"')
+A('__version__ = "0.1.1 (single-file build)"')
 A('')
 A('# --- embedded indicator data ------------------------------------------------')
 A('# The real file is iocs/adfection_iocs.txt in the project. Its provenance')
@@ -170,6 +169,7 @@ A('')
 for label, fname in (("result", "result.py"),
                      ("iocs", "iocs.py"),
                      ("netguard", "netguard.py"),
+                     ("localpaths", "localpaths.py"),
                      ("context", "context.py"),
                      ("report", "report.py")):
     A('# --- {} {}'.format(label, '-' * max(0, 72 - len(label))))
@@ -257,8 +257,8 @@ def main(argv=None):
                    help="do not wait for a keypress before exiting")
     args = p.parse_args(sys.argv[1:] if argv is None else argv)
 
-    if sys.version_info < (3, 7):
-        print("This needs Python 3.7 or newer; this is {}.{}.".format(
+    if sys.version_info < (3, 8):
+        print("This needs Python 3.8 or newer; this is {}.{}.".format(
             *sys.version_info[:2]), file=sys.stderr)
         _hold(args)
         return 1
@@ -289,11 +289,19 @@ def main(argv=None):
                 continue
             print("[*] running check: {}".format(name), file=sys.stderr)
             started_mod = time.time()
+            ctx.partial = None
             try:
                 result = fn(ctx)
             except Exception as exc:
-                result = ModuleResult(name)
+                # Match the source CLI: an error after a hit must not erase it.
+                partial = ctx.partial
+                if isinstance(partial, ModuleResult) and partial.name == name:
+                    result = partial
+                else:
+                    result = ModuleResult(name)
                 result.could_not_run(name, "module error: {}".format(exc))
+            finally:
+                ctx.partial = None
             result.duration_s = time.time() - started_mod
             print("[*]   {} finished in {:.0f}s".format(name, result.duration_s),
                   file=sys.stderr)

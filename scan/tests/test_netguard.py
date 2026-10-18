@@ -17,6 +17,8 @@ import re
 import socket
 import sys
 import unittest
+import tempfile
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -66,9 +68,7 @@ class TestGuardBlocks(unittest.TestCase):
 
 
 class TestRealScanResolvesNothing(unittest.TestCase):
-    """Run the actual modules and prove no resolution happened. This is the
-    assertion that matters: the guard could be bypassed by a module that uses
-    something other than `socket`, so we also count real resolution calls."""
+    """Exercise host orchestration with synthetic OS inputs, never live host I/O."""
 
     def test_full_scan_performs_no_resolution(self):
         from adint_scan import iocs as iocmod
@@ -87,29 +87,25 @@ class TestRealScanResolvesNothing(unittest.TestCase):
 
         def spy_getaddrinfo(*a, **k):
             calls.append(("getaddrinfo", a))
-            return real_getaddrinfo(*a, **k)
+            raise AssertionError("unexpected resolution")
 
         def spy_gethostbyname(*a, **k):
             calls.append(("gethostbyname", a))
-            return real_gethostbyname(*a, **k)
+            raise AssertionError("unexpected resolution")
 
         socket.getaddrinfo = spy_getaddrinfo
         socket.gethostbyname = spy_gethostbyname
         try:
-            # The host module is the one with real resolution risk: it is the
-            # only module that shells out to the OS network stack (reading the
-            # local DNS cache and the DNS event log), so it is the one worth
-            # running live against the real indicator set. The browser and hash
-            # modules only read files; they are covered by the static import and
-            # shell-out checks below, and running them live here would walk tens
-            # of thousands of real cache files and make the suite unusable.
             ctx = ScanContext(iocs=ioc_set, emit=lambda _m: None)
-            try:
-                host.run(ctx)
-            except Exception:
-                # A module failing is a separate concern; this test is only
-                # ever about whether anything was resolved.
-                pass
+            with tempfile.TemporaryDirectory() as tmp:
+                with patch.dict(os.environ, {"SystemRoot": tmp}), \
+                     patch.object(host.platform, "system", return_value="Windows"), \
+                     patch.object(host, "_enum_com_registrations", return_value=([], [])), \
+                     patch.object(host, "_network_drive_letters", return_value=(set(), True)), \
+                     patch.object(host, "_ps_json", return_value=([], "")), \
+                     patch.object(host, "_ps", return_value=("", "")), \
+                     patch.object(host.subprocess, "run", side_effect=AssertionError("live subprocess")):
+                    host.run(ctx)
         finally:
             socket.getaddrinfo = real_getaddrinfo
             socket.gethostbyname = real_gethostbyname
@@ -138,6 +134,9 @@ class TestNoNetworkImports(unittest.TestCase):
                 continue
             with open(os.path.join(mod_dir, fn), encoding="utf-8") as fh:
                 text = fh.read()
+            # urllib.parse is a pure string parser; no other urllib module is
+            # permitted. Keep the exemption exact instead of allowing urllib.
+            text = text.replace("from urllib.parse import urlsplit", "")
             for needle in self.FORBIDDEN:
                 if needle in text:
                     offenders.append("{}: {}".format(fn, needle))
@@ -168,6 +167,119 @@ class TestNoNetworkImports(unittest.TestCase):
         self.assertEqual(offenders, [],
                          "a module appears to shell out to a name resolver or "
                          "HTTP client: {}".format(offenders))
+
+
+class TestRemotePathsAreNeverTouched(unittest.TestCase):
+    """The socket guard cannot see a filesystem path.
+
+    A COM registration value comes out of the registry, which an attacker on a
+    compromised machine controls. os.path.exists() on \\\\attacker-host\\share\\x.dll
+    makes WINDOWS open an SMB session - no Python socket is involved, so the
+    guard above records nothing - and that handshake can hand the remote host
+    the user's NetNTLM credentials. A drive letter mapped to a remote share does
+    the same with none of the visual warning.
+    """
+
+    BACKSLASH = chr(92)
+
+    def _run_com_over(self, raw_values, remote_letters=(), kind="InprocServer32"):
+        import tempfile
+        from adint_scan import iocs as iocmod
+        from adint_scan.context import ScanContext
+        from adint_scan.modules import host
+
+        tmp = tempfile.mkdtemp(prefix="comunc_")
+        ioc_path = os.path.join(tmp, "iocs.txt")
+        with open(ioc_path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write("synthetic-indicator.invalid\tdelivery\tprimary\tt\n")
+        ctx = ScanContext(iocs=iocmod.load(ioc_path), emit=lambda _m: None)
+
+        touched = []
+        real_exists, real_isfile = os.path.exists, os.path.isfile
+        saved_enum = host._enum_com_registrations
+        saved_drives = host._network_drive_letters
+        saved_sigs = host._signature_status
+
+        def spy_exists(p):
+            touched.append(p)
+            return False
+
+        def spy_isfile(p):
+            touched.append(p)
+            return False
+
+        host._enum_com_registrations = lambda _r: ([
+            {"clsid": "{{{}}}".format(i), "kind": kind, "raw": v,
+             "view": "native"} for i, v in enumerate(raw_values)], [])
+        host._network_drive_letters = lambda: (set(remote_letters), True)
+        # Never spawn PowerShell from the suite; signatures are not what this
+        # test is about.
+        host._signature_status = lambda paths, timeout=180: ({}, "")
+        os.path.exists, os.path.isfile = spy_exists, spy_isfile
+        try:
+            r = host.ModuleResult("host")
+            host._check_com(r, ctx)
+        finally:
+            os.path.exists, os.path.isfile = real_exists, real_isfile
+            host._enum_com_registrations = saved_enum
+            host._network_drive_letters = saved_drives
+            host._signature_status = saved_sigs
+        return r, touched
+
+    def test_unc_registration_is_never_handed_to_the_filesystem(self):
+        b = self.BACKSLASH
+        unc = b + b + "attacker-host" + b + "share" + b + "payload.dll"
+        unc_ext = b + b + "?" + b + "UNC" + b + "attacker-host" + b + "p.dll"
+        # The safe control must be local on the OS running the test. A C:\\
+        # path is relative/unknown on Linux and should correctly be rejected.
+        with tempfile.TemporaryDirectory(prefix="com_local_") as local_root:
+            local = os.path.join(local_root, "synthetic-local-library.dll")
+            r, touched = self._run_com_over([unc, unc_ext, local])
+        for p in touched:
+            self.assertFalse(str(p).startswith(b + b),
+                             "D2 VIOLATION: the scan stat()ed {}, which makes "
+                             "Windows connect to the remote host".format(p))
+        self.assertEqual(r.submetrics.get("com_remote_paths"), 2)
+
+    def test_network_mapped_drive_letter_is_never_touched(self):
+        b = self.BACKSLASH
+        r, touched = self._run_com_over(["Z:" + b + "payload.dll"],
+                                        remote_letters=("Z",))
+        self.assertEqual(touched, [])
+        self.assertEqual(r.submetrics.get("com_remote_paths"), 1)
+
+    def test_localserver_remote_paths_are_rejected_before_command_parsing_io(self):
+        b = self.BACKSLASH
+        for raw in (b + b + "synthetic.invalid" + b + "share" + b + "app.exe",
+                    b + b + "?" + b + "UNC" + b + "synthetic.invalid" + b + "a.exe",
+                    "Z:" + b + "app.exe -Embedding"):
+            with self.subTest(raw=raw):
+                r, touched = self._run_com_over([raw], ("Z",), "LocalServer32")
+                self.assertEqual(touched, [])
+                self.assertTrue(any(not c.ran for c in r.checks))
+
+    def test_signature_inventory_never_starts_a_subprocess(self):
+        from adint_scan.modules import host
+        with patch.object(host, "_ps_json", side_effect=AssertionError("network-capable verifier")):
+            statuses, reason = host._signature_status(["C:" + self.BACKSLASH + "example.dll"])
+        self.assertTrue(reason)
+        self.assertEqual(next(iter(statuses.values()))[0], "NotChecked")
+
+    def test_a_rejected_path_is_a_recorded_gap_not_a_silent_drop(self):
+        """D3: UNKNOWN is never CLEAN. Refusing to look is honest; pretending
+        the entry was checked is not."""
+        b = self.BACKSLASH
+        unc = b + b + "attacker-host" + b + "share" + b + "payload.dll"
+        r, _touched = self._run_com_over([unc])
+        com = [c for c in r.checks if c.name == "com-persistence"]
+        self.assertEqual(len(com), 1)
+        self.assertFalse(com[0].ran, "the COM check must not report as fully "
+                                     "run when an entry was left unverified")
+        self.assertIn("not on a local disk", com[0].reason)
+        self.assertTrue(any("UNVERIFIED" in n for n in r.notes),
+                        "the user must be told which entries were not checked")
+        self.assertTrue(any("attacker-host" in n for n in r.notes),
+                        "and which path it was")
 
 
 if __name__ == "__main__":

@@ -55,8 +55,24 @@ def _domains(ioc_set, include_historical):
     return sorted(set(out))
 
 
-def _header(fmt, comment, domains, include_historical):
-    stamp = datetime.date.today().isoformat()
+def _asof_stamp(ioc_set):
+    """The date to stamp into every generated list: the set's curated date.
+
+    Stamping the wall clock made these files change every single day with no
+    change to the source, so the build's artifact-drift check (build.py --check)
+    failed on the day after the artifacts were committed. The '# as-of:' date is
+    content, so every rebuild and every checkout agrees on it - the same reason
+    the single-file build stamps it (build/bundle.py). Fall back to the file's
+    own mtime for a set whose header carries no date.
+    """
+    if ioc_set.asof:
+        return ioc_set.asof
+    if ioc_set.source_mtime is not None:
+        return datetime.date.fromtimestamp(ioc_set.source_mtime).isoformat()
+    return datetime.date.today().isoformat()
+
+
+def _header(fmt, comment, domains, include_historical, stamp):
     scope = "all tiers" if include_historical else "current campaign only"
     lines = [
         "{} adint-scan denylist ({}) - generated {}".format(comment, fmt, stamp),
@@ -68,35 +84,35 @@ def _header(fmt, comment, domains, include_historical):
     return lines
 
 
-def write_hosts(domains, outdir, include_historical):
+def write_hosts(domains, outdir, include_historical, stamp):
     """0.0.0.0 sinkhole file — works on Windows, macOS, Linux, Pi-hole, AdGuard Home."""
-    lines = _header("hosts", "#", domains, include_historical)
+    lines = _header("hosts", "#", domains, include_historical, stamp)
     for d in domains:
         lines.append("0.0.0.0 {}".format(d))
     _write(os.path.join(outdir, "adfection.hosts.txt"), lines)
 
 
-def write_adblock(domains, outdir, include_historical):
+def write_adblock(domains, outdir, include_historical, stamp):
     """Adblock Plus / uBlock Origin / AdGuard filter syntax (||domain^)."""
-    lines = _header("adblock", "!", domains, include_historical)
+    lines = _header("adblock", "!", domains, include_historical, stamp)
     lines.append("! Title: AdFection / Candiru blocklist")
     for d in domains:
         lines.append("||{}^".format(d))
     _write(os.path.join(outdir, "adfection.adblock.txt"), lines)
 
 
-def write_dnsmasq(domains, outdir, include_historical):
+def write_dnsmasq(domains, outdir, include_historical, stamp):
     """dnsmasq address= form, for a router or a dnsmasq-based resolver."""
-    lines = _header("dnsmasq", "#", domains, include_historical)
+    lines = _header("dnsmasq", "#", domains, include_historical, stamp)
     for d in domains:
         lines.append("address=/{}/0.0.0.0".format(d))
     _write(os.path.join(outdir, "adfection.dnsmasq.conf"), lines)
 
 
-def write_plain(domains, outdir, include_historical):
+def write_plain(domains, outdir, include_historical, stamp):
     """One domain per line — for NextDNS, Pi-hole regex/exact, or any tool that
     takes a bare domain list."""
-    lines = _header("domains", "#", domains, include_historical)
+    lines = _header("domains", "#", domains, include_historical, stamp)
     lines.extend(domains)
     _write(os.path.join(outdir, "adfection.domains.txt"), lines)
 
@@ -124,10 +140,11 @@ def main(argv=None):
     if not os.path.isdir(args.outdir):
         os.makedirs(args.outdir)
 
-    write_hosts(domains, args.outdir, include_historical)
-    write_adblock(domains, args.outdir, include_historical)
-    write_dnsmasq(domains, args.outdir, include_historical)
-    write_plain(domains, args.outdir, include_historical)
+    stamp = _asof_stamp(ioc_set)
+    write_hosts(domains, args.outdir, include_historical, stamp)
+    write_adblock(domains, args.outdir, include_historical, stamp)
+    write_dnsmasq(domains, args.outdir, include_historical, stamp)
+    write_plain(domains, args.outdir, include_historical, stamp)
     print("\n{} domains written in 4 formats (IPs and hashes excluded by design)."
           .format(len(domains)))
     return 0

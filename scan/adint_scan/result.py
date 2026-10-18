@@ -28,11 +28,12 @@ PARTIAL = "PARTIAL"
 EV_ON_DISK = "on-disk"          # a known sample's fingerprint matched a file
 EV_PERSISTENCE = "persistence"  # named in an auto-start registration
 EV_CONTACTED = "contacted"      # the device demonstrably talked to the host
+EV_DNS = "dns-record"           # a resolver record; endpoint contact unverified
 EV_ATTEMPTED = "attempted"      # a lookup happened but a filter blocked it
 EV_CONFIGURED = "configured"    # named in local config, NOT as a block
 EV_REFERENCED = "referenced"    # the string appeared in saved content
 
-EVIDENCE_ORDER = [EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_ATTEMPTED,
+EVIDENCE_ORDER = [EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_DNS, EV_ATTEMPTED,
                   EV_CONFIGURED, EV_REFERENCED]
 
 # Everything except `referenced` is a finding that needs a person to look at it.
@@ -68,8 +69,10 @@ class Hit:
     #                sample. Conclusive.
     #   persistence- the name appears in an auto-start/COM registration. Serious.
     #   contacted  - the browser or OS demonstrably talked to this host. A cookie
-    #                it set, an HSTS header it sent, a connection record, a DNS
-    #                resolution. Serious.
+    #                it set, an HSTS header it sent, or a connection record.
+    #   dns-record - the name or address appears in a DNS cache or event log.
+    #                A lookup may fail, be prefetched, or never lead to a
+    #                connection. Endpoint contact is unverified.
     #   attempted  - something on the device looked the name up, but a DNS filter
     #                answered with a block address, so no connection was made.
     #   configured - the name appears in local configuration (e.g. the hosts

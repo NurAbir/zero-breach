@@ -74,16 +74,19 @@ class TestCookieWindowMeasured(unittest.TestCase):
             fh.write("synthetic-test-indicator.invalid\tdelivery\tprimary\n")
         ctx = ScanContext(iocs=iocmod.load(ioc_path), emit=lambda _m: None)
 
-        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL)
+        saved = (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+                 browser.FIREFOX_ROOTS)
         empty = os.path.join(tmp, "empty")
         os.makedirs(empty)
         try:
             browser.CHROMIUM_ROOTS = [("test", root)]
             browser.ROAMING = empty
             browser.LOCAL = empty
+            browser.FIREFOX_ROOTS = []
             r = browser.run(ctx)
         finally:
-            browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL = saved
+            (browser.CHROMIUM_ROOTS, browser.ROAMING, browser.LOCAL,
+             browser.FIREFOX_ROOTS) = saved
 
         self.assertIn("cookies", r.reach,
                       "the cookie store reaches furthest back; omitting it "

@@ -24,23 +24,20 @@ targeted, so be clear about what the check does and does not prove:
     the file.
   - The new list is loaded and validated before it can replace your copy, so a
     malformed or empty download can never silently wipe out your indicators.
-  - For STRONGER assurance than "trust GitHub over HTTPS", the maintainer also
-    publishes a detached signature (adfection_iocs.txt.minisig) made with a key
-    whose public half is in the repo (see SIGNING.md). Verify it out of band:
-        minisign -Vm adfection_iocs.txt -P <public key from SIGNING.md>
-    This script does not verify that signature itself, because doing so needs a
-    cryptography library and the scanner has a strict no-dependencies rule; the
-    verification is a one-line manual step for anyone who wants it.
+  - Detached signing is not configured for the current release. SIGNING.md is
+    a maintainer setup guide, not evidence that a signature exists. This updater
+    does not verify signatures. Do not treat its SHA-256 check as independent
+    publisher authentication.
 
-  If you are at meaningful risk, prefer downloading a tagged release and checking
-  its signature over an automatic refresh.
+  For reproducibility, download a tagged release and compare its published hash
+  with a build from that same tag.
 
 USAGE
     python update-iocs.py                 # dry run: fetch, verify, show the diff
     python update-iocs.py --apply         # also replace the local indicator file
     python update-iocs.py --url <base>    # use a different base URL (e.g. a mirror)
 
-Standard library only. Python 3.7+.
+Standard library only. Python 3.8+.
 """
 
 from __future__ import annotations
@@ -75,9 +72,31 @@ def _fetch(url, timeout=30):
         return resp.read()
 
 
-def _values(path):
+def _index(path):
+    """(value -> (tier, confidence, source), curated date, count) for one file.
+
+    The metadata travels alongside the values because an upstream correction
+    that retiers an indicator, downgrades its confidence or fixes its citation
+    changes what the scanner tells you about a hit, even though no indicator
+    value moved. Comparing values alone made those corrections invisible and
+    unappliable.
+    """
     s = load(path)
-    return {i.value for i in s.indicators}, len(s)
+    meta = {i.value: (i.tier, i.confidence, i.source) for i in s.indicators}
+    return meta, s.asof, len(s)
+
+
+_FIELDS = ("tier", "confidence", "source")
+
+
+def _describe_change(old_meta, new_meta):
+    """"tier=a -> b, source=c -> d" for only the fields that actually moved."""
+    parts = []
+    for name, was, now in zip(_FIELDS, old_meta, new_meta):
+        if was != now:
+            parts.append("{}={} -> {}".format(name, was or "(none)",
+                                              now or "(none)"))
+    return ", ".join(parts)
 
 
 def main(argv=None):
@@ -121,7 +140,7 @@ def main(argv=None):
     with io.open(newfile, "wb") as fh:
         fh.write(data)
     try:
-        new_values, new_count = _values(newfile)
+        new_meta, new_asof, new_count = _index(newfile)
     except IocError as exc:
         print("error: the downloaded file is not a valid indicator set ({}). "
               "Not touching your local file.".format(exc), file=sys.stderr)
@@ -130,15 +149,22 @@ def main(argv=None):
 
     # 4. Diff against the local copy so the change is never silent.
     if os.path.exists(args.local):
-        old_values, old_count = _values(args.local)
+        old_meta, old_asof, old_count = _index(args.local)
     else:
-        old_values, old_count = set(), 0
+        old_meta, old_asof, old_count = {}, None, 0
         print("(no local indicator file at {} yet)".format(args.local))
 
-    added = sorted(new_values - old_values)
-    removed = sorted(old_values - new_values)
-    print("\nchange since your copy: +{} new, -{} removed (you have {}, repo has {})"
-          .format(len(added), len(removed), old_count, new_count))
+    added = sorted(set(new_meta) - set(old_meta))
+    removed = sorted(set(old_meta) - set(new_meta))
+    changed = sorted(v for v in set(new_meta) & set(old_meta)
+                     if new_meta[v] != old_meta[v])
+    asof_changed = old_count and new_asof != old_asof
+    print("\nchange since your copy: +{} new, -{} removed, ~{} changed "
+          "(you have {}, repo has {})"
+          .format(len(added), len(removed), len(changed), old_count, new_count))
+    if asof_changed:
+        print("  curation date: {} -> {}".format(old_asof or "(none)",
+                                                 new_asof or "(none)"))
     for v in added[:40]:
         print("  + {}".format(v))
     if len(added) > 40:
@@ -147,8 +173,12 @@ def main(argv=None):
         print("  - {}".format(v))
     if len(removed) > 40:
         print("  - ... and {} more".format(len(removed) - 40))
+    for v in changed[:40]:
+        print("  ~ {}: {}".format(v, _describe_change(old_meta[v], new_meta[v])))
+    if len(changed) > 40:
+        print("  ~ ... and {} more".format(len(changed) - 40))
 
-    if not added and not removed:
+    if not added and not removed and not changed and not asof_changed:
         print("\nYour indicator list is already up to date.")
         return 0
 
@@ -158,13 +188,31 @@ def main(argv=None):
               .format(args.local))
         return 0
 
+    # Write beside the destination and rename over it. Opening the destination
+    # directly truncates it first, so an interruption or a failed write at that
+    # moment leaves a targeted person with no usable indicator list at all -
+    # and the scanner refuses to run without one. os.replace is atomic on both
+    # Windows and POSIX, and the temp file is in the same directory so the
+    # rename cannot cross a filesystem boundary.
+    tmp_path = None
     try:
-        with io.open(args.local, "wb") as fh:
+        dest = os.path.abspath(args.local)
+        fd, tmp_path = tempfile.mkstemp(prefix=".adint_iocs_",
+                                        dir=os.path.dirname(dest) or ".")
+        with io.open(fd, "wb") as fh:
             fh.write(data)
+        os.replace(tmp_path, dest)
+        tmp_path = None  # ownership handed to the destination
     except OSError as exc:
         print("error: could not write {}: {}".format(args.local, exc),
               file=sys.stderr)
         return 1
+    finally:
+        if tmp_path is not None and os.path.exists(tmp_path):
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass  # a leftover temp file is not worth failing the update over
     print("\nupdated {} ({} indicators).".format(args.local, new_count))
     return 0
 

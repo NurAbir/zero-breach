@@ -32,7 +32,13 @@ VALID_TIERS = {
     "validator",    # Candiru validator / target-selection servers
     "delivery",     # Discover-Tech / Controlium ad infrastructure
     "historical",   # older, separate Candiru campaigns
-    "sample",       # file hashes
+    "sample",       # file hashes of the spyware itself
+    # A legitimate, signed third-party driver or utility that this actor abuses
+    # (bring-your-own-vulnerable-driver). The file is NOT spyware: it ships with
+    # real products and is present on clean machines for innocent reasons. It is
+    # tiered apart from `sample` precisely so a match can never be reported as
+    # proof of infection - presence is a lead to investigate, nothing more.
+    "vuln-driver",
     # Candiru-attributed server infrastructure whose individual ROLE is not stated
     # by the source. Recorded Future's Aug 2025 DevilsTongue report lists 8
     # clusters mixing victim-facing C2 and higher-tier operator infrastructure,
@@ -334,11 +340,32 @@ class IocSet:
 
     # --- freshness ----------------------------------------------------------
 
-    def age_days(self, now: Optional[datetime.datetime] = None) -> Optional[int]:
+    def _curated_at(self) -> Optional[datetime.datetime]:
+        """When this set was last curated, as a datetime, or None if unknowable.
+
+        The '# as-of:' date is preferred over the file's modification time
+        because mtime is a property of the COPY, not of the data: a fresh clone,
+        an unzip or a plain file copy resets it to now, so a set curated a year
+        ago would report itself as zero days old and never trip the staleness
+        warning. The header date is content, so it survives being copied.
+        """
+        if self.asof:
+            try:
+                return datetime.datetime.strptime(self.asof, "%Y-%m-%d")
+            except ValueError:
+                # A malformed header must degrade to the mtime, never raise in
+                # the middle of a scan.
+                pass
         if self.source_mtime is None:
             return None
+        return datetime.datetime.fromtimestamp(self.source_mtime)
+
+    def age_days(self, now: Optional[datetime.datetime] = None) -> Optional[int]:
+        curated = self._curated_at()
+        if curated is None:
+            return None
         now = now or datetime.datetime.now()
-        delta = now - datetime.datetime.fromtimestamp(self.source_mtime)
+        delta = now - curated
         return max(0, delta.days)
 
     def is_stale(self, threshold_days: int = 30) -> bool:

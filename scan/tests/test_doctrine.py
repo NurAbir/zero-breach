@@ -220,7 +220,10 @@ class TestHitRendersAsInvestigate(unittest.TestCase):
                          "the explicit denial of it")
 
     def test_carries_provenance_and_location(self):
-        self.assertIn("fearevolve.com", self.text)
+        # Defanged, because every rendering of the name in the human report is -
+        # including the one inside the detail line, which quotes a whole URL.
+        self.assertIn("fearevolve[.]com", self.text)
+        self.assertNotIn("fearevolve.com", self.text)
         self.assertIn("delivery/primary", self.text)
         self.assertIn(r"C:\fake\Default\History", self.text)
 

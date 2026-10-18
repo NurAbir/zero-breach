@@ -31,6 +31,59 @@ NAMESPACE = uuid.UUID("6f0b4a2e-5d1c-4f3b-9a7e-adf3c70f1001")
 CITIZENLAB_URL = ("https://citizenlab.ca/research/"
                   "how-discover-tech-turned-targeted-ads-into-a-pipeline-for-spyware/")
 
+# Per-indicator provenance, keyed by the IOC file's source column.
+# (publisher, report title, date, url-or-None). Most of this set is NOT the
+# Citizen Lab AdFection report - it is ESET's, Avast's and Recorded Future's
+# work - and this event is published for other defenders to import, so stamping
+# one citation onto every attribute would credit one team for research four
+# teams did. The citations below are the ones recorded in the header of
+# iocs/adfection_iocs.txt; where that header gives no URL, none is recorded
+# rather than one being guessed at.
+SOURCES = {
+    "citizenlab-adfection-2026": (
+        "The Citizen Lab",
+        "Exposing AdFection: How Discover-Tech Turned Targeted Ads Into a "
+        "Pipeline for Zero-Click Mercenary Spyware",
+        "2026-10-15",
+        CITIZENLAB_URL),
+    "recordedfuture-2025-08": (
+        "Recorded Future (Insikt Group)",
+        "Tracking Candiru's DevilsTongue Spyware in Multiple Countries "
+        "(CTA-2025-0805)",
+        "2025-08-05",
+        "https://www.recordedfuture.com/research/"
+        "tracking-candirus-devilstongue-spyware"),
+    "citizenlab-candiru-2021": (
+        "The Citizen Lab",
+        "Hooking Candiru",
+        "2021-07",
+        None),
+    "eset-swc-2021": (
+        "ESET",
+        "Strategic web compromises ... Candiru",
+        "2021-11-16",
+        None),
+    "avast-2022": (
+        "Avast / Gen",
+        "The Return of Candiru (CVE-2022-2294)",
+        "2022",
+        None),
+}
+
+
+def _citation(source_key: str) -> str:
+    """One attribute's real citation, for its comment line.
+
+    An unmapped key is emitted verbatim so a consumer can see which report they
+    have to go and find; attributing it to the Citizen Lab instead would be a
+    false citation in a file other people act on.
+    """
+    cite = SOURCES.get(source_key)
+    if not cite:
+        return source_key or "source unspecified"
+    name, title, date, _url = cite
+    return "{}, {}, {}".format(name, title, date)
+
 # MISP attribute type per inferred indicator type.
 MISP_TYPE = {
     iocmod.TYPE_DOMAIN: "domain",
@@ -45,6 +98,9 @@ MISP_CATEGORY = {
     "delivery": "Network activity",
     "historical": "Network activity",
     "sample": "Payload delivery",
+    # Legitimate signed software this actor abuses: a file artifact found on a
+    # host, not a payload this campaign delivers.
+    "vuln-driver": "Artifacts dropped",
     "candiru": "Network activity",
     "candiru-ip": "Network activity",
 }
@@ -58,6 +114,10 @@ MISP_CATEGORY = {
 # `candiru-ip` is deliberately EXCLUDED. Cloud IPs from a 2025 report are very
 # likely reassigned, and shipping 109 of them as detection signatures would
 # generate alerts on innocent tenants and teach analysts to mute the feed.
+# `vuln-driver` is deliberately EXCLUDED. It is legitimately signed software that
+# ships with real products, so turning its hash into a detection signature alerts
+# on every clean machine that uses that hardware (D4, precision over coverage).
+# It is still published - with its tier - so an analyst can hunt it deliberately.
 TO_IDS_TIERS = {"cc", "validator", "sample", "candiru"}
 
 
@@ -77,13 +137,24 @@ def build_event(ioc_set: iocmod.IocSet, now: datetime.datetime) -> dict:
             "value": ind.value,
             "to_ids": ind.tier in TO_IDS_TIERS,
             "timestamp": stamp,
-            "comment": "tier={} confidence={} (Citizen Lab, Exposing AdFection, "
-                       "2026-10-15)".format(ind.tier, ind.confidence),
+            "comment": "tier={} confidence={} ({})".format(
+                ind.tier, ind.confidence, _citation(ind.source)),
             "Tag": [
                 {"name": 'adint:tier="{}"'.format(ind.tier)},
                 {"name": 'adint:confidence="{}"'.format(ind.confidence)},
+                {"name": 'adint:source="{}"'.format(
+                    ind.source or "unspecified")},
             ],
         })
+
+    # Sorted so the event is byte-identical on every build.
+    sources_used = []
+    for key in sorted({i.source or "" for i in ioc_set.indicators}):
+        entry = {"key": key or "unspecified", "citation": _citation(key)}
+        cite = SOURCES.get(key)
+        if cite and cite[3]:
+            entry["url"] = cite[3]
+        sources_used.append(entry)
 
     return {
         "Event": {
@@ -108,6 +179,11 @@ def build_event(ioc_set: iocmod.IocSet, now: datetime.datetime) -> dict:
                 "source": "The Citizen Lab, 'Exposing AdFection' (2026-10-15) and "
                           "Confiant, 'ADINT' (2026-10-15).",
                 "source_url": CITIZENLAB_URL,
+                # The event spans several researchers' reports, so the whole
+                # roster is listed here and each attribute names its own one.
+                # An importer that only reads the event header must not come
+                # away believing one team published all of this.
+                "sources": sources_used,
                 "attribution_note": "Neither The Citizen Lab nor Confiant is "
                                     "affiliated with this tool or endorses it. "
                                     "Their report is the source; the tool is not "

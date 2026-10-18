@@ -107,11 +107,24 @@ def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
                 continue
             ctx.emit("[*] running check: {}".format(mod.NAME))
             started = time.time()
+            ctx.partial = None
             try:
                 result = mod.run(ctx)
             except Exception as exc:  # a module must never crash the whole tool
-                result = ModuleResult(mod.NAME)
+                # Keep what the module had already found. Replacing it with a
+                # fresh empty result discarded real hits: one malformed artifact
+                # late in the browser walk wiped out a matching cookie that had
+                # already been read, and the scan reported only a gap. The error
+                # is still recorded as a gap, so the reader sees both the
+                # finding and the fact that the check did not finish.
+                partial = ctx.partial
+                if isinstance(partial, ModuleResult) and partial.name == mod.NAME:
+                    result = partial
+                else:
+                    result = ModuleResult(mod.NAME)
                 result.could_not_run(mod.NAME, "module error: {}".format(exc))
+            finally:
+                ctx.partial = None
             result.duration_s = time.time() - started
             ctx.emit("[*]   {} finished in {:.0f}s".format(
                 mod.NAME, result.duration_s))
@@ -127,9 +140,9 @@ def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
                 r.could_not_run(
                     "persistence-sweep",
                     "tier 2 (--deep) is not implemented yet — no full "
-                    "persistence sweep was performed. Use --arm --baseline and "
-                    "--arm --baseline-diff, which answer a sharper question: "
-                    "what changed since a known-good inventory")
+                    "persistence sweep was performed. The --arm commands are "
+                    "also disabled in this release. A full persistence review "
+                    "requires a separate forensic examination")
                 results.append(r)
             else:
                 ctx.emit("[*] running module: {}".format(deepmod.NAME))

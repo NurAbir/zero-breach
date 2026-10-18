@@ -43,11 +43,12 @@ from __future__ import annotations
 import io
 import json
 import os
+from ..localpaths import path_problem
 import platform
 import subprocess
 
-from ..result import (Hit, ModuleResult, EV_CONTACTED, EV_PERSISTENCE,
-                      EV_CONFIGURED, EV_REFERENCED, EV_ON_DISK)
+from ..result import (Hit, ModuleResult, EV_DNS,
+                      EV_PERSISTENCE, EV_CONFIGURED, EV_REFERENCED, EV_ON_DISK)
 
 NAME = "host"
 
@@ -61,6 +62,16 @@ _PS = ["powershell", "-NoProfile", "-NonInteractive",
        "-ExecutionPolicy", "Bypass", "-Command"]
 
 _DNS_LOG = "Microsoft-Windows-DNS-Client/Operational"
+
+# Addresses that mean "this name was deliberately pointed nowhere". Shared by the
+# hosts-file check and the resolver-cache check, because the two have to make the
+# SAME judgement about the same address: a name answered with one of these was
+# blocked by a filter, not reached. This project publishes hosts-file blocklists
+# that map these very indicators to 0.0.0.0, so anyone who took our own advice
+# will have exactly these entries - and telling them their device "communicated
+# with" israeli spyware infrastructure would be a false alarm aimed at precisely
+# the people the tool is for.
+_SINK_ADDRESSES = {"0.0.0.0", "127.0.0.1", "::1", "::", "0:0:0:0:0:0:0:1"}
 
 # The sub-keys under a CLSID that name a server binary, in the order the PoC
 # checks them. InprocHandler32 is included because it is loaded the same way
@@ -89,7 +100,7 @@ _DNS_LOG_GAP = (
     "retrospectively from this host")
 
 _ARM_HINT = ("dns-log: Windows is not recording DNS history on this machine. See "
-             "\"HOW TO TURN ON DNS HISTORY\" below to start a record a future scan "
+             "\"HOW TO TURN ON DNS HISTORY\" in this report to start a record a future scan "
              "can search. It cannot answer the question for the past.")
 
 # Spelled out, because "enable DNS logging" is not an instruction most people can
@@ -269,8 +280,12 @@ def _enum_com_registrations(r: ModuleResult):
                     try:
                         with winreg.OpenKey(base, sub, 0, access) as key:
                             value, _type = winreg.QueryValueEx(key, "")
-                    except OSError:
+                    except FileNotFoundError:
                         continue  # no such sub-key, or no default value
+                    except OSError as exc:
+                        partial.append("{} {} could not be read ({})".format(
+                            view_name, sub, exc))
+                        continue
                     if not isinstance(value, str) or not value.strip():
                         continue
                     entries.append({
@@ -301,11 +316,8 @@ def _server_path(raw: str, kind: str) -> str:
             return s[1:end].strip()
     s = s.strip('"').strip()
     if kind == "LocalServer32" and s:
-        try:
-            if os.path.exists(s):      # unquoted path with spaces, no switches
-                return s
-        except OSError:
-            pass
+        # Parse only text here. Even an existence check would contact a UNC
+        # server before _check_com has had a chance to reject the path.
         low = s.lower()
         for ext in (".exe", ".com", ".bat", ".cmd"):
             idx = low.find(ext)
@@ -314,41 +326,97 @@ def _server_path(raw: str, kind: str) -> str:
     return s
 
 
-def _signature_status(paths, timeout: int = 180):
-    """Authenticode status for many files in ONE PowerShell call.
+# --- "it never connects" enforced for FILESYSTEM paths ---------------------
+#
+# netguard.py makes network contact impossible through Python's socket module.
+# A registered COM path escapes that guard completely: the value comes out of
+# the registry, which is attacker-controllable on a compromised machine, and a
+# UNC value such as \\attacker-host\share\payload.dll makes WINDOWS open an SMB
+# session the instant anything stats the path. The connection is made by the OS,
+# not by Python, so the socket guard never sees it and records nothing - and on
+# Windows that handshake can hand the remote host this account's NetNTLM
+# credentials. A drive letter mapped to a remote share does the same thing with
+# none of the visual warning a UNC path gives.
+#
+# So the question "is this path local?" is answered from the STRING and from the
+# OS's own mount table, before anything opens, stats or hashes it.
+#
+# Residual, stated rather than hidden: a reparse point or symlink sitting under a
+# local drive letter can still redirect to a remote location, and there is no way
+# to find that out without following it - which is the very act we are avoiding.
+# That case needs an attacker who can already create reparse points locally.
 
-    Get-AuthenticodeSignature takes an array for -LiteralPath, so the whole
-    inventory costs a single subprocess instead of one per file. The reference
-    machine had 37 registrations; a process per file is the module's hot path.
-    Status is cast to [string] because ConvertTo-Json renders a bare .NET enum
-    as its integer value.
+# DRIVE_REMOTE from winbase.h: GetDriveTypeW's answer for a letter bound to a
+# network share. The call reads the mount table the OS already holds and opens
+# nothing itself, which is what makes it safe to ask first.
+_DRIVE_REMOTE = 4
+
+
+def _network_drive_letters():
+    """Drive letters currently bound to a remote share.
+
+    Returns (letters, known). `known` is False when the question could not be
+    asked at all; per D3 that is reported as a gap, never assumed to mean
+    "local".
     """
-    out = {}
+    letters = set()
+    try:
+        import ctypes
+        get_drive_type = ctypes.windll.kernel32.GetDriveTypeW  # type: ignore
+    except (ImportError, AttributeError, OSError):  # pragma: no cover - non-Windows
+        return letters, False
+    for code in range(ord("A"), ord("Z") + 1):
+        letter = chr(code)
+        try:
+            if get_drive_type("{}:\\".format(letter)) == _DRIVE_REMOTE:
+                letters.add(letter)
+        except OSError:  # pragma: no cover - defensive
+            return letters, False
+    return letters, True
+
+
+def _remote_path_reason(path: str, remote_letters, drives_known: bool) -> str:
+    """Why this registered path must NOT be touched, or "" if it is local.
+
+    Asked BEFORE os.path.exists(), because on a UNC path the existence test IS
+    the connection; there is no safe way to ask afterwards.
+    """
+    if not path:
+        return ""
+    s = path.replace("/", "\\")
+    low = s.lower()
+    rest = s
+    if low.startswith("\\\\?\\") or low.startswith("\\\\.\\"):
+        # Extended-length prefix. "\\?\UNC\server\share" is the long spelling of
+        # "\\server\share", while "\\?\C:\..." wearing the same prefix is an
+        # ordinary local path - so the prefix alone settles nothing and the part
+        # after it has to be read.
+        if low[4:].startswith("unc\\"):
+            return "it is a UNC path to a remote share (\\\\?\\UNC\\...)"
+        rest = s[4:]
+    elif s.startswith("\\\\"):
+        return "it is a UNC path to a remote share (\\\\server\\share)"
+    if len(rest) >= 2 and rest[0].isalpha() and rest[1] == ":":
+        letter = rest[0].upper()
+        if letter in remote_letters:
+            return "drive {}: is mapped to a remote share".format(letter)
+        if not drives_known:
+            return ("drive {}: could not be classified as a local disk or a "
+                    "network mapping on this host".format(letter))
+    return ""
+
+
+def _signature_status(paths, timeout: int = 180):
+    """Leave signatures unverified: the OS verifier may retrieve network data.
+
+    Signature inventory is optional context, never an indicator match. Until a
+    strictly offline verifier is available, no verification subprocess is run.
+    """
     if not paths:
-        return out, ""
-    ordered = sorted(set(paths))
-    error = ""
-    # Chunked only to keep the command line well inside its length limit.
-    for start in range(0, len(ordered), 100):
-        chunk = ordered[start:start + 100]
-        cmd = (
-            "$p = @({});"
-            " Get-AuthenticodeSignature -LiteralPath $p -ErrorAction SilentlyContinue"
-            " | Select-Object @{{n='Path';e={{[string]$_.Path}}}},"
-            " @{{n='Status';e={{[string]$_.Status}}}},"
-            " @{{n='Signer';e={{[string]$_.SignerCertificate.Subject}}}}"
-            " | ConvertTo-Json -Depth 3 -Compress"
-        ).format(",".join(_ps_literal(p) for p in chunk))
-        rows, err = _ps_json(cmd, timeout=timeout)
-        if err and not rows:
-            error = err
-            continue
-        for row in rows:
-            path = _str(row, "Path")
-            if path:
-                out[path.lower()] = (_str(row, "Status") or "Unknown",
-                                     _str(row, "Signer"))
-    return out, error
+        return {}, ""
+    return ({p.lower(): ("NotChecked", "") for p in paths},
+            "signature verification was not performed because the OS verifier "
+            "may contact the network; signature status is unknown")
 
 
 def _check_com(r: ModuleResult, ctx) -> None:
@@ -358,11 +426,23 @@ def _check_com(r: ModuleResult, ctx) -> None:
     # Expand, de-quote and test each registered path before asking about
     # signatures, so the batched call only covers files that exist on disk.
     writable = _user_writable_dirs()
+    remote_letters, drives_known = _network_drive_letters()
     on_disk = []
     for e in entries:
         expanded = _server_path(e["raw"], e["kind"])
         e["path"] = expanded
         low = expanded.lower()
+        # Decided before the path is touched: os.path.exists() on a remote path
+        # is itself the network contact this tool promises never to make, and it
+        # happens inside Windows where netguard cannot see it.
+        e["remote_reason"] = _remote_path_reason(expanded, remote_letters,
+                                                 drives_known)
+        if not e["remote_reason"] and expanded:
+            e["remote_reason"] = path_problem(expanded)
+        if e["remote_reason"]:
+            e["exists"] = False
+            e["user_writable"] = False
+            continue
         try:
             e["exists"] = bool(expanded) and os.path.exists(expanded)
         except OSError:
@@ -373,13 +453,17 @@ def _check_com(r: ModuleResult, ctx) -> None:
 
     sigs, sig_err = _signature_status(on_disk)
     if sig_err:
-        r.note("com-persistence: Authenticode status unavailable for some "
-               "entries ({}); treat their signature as unknown".format(sig_err))
+        r.could_not_run("com-signatures", sig_err)
 
     user_writable = 0
     reviewable = []
+    unreachable = []
     for e in entries:
-        if e["exists"]:
+        if e.get("remote_reason"):
+            # NOT "not on disk": nobody looked. Rendering a refusal to look as a
+            # measurement is exactly the collapse D3 forbids.
+            status, signer = "not checked (path is not on a local disk)", ""
+        elif e["exists"]:
             status, signer = sigs.get(e["path"].lower(), ("Unknown", ""))
         else:
             status, signer = "n/a (not on disk)", ""
@@ -401,12 +485,19 @@ def _check_com(r: ModuleResult, ctx) -> None:
                "investigate the registration and the binary",
                EV_PERSISTENCE)
 
+        # The string match above is pure text and costs nothing, so a remote
+        # registration is still matched against the indicator set - it is only
+        # the FILE behind it that is left alone. Collected here, where the
+        # registry location has been formatted, so the report can name it.
+        if e.get("remote_reason"):
+            unreachable.append((location, e))
+
         # Reviewable inventory, deliberately narrowed: an entry is only worth a
         # human's attention if it is BOTH in a user-writable directory AND not
         # validly signed. Collected rather than noted inline, so the list can be
         # capped - 8 full-width "not validly signed" lines in the DETAIL channel
         # read as 8 alarms next to the real hits.
-        if e["user_writable"] and status != "Valid":
+        if e["user_writable"] and status not in ("Valid", "Unknown", "NotChecked"):
             reviewable.append((location, e))
 
     if reviewable:
@@ -423,9 +514,30 @@ def _check_com(r: ModuleResult, ctx) -> None:
             r.note("    - ... and {} more, listed in full in the JSON report."
                    .format(len(reviewable) - 3))
 
+    if unreachable:
+        # Refusing to touch the path is the right call, but a refusal is a GAP,
+        # not a clean entry, and the user is owed both facts: what was skipped
+        # and why skipping it was the safe thing to do.
+        r.note("com-persistence: {} per-user COM registration(s) name a path "
+               "that is not on a local disk. The scanner did NOT open them. "
+               "Merely testing whether such a path exists makes Windows open a "
+               "connection to the remote host - and can hand that host this "
+               "account's network credentials - which is the one thing this "
+               "tool promises never to do. These entries are UNVERIFIED: their "
+               "file was not fingerprinted and its signature was not checked."
+               .format(len(unreachable)))
+        for location, e in unreachable[:3]:
+            r.note("    - {} -> {} [not checked: {}]".format(
+                location, e["path"] or "(empty)", e["remote_reason"]))
+        if len(unreachable) > 3:
+            r.note("    - ... and {} more, listed in full in the JSON report."
+                   .format(len(unreachable) - 3))
+
     r.checked += len(entries)
     r.submetrics["com_registrations"] = len(entries)
     r.submetrics["com_user_writable"] = user_writable
+    if unreachable:
+        r.submetrics["com_remote_paths"] = len(unreachable)
 
     # A truncated enumeration must not pass as a complete one (D3). If a registry
     # view could not be fully walked, the COM surface was only partly checked.
@@ -434,6 +546,17 @@ def _check_com(r: ModuleResult, ctx) -> None:
                         "the registry could not be fully enumerated, so an "
                         "auto-start entry may have been missed: {}".format(
                             "; ".join(partial)))
+    elif unreachable:
+        # Same doctrine, different cause: the registry was read in full, but
+        # some of what it named was deliberately not opened.
+        r.could_not_run("com-persistence",
+                        "{} registered path(s) are not on a local disk and were "
+                        "deliberately not opened (contacting them is what this "
+                        "tool promises not to do), so those entries were not "
+                        "verified: {}".format(
+                            len(unreachable),
+                            "; ".join(sorted(set(
+                                e["remote_reason"] for _loc, e in unreachable)))))
     else:
         r.ran("com-persistence")
     ctx.emit("[host] COM registrations: {} ({} in user-writable dirs)"
@@ -455,21 +578,37 @@ def _check_dns_cache(r: ModuleResult, ctx) -> None:
         return
 
     hits = 0
+    blocked = 0
     for row in rows:
         entry = _str(row, "Entry")
         name = _str(row, "Name")
         data = _str(row, "Data")
-        hits += _match(
-            r, ctx, " ".join((entry, name, data)),
-            "DNS resolver cache",
-            "indicator {ioc} is in this boot's DNS resolver cache "
-            "(Entry=" + (entry or "-") + " Name=" + (name or "-") +
-            " Data=" + (data or "-") + ") — something on this host resolved "
-            "it since the last reboot",
-            EV_CONTACTED)
+        # Windows preloads hosts-file mappings into the resolver cache when
+        # the DNS Client starts, even if no application looked up that name.
+        # A sink entry is therefore protective state, not proof of an attempted
+        # connection. Installing our blocklist must not create findings.
+        # https://learn.microsoft.com/en-us/windows-server/networking/dns/queries-lookups
+        was_blocked = data.strip().lower() in _SINK_ADDRESSES
+        haystack = " ".join((entry, name, data))
+        if was_blocked:
+            blocked += sum(1 for _ind in ctx.iocs.search(haystack.lower()))
+            continue
+        where = ("(Entry=" + (entry or "-") + " Name=" + (name or "-") +
+                 " Data=" + (data or "-") + ")")
+        detail = ("indicator {ioc} appears as a name or address in this "
+                  "boot's DNS resolver cache " + where + " — this is a "
+                  "resolver record; endpoint contact is unverified")
+        found = _match(r, ctx, haystack, "DNS resolver cache", detail, EV_DNS)
+        hits += found
 
     r.checked += len(rows)
     r.submetrics["dns_cache_entries"] = len(rows)
+    if blocked:
+        r.submetrics["dns_cache_blocked_indicators"] = blocked
+        r.note("dns-cache: {} indicator entry/entries point to a sink address. "
+               "This is protective state, not a finding. Windows can preload "
+               "these entries from the hosts file without any lookup; no "
+               "attempt or contact is established.".format(blocked))
 
     # The resolver cache is wiped by a reboot, so its whole window is "since last
     # boot". Stating that plainly stops a clean cache being read as a clean history.
@@ -479,12 +618,13 @@ def _check_dns_cache(r: ModuleResult, ctx) -> None:
         "days": None,
         "basis": "the resolver cache holds only this boot session"
                  + ("" if boot else " (boot time unavailable: {})".format(boot_err)),
-        "note": "Rebooting empties this entirely. It can say what was looked up "
-                "since you last restarted, and nothing before that.",
+        "note": "The cache includes hosts-file mappings loaded at startup and "
+                "records obtained during this boot. An entry alone does not "
+                "establish that an application looked it up or connected.",
     }
     r.ran("dns-cache")
-    ctx.emit("[host] DNS cache entries: {} ({} indicator matches)"
-             .format(len(rows), hits))
+    ctx.emit("[host] DNS cache entries: {} ({} DNS findings, {} protective "
+             "sink entries)".format(len(rows), hits, blocked))
 
 
 # --- 3. retrospective DNS history ------------------------------------------
@@ -585,10 +725,12 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
         hits += _match(
             r, ctx, _str(ev, "Message"),
             "{} @ {}".format(_DNS_LOG, when or "unknown time"),
-            "indicator {ioc} appears in a DNS-Client/Operational event" +
+            "indicator {ioc} appears as a name or address in a "
+            "DNS-Client/Operational event" +
             (" at " + when if when else "") +
-            " — this host queried that name",
-            EV_CONTACTED, when)
+            " — the event alone does not establish successful resolution or "
+            "endpoint contact",
+            EV_DNS, when)
 
     r.checked += len(events)
     r.submetrics["dns_log_events_scanned"] = len(events)
@@ -609,6 +751,10 @@ def _check_hosts(r: ModuleResult, ctx) -> None:
     root = os.environ.get("SystemRoot", r"C:\Windows")
     path = os.path.join(root, "System32", "drivers", "etc", "hosts")
     ctx.emit("[host] reading {}".format(path))
+    problem = path_problem(path)
+    if problem:
+        r.could_not_run("hosts-file", problem)
+        return
     if not os.path.exists(path):
         r.could_not_run("hosts-file", "no hosts file at {}".format(path))
         return
@@ -625,7 +771,7 @@ def _check_hosts(r: ModuleResult, ctx) -> None:
     # these sink addresses is a deliberate BLOCK - protective, the OPPOSITE of a
     # compromise - so it is not reported as a hit at all, only counted. Only a
     # mapping to a REAL address is a finding (EV_CONFIGURED).
-    _SINKS = {"0.0.0.0", "127.0.0.1", "::1", "::", "0:0:0:0:0:0:0:1"}
+    _SINKS = _SINK_ADDRESSES
     hits = 0
     blocked = 0
     for line in active:
@@ -680,13 +826,21 @@ def _check_known_paths(r: ModuleResult, ctx) -> None:
     root = os.environ.get("SystemRoot", r"C:\Windows")
     known_hashes = {h.value for h in ctx.iocs.hashes}
     found = 0
+    unavailable = 0
     for parts, why in _KNOWN_DROPS:
         path = os.path.join(root, *parts)
         try:
-            present = os.path.isfile(path)
-        except OSError:
-            present = False
-        if not present:
+            problem = path_problem(path)
+            if problem:
+                raise PermissionError(13, problem, path)
+            os.stat(path)
+        except FileNotFoundError:
+            continue
+        except OSError as exc:
+            unavailable += 1
+            r.skipped += 1
+            r.could_not_run("known-path:" + path,
+                            "could not inspect this path: {}".format(exc))
             continue
         found += 1
         digest = ""
@@ -696,23 +850,37 @@ def _check_known_paths(r: ModuleResult, ctx) -> None:
                 for chunk in iter(lambda: fh.read(1024 * 1024), b""):
                     h.update(chunk)
             digest = h.hexdigest()
-        except OSError:
-            # Present but unreadable (locked / permissions): still report it, but
-            # say the hash could not be taken so the grade is honest.
-            r.note("known-paths: {} exists but could not be read to fingerprint "
-                   "it".format(path))
+        except OSError as exc:
+            unavailable += 1
+            r.skipped += 1
+            r.could_not_run("known-path:" + path,
+                            "file exists but its fingerprint is unavailable: {}"
+                            .format(exc))
+            continue
         if digest and digest in known_hashes:
             ind = ctx.iocs.lookup(digest)
+            tier = ind.tier if ind else "sample"
+            # A `vuln-driver` match is legitimate signed software this actor
+            # abuses - present on clean machines too. Calling that "KNOWN-BAD"
+            # would tell an innocent owner they are infected, so the wording is
+            # chosen from the tier (see NOT_MALWARE_TIERS in report.py).
+            if tier == "vuln-driver":
+                detail = ("the file at {} matches a published indicator for {}. "
+                          "This file is LEGITIMATE, signed software that is also "
+                          "installed for honest reasons - its presence is NOT "
+                          "proof of spyware. Worth establishing how and when it "
+                          "was installed. Do not delete it.".format(path, why))
+            else:
+                detail = ("the file at {} is the KNOWN-BAD build - {}. Its "
+                          "SHA-256 matches a published indicator. Do not delete "
+                          "it; it is evidence.".format(path, why))
             r.add_hit(Hit(
-                indicator=digest, location=path,
-                detail="the file at {} is the KNOWN-BAD build - {}. Its SHA-256 "
-                       "matches a published indicator. Do not delete it; it is "
-                       "evidence.".format(path, why),
-                tier=ind.tier if ind else "sample",
+                indicator=digest, location=path, detail=detail,
+                tier=tier,
                 confidence=ind.confidence if ind else "secondary",
                 source=ind.source if ind else "", evidence=EV_ON_DISK))
         else:
-            # Present, but not the known-bad hash (or unreadable). A legitimate
+            # Present, but not the known-bad hash. A legitimate
             # driver of the same name exists, so this is a POINTER, not a hit:
             # recorded as a note, graded nowhere, so it never alarms on its own.
             r.note("known-paths: a file exists at {} ({}). This path is {}. "
@@ -722,11 +890,12 @@ def _check_known_paths(r: ModuleResult, ctx) -> None:
                        path, "SHA-256 " + digest[:16] + "..." if digest else
                        "unreadable", why,
                        "" if digest else " (could not read it)"))
-    r.checked += len(_KNOWN_DROPS)
-    r.submetrics["known_paths_checked"] = len(_KNOWN_DROPS)
+    r.checked += len(_KNOWN_DROPS) - unavailable
+    r.submetrics["known_paths_checked"] = len(_KNOWN_DROPS) - unavailable
     if found:
         r.submetrics["known_paths_present"] = found
-    r.ran("known-paths")
+    if unavailable < len(_KNOWN_DROPS):
+        r.ran("known-paths")
     ctx.emit("[host] known fixed-path drops: {} checked, {} present".format(
         len(_KNOWN_DROPS), found))
 
@@ -735,6 +904,10 @@ def _check_known_paths(r: ModuleResult, ctx) -> None:
 
 def run(ctx) -> ModuleResult:
     r = ModuleResult(NAME)
+    # Publish the result straight away so that if anything below raises, the CLI
+    # can still recover whatever was found before the failure instead of
+    # discarding it (see ScanContext.partial).
+    ctx.partial = r
 
     system = platform.system()
     if system != "Windows" or winreg is None:

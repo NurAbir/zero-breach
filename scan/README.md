@@ -1,11 +1,7 @@
 # adint-scan
 
-A local, read-only check for the published AdFection / Candiru indicators, and —
-more usefully — a way to make this machine *answerable next time*.
-
-It replaces the three proof-of-concept scripts in `../scripts/` with one tool, one
-set of counts and one report. Those scripts are kept for reference; this is what
-you run.
+A local, read-only check for the published AdFection / Candiru indicators,
+with explicit reporting of missing evidence and checks that could not run.
 
 ## What it tells you, and what it cannot
 
@@ -13,8 +9,8 @@ It answers two questions honestly:
 
 1. Are the published indicators present in the places this machine can actually
    be checked?
-2. Will this machine be checkable next time? — and if not, `--arm` offers to fix
-   that.
+2. What evidence survives, and what could not be checked? Manual DNS-history
+   setup is documented below. The `--arm` commands are disabled in this release.
 
 **A clean result means "no known indicators were found in the places that can be
 checked." It does not mean the device is clean.** Spyware of this grade is
@@ -51,8 +47,9 @@ adint-scan [--deep] [--quick] [--json PATH] [--iocs PATH]
 | `--deep` | tier 2: full persistence sweep. Not implemented — the flag reports an honest `UNKNOWN` gap rather than faking a sweep |
 
 Exit codes: `0` nothing found, `2` an indicator matched, `1` the scan could not
-be set up. This release writes nothing to the system and needs no administrator
-under any flag.
+be set up. This release changes no system settings and needs no administrator.
+Locked SQLite databases may be copied to temporary snapshots, which are removed
+after use. `--json PATH` writes the report you request.
 
 ### Modules
 
@@ -99,10 +96,11 @@ record to search instead of an empty attic.
 
 - **Never contact an indicator.** No DNS resolution, ping, HTTP or WHOIS of any
   indicator, ever — resolving a C&C domain announces a possible victim to the
-  people running it. This is enforced at runtime (the whole scan runs inside a
-  guard that raises if anything touches the network) and asserted in
-  `tests/test_netguard.py`, which also fails if a module so much as *imports* a
-  network library or shells out to a resolver.
+  people running it. A runtime guard blocks Python network calls. Local-path
+  guards reject remote/redirected paths; certificate verification that could
+  retrieve data is disabled. The guard is not an OS network sandbox. Tests use
+  synthetic fixtures and reject network-capable imports; `urllib.parse` is
+  permitted solely for lexical URL parsing.
 - **No telemetry.** None, of any kind.
 - **Measured, never inferred.** If a check could not run, it is `UNKNOWN`.
 - **Precision over coverage.** An unsigned binary in a user-writable path is not

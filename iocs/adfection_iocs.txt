@@ -18,7 +18,9 @@
 # and cross-checked by two independent reads of the page before being added.
 #
 # Format: indicator <TAB> tier <TAB> confidence
-#   tier       = cc | validator | delivery | historical | sample
+#   tier       = cc | validator | delivery | historical | sample | vuln-driver
+#                (`sample` = the spyware itself; `vuln-driver` = legitimate signed
+#                 software this actor abuses - a match is a lead, never proof)
 #   confidence = primary   (read out of the Citizen Lab AdFection report body or its
 #                           appendix)
 #                secondary (from a third-party summary of that report, OR from a
@@ -473,4 +475,16 @@ cyprusnet.tk	historical	secondary	citizenlab-candiru-2021
 lwaeh-iteham-alasra.com	historical	secondary	citizenlab-candiru-2021
 mbsmetoo.com	historical	secondary	citizenlab-candiru-2021
 indoprogress.co	historical	secondary	citizenlab-candiru-2021
-6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5	sample	secondary	avast-2022
+#
+# BRING-YOUR-OWN-VULNERABLE-DRIVER. This is HW.sys / HW64.sys, a LEGITIMATE kernel
+# driver signed by Marvin Test Solutions, Inc. (port/memory/PCI access). Candiru
+# loads it to disable protections (Avast, 'The Return of Candiru', CVE-2022-2294);
+# it is catalogued as an abusable driver by LOLDrivers.
+#
+# IT IS NOT SPYWARE AND IT IS NOT THIS CAMPAIGN'S PAYLOAD. The same file is present
+# on clean machines that legitimately use Marvin Test hardware software. It is tiered
+# `vuln-driver`, NOT `sample`, so that a match is reported as something to look at
+# rather than as proof of infection. Reporting it as a spyware sample would hand a
+# false 'you are infected' to anyone running that hardware - the worst failure this
+# tool can have.
+6a4875ae86131a594019dec4abd46ac6ba47e57a88287b814d07d929858fe3e5	vuln-driver	secondary	avast-2022

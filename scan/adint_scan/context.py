@@ -20,3 +20,10 @@ class ScanContext:
     # progress sink; defaults to stderr so stdout stays the clean human report
     emit: Callable[[str], None] = field(
         default=lambda msg: print(msg, file=sys.stderr))
+    # The result the running module is filling in, published here as soon as it
+    # exists. A module that dies half way through has usually already found
+    # something - a matching cookie read before a later, malformed artifact
+    # raised - and that evidence must survive the crash. Without this the CLI
+    # could only build a fresh empty result and the hits were thrown away.
+    # Modules set it; nothing else should read it except the CLI's recovery path.
+    partial: object = None

@@ -1,5 +1,10 @@
 # Signing the indicator set
 
+**Current status:** detached signing has not been configured. No maintainer
+public key or detached signature is supplied with the current release. The
+instructions below describe setup; users currently rely on HTTPS and published
+hashes, which do not independently authenticate the publisher.
+
 The updater (`scan/update-iocs.py`) fetches a fresh indicator list over HTTPS and
 checks it against a published SHA-256. That proves the file arrived intact from
 GitHub, but not — on its own — that *you* published it, because the hash is served
