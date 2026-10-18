@@ -12,7 +12,9 @@ opening a public issue.
 
 - Open a **private security advisory** on this repository (the "Security" tab →
   "Report a vulnerability"), or
-- contact the maintainer through the address listed on the repository profile.
+- message the project on Telegram: https://t.me/+t9gq13mSKcE4NGI0
+
+For a security report, prefer the private advisory; use Telegram if you cannot.
 
 Please include what you found, how to reproduce it, and the impact. We will
 acknowledge, investigate, and credit you if you wish.

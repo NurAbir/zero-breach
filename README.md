@@ -215,6 +215,11 @@ The suite covers the network guard, the evidence grading, the boundary matching
 loader's failure modes, and behavioural proofs that the tool never reads cookie
 values or the browser's master key.
 
+## Contact
+
+Questions or feedback: the project's **Telegram** — https://t.me/+t9gq13mSKcE4NGI0.
+To report a security problem, please see [SECURITY.md](SECURITY.md).
+
 ## Licence
 
 The software is licensed under the **Apache License 2.0** (`LICENSE`). The
