@@ -43,7 +43,7 @@ updates or establish that a device is safe.
 
 | area | what it reads |
 |---|---|
-| **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Chromium and Firefox, for discovered profiles in supported locations |
+| **Browser** | history, cookies (host names and timestamps only), favicons, HTTP cache, Local/Session Storage, Service Worker caches, and HSTS/connection records — across Chrome, Edge, Brave, Vivaldi, Chromium and Firefox, for discovered profiles in supported locations |
 | **Files** | SHA-256 of candidate files under the user-writable locations spyware drops into, against known sample hashes — and, kept deliberately separate, the hash of a legitimate signed driver this actor abuses, which is reported as a lead rather than as proof |
 | **Host** (Windows) | per-user COM registrations (this campaign's documented persistence), the DNS resolver cache, whether DNS history logging is even enabled, the hosts file, and known fixed-path driver drops (e.g. the `HW.sys` vulnerable driver) |
 
@@ -53,6 +53,25 @@ but do not establish infection or explain how the record arrived. A domain
 merely appearing in a cached web page may be a saved reference, such as an
 article about the campaign. The tool distinguishes saved references from
 connection evidence so that each finding can be interpreted in context.
+
+### Supported browsers
+
+| family | browsers | profile locations checked |
+| ------ | -------- | ------------------------- |
+| Chromium | Chrome, Edge, Brave, **Vivaldi**, Chromium | Windows `%LOCALAPPDATA%\\<vendor>\\User Data`; macOS `~/Library/Application Support/<vendor>`; Linux `~/.config/<vendor>` plus snap and Flatpak locations |
+| Firefox | Firefox | standard profile and cache directories |
+
+Vivaldi paths: `%LOCALAPPDATA%\\Vivaldi\\User Data` (Windows),
+`~/Library/Application Support/Vivaldi` (macOS), `~/.config/vivaldi`,
+`~/.config/vivaldi-snapshot` and the Flatpak `com.vivaldi.Vivaldi` config
+(Linux). Other Chromium-based browsers (Opera, Arc and similar) are not scanned
+yet. Unsupported browsers and custom profile locations are not checked and may
+not appear in the report; a no-match result does not cover them. Close the
+browser before scanning so its databases are not locked.
+
+> **Release note:** Vivaldi support is available in the source code and is not
+> included in the signed v0.1.1 download. A new build has a different SHA-256;
+> the v0.1.1 signature and checksum do not apply to it.
 
 ## Install and run
 

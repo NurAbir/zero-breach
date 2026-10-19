@@ -66,6 +66,7 @@ def _chromium_roots():
             ("brave", os.path.join(LOCAL, "BraveSoftware", "Brave-Browser",
                                    "User Data")),
             ("chromium", os.path.join(LOCAL, "Chromium", "User Data")),
+            ("vivaldi", os.path.join(LOCAL, "Vivaldi", "User Data")),
         ]
     if sys.platform == "darwin":
         asup = os.path.join(home, "Library", "Application Support")
@@ -74,6 +75,7 @@ def _chromium_roots():
             ("edge", os.path.join(asup, "Microsoft Edge")),
             ("brave", os.path.join(asup, "BraveSoftware", "Brave-Browser")),
             ("chromium", os.path.join(asup, "Chromium")),
+            ("vivaldi", os.path.join(asup, "Vivaldi")),
         ]
     if sys.platform.startswith("linux"):
         cfg = os.path.join(home, ".config")
@@ -84,6 +86,8 @@ def _chromium_roots():
             ("chromium", os.path.join(cfg, "chromium")),
             ("brave", os.path.join(cfg, "BraveSoftware", "Brave-Browser")),
             ("edge", os.path.join(cfg, "microsoft-edge")),
+            ("vivaldi", os.path.join(cfg, "vivaldi")),
+            ("vivaldi-snapshot", os.path.join(cfg, "vivaldi-snapshot")),
             # snap packaging
             ("chromium-snap", os.path.join(snap, "chromium", "common", "chromium")),
             # flatpak packaging
@@ -93,6 +97,8 @@ def _chromium_roots():
                                            "BraveSoftware", "Brave-Browser")),
             ("chromium-flatpak", os.path.join(var, "org.chromium.Chromium",
                                               "config", "chromium")),
+            ("vivaldi-flatpak", os.path.join(var, "com.vivaldi.Vivaldi",
+                                             "config", "vivaldi")),
         ]
     return []
 
@@ -331,9 +337,11 @@ def _locked_note(path, exc):
         "may remain at {}. Remove this temporary directory when its files can "
         "be released.".format(leftover) if leftover else "")
     browser_name = "the browser"
-    for marker, label in (("BraveSoftware", "Brave"), ("Google", "Chrome"),
-                          ("Microsoft", "Edge"), ("Mozilla", "Firefox")):
-        if marker in path:
+    lowered = path.lower()
+    for marker, label in (("bravesoftware", "Brave"), ("vivaldi", "Vivaldi"),
+                          ("google", "Chrome"), ("microsoft", "Edge"),
+                          ("mozilla", "Firefox")):
+        if marker in lowered:
             browser_name = label
             break
     if (isinstance(exc, PermissionError) or getattr(exc, "errno", None) == 13
@@ -1129,7 +1137,7 @@ def run(ctx) -> ModuleResult:
                         "{}".format(sys.platform))
         return r
 
-    # --- Chromium family: Chrome, Edge, Brave, Chromium ---------------------
+    # --- Chromium family: Chrome, Edge, Brave, Vivaldi, Chromium ---------------------
     for label, root in CHROMIUM_ROOTS:
         problem = path_problem(root)
         if problem:
