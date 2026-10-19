@@ -336,6 +336,11 @@ file shipped with the signed release, not later development-branch updates; see 
 
 ## Tests
 
+Maintainers: run `python tools/release_check.py --require-patterns` before
+publishing. It builds the download and exercises source/download fixture scans,
+reports, optional patterns and the webpage when supplied. Setup and the short
+release checklist are in [TESTING.md](TESTING.md).
+
 ```
 cd scan && python -m unittest discover -s tests
 ```
