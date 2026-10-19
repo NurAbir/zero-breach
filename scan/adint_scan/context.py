@@ -27,3 +27,6 @@ class ScanContext:
     # could only build a fresh empty result and the hits were thrown away.
     # Modules set it; nothing else should read it except the CLI's recovery path.
     partial: object = None
+    # Optional research feature. Never installs a dependency or fetches rules.
+    patterns: bool = False
+    pattern_paths: tuple = ()

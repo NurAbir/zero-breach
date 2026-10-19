@@ -1,5 +1,10 @@
 # Zero Breach
 
+> Development branch: optional Candiru pattern scanning is under validation.
+> It is not part of the signed v0.1.2 release. See
+> [the upgrade scope and test gate](DETECTION-UPGRADE.md). The optional mode
+> needs a pinned YARA-X dependency; default checks remain standard-library-only.
+
 [![tests](https://github.com/interplains/zero-breach/actions/workflows/tests.yml/badge.svg)](https://github.com/interplains/zero-breach/actions/workflows/tests.yml)
 
 A local, read-only scanner that checks a computer for traces of the **AdFection /
@@ -94,8 +99,10 @@ python -X utf8 scan/adint-scan.py
 ```
 
 The scan changes no system settings and needs no administrator. It makes no
-intentional network requests or indicator lookups. Remote and redirected paths
-are skipped, and online certificate verification is disabled. Locked database
+intentional network requests or indicator lookups. Redirected paths and Windows
+remote drives are skipped, and online certificate verification is disabled.
+On POSIX, network mounts can still be read through ordinary filesystem calls.
+Locked database
 snapshots are temporary; cleanup is attempted after use, and any cleanup failure
 is reported with the retained location. `--json` writes the requested report.
 
@@ -281,7 +288,8 @@ file shipped with v0.1.2, not later development-branch updates; see [SIGNING.md]
 ## Design principles
 
 - **Never contact an indicator.** A Python socket guard blocks direct DNS and
-  network calls. Local-path checks reject remote and redirected paths, and
+  network calls. Local-path checks reject redirected paths and Windows remote
+  drives, while POSIX network mounts may appear as local filesystem paths;
   Authenticode checks that could retrieve certificates are disabled. The socket
   guard is not an operating-system network sandbox; use OS isolation when a
   strict offline execution boundary is required.

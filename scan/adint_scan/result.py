@@ -26,6 +26,7 @@ PARTIAL = "PARTIAL"
 
 # Evidence grades, strongest first. See Hit.evidence for what each one means.
 EV_ON_DISK = "on-disk"          # a known sample's fingerprint matched a file
+EV_FILE_PATTERN = "file-pattern"  # a research rule matched; needs verification
 EV_PERSISTENCE = "persistence"  # named in an auto-start registration
 EV_CONTACTED = "contacted"      # the device demonstrably talked to the host
 EV_DNS = "dns-record"           # a resolver record; endpoint contact unverified
@@ -33,7 +34,7 @@ EV_ATTEMPTED = "attempted"      # a lookup happened but a filter blocked it
 EV_CONFIGURED = "configured"    # named in local config, NOT as a block
 EV_REFERENCED = "referenced"    # the string appeared in saved content
 
-EVIDENCE_ORDER = [EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_DNS, EV_ATTEMPTED,
+EVIDENCE_ORDER = [EV_ON_DISK, EV_FILE_PATTERN, EV_PERSISTENCE, EV_CONTACTED, EV_DNS, EV_ATTEMPTED,
                   EV_CONFIGURED, EV_REFERENCED]
 
 # Everything except `referenced` is a finding that needs a person to look at it.

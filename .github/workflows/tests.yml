@@ -45,6 +45,23 @@ jobs:
         working-directory: scan
         run: python -X utf8 adint-scan.py --quick --json scan.json
 
+  optional-patterns:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.9", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install the pinned official optional engine wheels
+        run: python -m pip install -r requirements-patterns.txt
+      - name: Test optional patterns and default checks using harmless fixtures
+        run: python -B -m unittest discover -s scan/tests -v
+
   reproducible-build:
     # The build must be deterministic and the committed artifacts up to date, so
     # anyone can rebuild zero-breach.py from source and get the published file.

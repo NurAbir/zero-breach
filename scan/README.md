@@ -1,5 +1,9 @@
 # adint-scan
 
+> This development branch includes experimental `--patterns` support. See
+> [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
+> validation requirements. It has not replaced the signed public release.
+
 A local, read-only check for the published AdFection / Candiru indicators,
 with explicit reporting of missing evidence and checks that could not run.
 
@@ -97,7 +101,8 @@ record to search instead of an empty attic.
 - **Never contact an indicator.** No DNS resolution, ping, HTTP or WHOIS of any
   indicator, ever — resolving a C&C domain announces a possible victim to the
   people running it. A runtime guard blocks Python network calls. Local-path
-  guards reject remote/redirected paths; certificate verification that could
+  guards reject redirected paths and Windows remote drives; POSIX network mounts
+  can appear local and may be read. Certificate verification that could
   retrieve data is disabled. The guard is not an OS network sandbox. Tests use
   synthetic fixtures and reject network-capable imports; `urllib.parse` is
   permitted solely for lexical URL parsing.

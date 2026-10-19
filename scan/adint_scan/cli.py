@@ -71,13 +71,24 @@ def _parse(argv: List[str]) -> argparse.Namespace:
     p.add_argument("--deep", action="store_true",
                    help="tier 2: full persistence sweep (noisy; most hits are "
                         "legitimate). Opens with a warning.")
+    p.add_argument("--patterns", action="store_true",
+                   help="experimental local Candiru file-pattern check; needs "
+                        "the separately installed, pinned YARA-X dependency. "
+                        "Does not inspect running memory.")
+    p.add_argument("--pattern-path", action="append", default=[], metavar="PATH",
+                   help="file or folder for --patterns (repeatable). Limits only "
+                        "the pattern check; browser, hash and host checks keep "
+                        "their usual scope.")
     p.add_argument("--json", metavar="PATH",
                    help="also write the machine-readable report to PATH.")
     p.add_argument("--iocs", metavar="PATH", default=_default_ioc_path(),
                    help="indicator file (default: bundled adfection_iocs.txt).")
     p.add_argument("--version", action="version",
                    version="Zero Breach {}".format(__version__))
-    return p.parse_args(argv)
+    args = p.parse_args(argv)
+    if args.pattern_path and not args.patterns:
+        p.error("--pattern-path requires --patterns")
+    return args
 
 
 def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
@@ -88,7 +99,11 @@ def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
     results: List[ModuleResult] = []
     # The entire scan runs inside the no-network guard (D2).
     with no_network():
-        for mod in (browser, hashscan, host):
+        modules = [browser, hashscan, host]
+        if ctx.patterns:
+            from .modules import patternscan
+            modules.append(patternscan)
+        for mod in modules:
             # --quick drops the file-fingerprint check. It costs ~45% of the
             # whole scan (345s of 774s measured) to look for ONE published file
             # hash, and Candiru compiles a fresh build per target, so another
@@ -171,7 +186,8 @@ def main(argv: List[str] = None) -> int:
               "panic at an unsigned binary in a user-writable path.\n",
               file=sys.stderr)
 
-    ctx = ScanContext(iocs=iocs, deep=args.deep, quick=args.quick)
+    ctx = ScanContext(iocs=iocs, deep=args.deep, quick=args.quick,
+                      patterns=args.patterns, pattern_paths=tuple(args.pattern_path))
     started = datetime.datetime.now()
     results = _run_modules(ctx)
 

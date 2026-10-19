@@ -135,6 +135,8 @@ A('    The Citizen Lab                       https://citizenlab.ca/')
 A('')
 A('LICENCE')
 A('  Software: Apache License 2.0. Indicator data: CC0 1.0 (public domain).')
+A('  Optional Candiru rules retain their separate DRL 1.1 / CC BY-SA 4.0')
+A('  licences and author credits, embedded below with their provenance.')
 A('  Copyright 2026 archivegenocide.com. Provided AS IS, without warranty.')
 A('  Full text, and the sources every indicator came from:')
 A('    https://github.com/interplains/zero-breach')
@@ -147,6 +149,8 @@ A('  python -X utf8 zero-breach.py --json report.json')
 A('')
 A('Requires Python 3.8 or newer. Needs no administrator. All supported platforms')
 A('get browser and file checks; Windows also gets host checks.')
+A('Experimental --patterns also requires Python 3.9+ and yara-x==1.21.0.')
+A('This development build is not an approved release.')
 A('"""')
 A('from __future__ import annotations')
 A('')
@@ -155,7 +159,7 @@ A('import datetime')
 A('import sys')
 A('import time')
 A('')
-A('__version__ = "0.1.2 (single-file build)"')
+A('__version__ = "0.1.3.dev0 (single-file build)"')
 A('')
 A('# --- embedded indicator data ------------------------------------------------')
 A('# The real file is iocs/adfection_iocs.txt in the project. Its provenance')
@@ -172,6 +176,7 @@ for label, fname in (("result", "result.py"),
                      ("netguard", "netguard.py"),
                      ("localpaths", "localpaths.py"),
                      ("context", "context.py"),
+                     ("candiru_rules", "candiru_rules.py"),
                      ("report", "report.py")):
     A('# --- {} {}'.format(label, '-' * max(0, 72 - len(label))))
     A(strip_imports(read(os.path.join(PKG, fname))))
@@ -179,8 +184,11 @@ for label, fname in (("result", "result.py"),
 
 for label, fname, suffix in (("modules/browser", "browser.py", "browser"),
                              ("modules/hashscan", "hashscan.py", "hash"),
-                             ("modules/host", "host.py", "host")):
+                             ("modules/host", "host.py", "host"),
+                             ("modules/patternscan", "patternscan.py", "patterns")):
     A('# --- {} {}'.format(label, '-' * max(0, 72 - len(label))))
+    if suffix == "patterns":
+        A('_pattern_roots = _roots  # hash module default local roots')
     A(namespace(strip_imports(read(os.path.join(PKG, "modules", fname))), suffix))
     A('')
 
@@ -256,7 +264,15 @@ def main(argv=None):
                         "as clean.")
     p.add_argument("--no-pause", action="store_true",
                    help="do not wait for a keypress before exiting")
+    p.add_argument("--patterns", action="store_true",
+                   help="experimental local Candiru file-pattern check; needs "
+                        "Python 3.9+ and yara-x==1.21.0; no memory scan")
+    p.add_argument("--pattern-path", action="append", default=[], metavar="PATH",
+                   help="file or folder for --patterns (repeatable). Limits only "
+                        "the pattern check, not the other checks")
     args = p.parse_args(sys.argv[1:] if argv is None else argv)
+    if args.pattern_path and not args.patterns:
+        p.error("--pattern-path requires --patterns")
 
     if sys.version_info < (3, 8):
         print("This needs Python 3.8 or newer; this is {}.{}.".format(
@@ -271,13 +287,16 @@ def main(argv=None):
         _hold(args)
         return 1
 
-    ctx = ScanContext(iocs=ioc_set, quick=args.quick)
+    ctx = ScanContext(iocs=ioc_set, quick=args.quick, patterns=args.patterns,
+                      pattern_paths=tuple(args.pattern_path))
     started = datetime.datetime.now()
     results = []
     # The whole scan runs inside the no-network guard (see the header).
     with no_network():
-        for name, fn in (("browser", run_browser), ("hash", run_hash),
-                         ("host", run_host)):
+        modules = [("browser", run_browser), ("hash", run_hash), ("host", run_host)]
+        if args.patterns:
+            modules.append(("patterns", run_patterns))
+        for name, fn in modules:
             if name == "hash" and args.quick:
                 r = ModuleResult("hash")
                 r.could_not_run(
