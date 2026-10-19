@@ -15,7 +15,8 @@ import time
 
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ("clean", "contact", "reference", "hash", "corrupt", "hit-and-gap", "quick",
-         "dns-cap-hit", "dns-cap-gap", "bad-feed", "patterns")
+         "dns-cap-hit", "dns-cap-gap", "dns-off-retained-hit", "dns-off-retained-clean",
+         "dns-off-unreadable", "dns-off-empty", "bad-feed", "patterns")
 
 
 class DownloadPanel(HTMLParser):

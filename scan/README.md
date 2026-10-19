@@ -1,8 +1,9 @@
 # adint-scan
 
-> Release v0.1.4 improves coverage for the experimental, opt-in `--patterns` check. See
-> [COVERAGE-UPGRADE.md](../COVERAGE-UPGRADE.md) and [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
-> validation evidence. Default checks need no added packages.
+> Release v0.1.5 reads retained Windows DNS events even if logging is currently
+> disabled, and keeps gaps for unrecorded activity. It never enables logging.
+> Optional Candiru pattern dependencies and limits are documented in
+> [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md).
 
 A local, read-only check for the published AdFection / Candiru indicators,
 with explicit reporting of missing evidence and checks that could not run.

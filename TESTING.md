@@ -35,11 +35,12 @@ untested optional positives as a skip. Use `--require-patterns` before release.
 
 - The existing unit/regression suite.
 - Two byte-identical builds of the downloadable script, plus its help/version.
-- Eleven fixture scenarios, each in fresh source-CLI and single-file processes:
+- Fifteen fixture scenarios, each in fresh source-CLI and single-file processes:
   clean data, contacted domain, harmless research reference, exact hash hit,
   corrupt database, a hit alongside a corrupt database, `--quick` coverage gap,
   a DNS hit past the old 20,000-event limit, unread older DNS events without a
-  hit, invalid indicator input, and COM-referenced optional file patterns.
+  hit, four disabled-DNS-log cases (retained match, retained clean data,
+  unreadable retained events and no events), invalid indicator input, and COM-referenced optional file patterns.
 - Real browser-shaped SQLite files and harmless rule-matching bytes pass through
   the real scanner modules, evidence grading, exit codes and text/JSON reports.
   Source and download must agree. Cookie values must stay out of reports;

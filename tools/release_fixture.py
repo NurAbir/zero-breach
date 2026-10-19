@@ -126,6 +126,8 @@ def main():
                 raise RuntimeError("fixture attempted file access outside test/code/runtime roots")
 
     events = [{"Time": "2025-06-01T00:00:00", "Message": "ordinary.invalid"}]
+    if case == "dns-off-retained-hit":
+        events[0]["Message"] = DOMAIN
     if case.startswith("dns-cap-"):
         events = events * 50000
         if case == "dns-cap-hit":
@@ -133,9 +135,12 @@ def main():
 
     def ps_json(command, timeout=60):
         if "-ListLog " in command:
-            return [{"IsEnabled": True, "RecordCount": len(events) + int(case.startswith("dns-cap-"))}], ""
+            return [{"IsEnabled": not case.startswith("dns-off-"),
+                     "RecordCount": 0 if case == "dns-off-empty" else len(events) + int(case.startswith("dns-cap-"))}], ""
         if "Get-WinEvent -LogName " in command:
             require("-MaxEvents 50000" in command, "unexpected DNS read cap")
+            if case == "dns-off-unreadable":
+                return [], "fixture read denied"
             return events, ""
         if "Get-DnsClientCache" in command:
             return [{"Entry": DOMAIN, "Data": "0.0.0.0", "Type": 1}], ""
@@ -196,6 +201,7 @@ def main():
                     "reference": ("browser", DOMAIN, "referenced"),
                     "hash": ("hash", DIGEST, "on-disk"),
                     "dns-cap-hit": ("host", DOMAIN, "dns-record")}
+        expected["dns-off-retained-hit"] = ("host", DOMAIN, "dns-record")
         if case == "patterns" and engine:
             expected[case] = ("patterns", "yara:MAL_DevilsTongue_HijackDll", "file-pattern")
         require(hits == ([expected[case]] if case in expected else []),
@@ -204,11 +210,20 @@ def main():
         require(verdict["hits_total"] == len(hits), "incorrect total finding count")
         expected_verdict = ("INDICATORS_FOUND" if hits else
                             "NO_KNOWN_INDICATORS_WITH_GAPS" if case in
-                            ("corrupt", "quick", "dns-cap-gap", "patterns") else "NO_KNOWN_INDICATORS")
+                            ("corrupt", "quick", "dns-cap-gap", "patterns", "dns-off-retained-clean",
+                             "dns-off-unreadable", "dns-off-empty") else "NO_KNOWN_INDICATORS")
         require(verdict["status"] == expected_verdict, "incorrect overall verdict: " + str(verdict))
         if case.startswith("dns-cap-"):
             require(any("dns-log-older-events" in g for g in verdict["gaps"]), "missing DNS cap gap")
             require(modules["host"]["submetrics"]["dns_log_events_scanned"] == 50000, "wrong DNS count")
+        if case.startswith("dns-off-"):
+            require(modules["host"]["submetrics"]["dns_log_enabled"] == 0, "logging state misreported")
+            require(bool(verdict["gaps"]), "disabled logging coverage gap missing")
+        if case.startswith("dns-off-retained-"):
+            require(modules["host"]["submetrics"]["dns_log_events_scanned"] == 1, "retained event not searched")
+            require("HOW TO TURN ON DNS HISTORY" in text, "future-logging instructions missing")
+        if case in ("dns-off-empty", "dns-off-unreadable"):
+            require(not modules["host"]["submetrics"].get("dns_log_events_scanned"), "unread log falsely searched")
         if case == "quick":
             require(modules["hash"]["status"] == "UNKNOWN", "quick scan falsely cleared file hashes")
         if case in ("corrupt", "hit-and-gap"):

@@ -30,7 +30,7 @@ from adint_scan import iocs as iocmod  # noqa: E402
 from adint_scan import report  # noqa: E402
 from adint_scan.context import ScanContext  # noqa: E402
 from adint_scan.modules import browser  # noqa: E402
-from adint_scan.result import Hit, ModuleResult, PARTIAL  # noqa: E402
+from adint_scan.result import Hit, ModuleResult, PARTIAL, UNKNOWN  # noqa: E402
 
 TEST_DOMAIN = "synthetic-test-indicator.invalid"
 
@@ -305,6 +305,56 @@ class TestBlockedDnsLookupIsNotContact(unittest.TestCase):
 
 
 class TestDnsLogIsNotProofOfContact(unittest.TestCase):
+    def disabled_log(self, records, events, error=""):
+        from adint_scan.modules import host
+        with tempfile.TemporaryDirectory(prefix="dnslog_off_") as tmp:
+            result = ModuleResult("host")
+            replies = [([{"IsEnabled": False, "RecordCount": records}], "")]
+            if records:
+                replies.append((events, error))
+            with patch.object(host, "_ps_json", side_effect=replies) as query:
+                host._check_dns_log(result, make_ctx(tmp))
+            self.assertEqual(query.call_count, 2 if records else 1)
+            for call in query.call_args_list:
+                self.assertIn("Get-WinEvent", call.args[0])
+                self.assertNotIn("wevtutil", call.args[0])
+            return result
+
+    def test_disabled_log_still_searches_retained_matching_event(self):
+        result = self.disabled_log(1, [{"Time": "2025-03-04T12:00:00Z", "Message": TEST_DOMAIN}])
+        self.assertEqual(result.status, "HITS")
+        self.assertEqual([(h.indicator, h.evidence) for h in result.hits], [(TEST_DOMAIN, "dns-record")])
+        self.assertEqual(result.hits[0].observed, "2025-03-04T12:00:00Z")
+        self.assertEqual(result.submetrics["dns_log_events_scanned"], 1)
+        self.assertEqual(result.submetrics["dns_log_enabled"], 0)
+        self.assertIn("how_to_enable", result.reach["dns-log"])
+
+    def test_disabled_log_clean_retained_event_keeps_recording_gap(self):
+        result = self.disabled_log(1, [{"Time": "2025-03-04T12:00:00Z", "Message": "ordinary.invalid"}])
+        self.assertEqual(result.status, PARTIAL)
+        self.assertEqual(result.hits, [])
+        self.assertTrue(any(c.name == "dns-log" and c.ran for c in result.checks))
+        self.assertTrue(any(c.name == "dns-log-recording" and not c.ran for c in result.checks))
+
+    def test_disabled_empty_log_is_not_clean(self):
+        result = self.disabled_log(0, [])
+        self.assertEqual(result.status, UNKNOWN)
+        self.assertNotIn("dns_log_events_scanned", result.submetrics)
+
+    def test_disabled_log_read_failure_is_not_clean(self):
+        result = self.disabled_log(1, [], "fixture permission denied")
+        self.assertEqual(result.status, UNKNOWN)
+        self.assertEqual(result.hits, [])
+        self.assertTrue(any(c.name == "dns-log" and not c.ran for c in result.checks))
+        self.assertNotIn("dns_log_events_scanned", result.submetrics)
+
+    def test_disabled_log_preserves_hit_and_older_retained_gap_together(self):
+        result = self.disabled_log(50001, [{"Time": "2025-03-04T12:00:00Z", "Message": TEST_DOMAIN}])
+        self.assertEqual(result.status, "HITS")
+        self.assertEqual(len(result.hits), 1)
+        self.assertTrue(any(c.name == "dns-log-older-events" and not c.ran for c in result.checks))
+        self.assertTrue(any(c.name == "dns-log-recording" and not c.ran for c in result.checks))
+
     def test_dns_match_after_old_20000_event_limit_is_read(self):
         from adint_scan.modules import host
         with tempfile.TemporaryDirectory(prefix="dnslog_extended_") as tmp:

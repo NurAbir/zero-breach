@@ -1,8 +1,9 @@
 # Zero Breach
 
-> Release v0.1.4 prioritizes local COM-registered files in the optional Candiru pattern check and expands Windows DNS-history coverage. See
-> [the v0.1.4 scope](COVERAGE-UPGRADE.md) and [pattern validation](DETECTION-UPGRADE.md). It needs a pinned YARA-X
-> dependency; default checks remain standard-library-only.
+> Release v0.1.5 searches saved Windows DNS events even when logging is currently
+> off. It keeps a coverage warning for unrecorded periods and does not change
+> logging settings. Optional Candiru patterns still need the pinned YARA-X engine;
+> see [pattern validation](DETECTION-UPGRADE.md). Default checks remain standard-library-only.
 
 [![tests](https://github.com/interplains/zero-breach/actions/workflows/tests.yml/badge.svg)](https://github.com/interplains/zero-breach/actions/workflows/tests.yml)
 
@@ -144,7 +145,7 @@ set up (e.g. a bad indicator file).
 
 Use the official repository above and check the downloaded file before running it.
 
-**1. Verify the publisher's signature.** Release v0.1.4 includes detached GPG
+**1. Verify the publisher's signature.** Release v0.1.5 includes detached GPG
 signatures for the scanner and its checksum manifest, using ArchiveGenocide's
 established release key. Follow [SIGNING.md](SIGNING.md), and compare the full
 key fingerprint with [ArchiveGenocide's verification page](https://archivegenocide.com/verify.html).
@@ -168,11 +169,11 @@ you do not have to trust the download at all; you can reproduce it:
 ```
 git clone https://github.com/interplains/zero-breach.git
 cd zero-breach
-git checkout v0.1.4
+git checkout v0.1.5
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
-These commands reproduce v0.1.4; substitute the matching tag for another release.
+These commands reproduce v0.1.5; substitute the matching tag for another release.
 On macOS or Linux use `python3` for the build command.
 Compare the hash with that release's published hash. The development branch may
 contain later changes and is not expected to reproduce an earlier release.

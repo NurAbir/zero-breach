@@ -690,7 +690,7 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
     r.submetrics["dns_log_enabled"] = 1 if enabled else 0
     r.submetrics["dns_log_records"] = records
 
-    if not enabled or records <= 0:
+    if records <= 0:
         # The important branch, and the common one. This must never read clean.
         r.could_not_run("dns-log", _DNS_LOG_GAP)
         r.note("dns-log: {} enabled={} records={} — forward-looking checks are "
@@ -702,14 +702,23 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
             "days": 0,
             "basis": "DNS logging is {} and holds {} records".format(
                 "enabled" if enabled else "disabled", records),
-            "note": "Nothing was ever recorded, so there is no window at all — "
-                    "not a short one. This is the Windows default, on every PC.",
+            "note": "No saved DNS events were available for this scan. "
+                    "This does not establish whether older events existed or were cleared.",
             "how_to_enable": _HOW_TO_ENABLE,
         }
         return
 
-    ctx.emit("[host] DNS-Client/Operational is enabled ({} records); "
-             "scanning messages".format(records))
+    # IsEnabled controls current collection, not whether retained events can
+    # be read. Disabling logging must not hide existing historical evidence.
+    if not enabled:
+        r.could_not_run("dns-log-recording",
+                        "DNS logging is currently off; queries made while "
+                        "logging was off may be missing")
+        r.note("dns-log: logging is off; the log reports {} saved event(s). "
+               "Checking them does not enable logging."
+               .format(records))
+    ctx.emit("[host] DNS-Client/Operational logging is {} ({} retained records); "
+             "scanning messages".format("on" if enabled else "off", records))
     # -ErrorAction Stop, not SilentlyContinue: with SilentlyContinue a failure to
     # read the channel (ACL, corrupt .evtx, Event Log service degraded) exits 0
     # with no output, so `events` is [] and `ev_err` is "" - and the log, which is
@@ -725,18 +734,16 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
         " | ConvertTo-Json -Depth 3 -Compress".format(
             _DNS_LOG, _DNS_EVENT_CAP), timeout=300)
     if (ev_err and not events) or (records > 0 and not events):
-        reason = ("log is enabled with {} records but none could be read{} - this "
+        reason = ("log has {} retained records but none could be read{} - this "
                   "machine's DNS history was NOT searched, so nothing here is "
                   "cleared".format(records, ": " + ev_err if ev_err else ""))
         r.could_not_run("dns-log", reason)
-        r.note(_ARM_HINT)
         return
 
     hits = 0
     times = [t for t in (_str(ev, "Time") for ev in events) if t]
     if times:
-        # The log IS on, so there is a real window. Report its true extent rather
-        # than implying the whole history of the machine.
+        # Retained records have dates even when logging is currently disabled.
         r.reach["dns-log"] = {
             "earliest": min(times),
             "days": None,
@@ -745,6 +752,9 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
             "note": "Queries before this are either rotated out of the log or "
                     "beyond the bounded event read.",
         }
+        if not enabled:
+            r.reach["dns-log"]["note"] += " Logging is currently off; queries during unrecorded periods may be missing."
+            r.reach["dns-log"]["how_to_enable"] = _HOW_TO_ENABLE
     for ev in events:
         when = _str(ev, "Time")
         hits += _match(
