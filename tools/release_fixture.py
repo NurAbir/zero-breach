@@ -85,9 +85,11 @@ def main():
     # Protective blocklist entries must never create findings.
     hosts.write_text("127.0.0.1 localhost\n0.0.0.0 " + DOMAIN + "\n", encoding="utf-8")
     registered = inputs / "Registered" / "server.dll"
-    registered.parent.mkdir()
+    if case == "patterns-localserver":
+        registered = inputs / "Registered" / "folder.exe" / "payload.bat"
+    registered.parent.mkdir(parents=True)
     engine = importlib.util.find_spec("yara_x") is not None
-    if case == "patterns" and engine:
+    if case in ("patterns", "patterns-localserver") and engine:
         from test_patterns import synthetic_mstic_fixture
         registered.write_bytes(synthetic_mstic_fixture())
     else:
@@ -132,6 +134,8 @@ def main():
         events = events * 50000
         if case == "dns-cap-hit":
             events[20000] = {"Time": "2025-06-01T00:00:00", "Message": DOMAIN}
+        else:
+            events = [{"Time": "2026-01-01T00:00:00", "Message": "ordinary.invalid"}] * 50000
 
     def ps_json(command, timeout=60):
         if "-ListLog " in command:
@@ -148,8 +152,10 @@ def main():
             return [{"Boot": "2026-01-01T00:00:00"}], ""
         raise RuntimeError("unexpected OS query in fixture")
 
-    entries = ([{"clsid": "{FIXTURE}", "kind": "InprocServer32", "raw": str(registered),
-                 "view": "native"}] if case == "patterns" else [])
+    entries = ([{"clsid": "{FIXTURE}",
+                 "kind": "LocalServer32" if case == "patterns-localserver" else "InprocServer32",
+                 "raw": str(registered) + (" -Embedding" if case == "patterns-localserver" else ""),
+                 "view": "native"}] if case in ("patterns", "patterns-localserver") else [])
     report_path = outputs / "report.json"
     argv = ["--iocs", str(feed if case != "bad-feed" else inputs / "missing.txt"),
             "--json", str(report_path)]
@@ -157,7 +163,7 @@ def main():
         argv.append("--no-pause")
     if case == "quick":
         argv.append("--quick")
-    if case == "patterns":
+    if case in ("patterns", "patterns-localserver"):
         argv.append("--patterns")
     with contextlib.ExitStack() as stack:
         stack.enter_context(patch.object(cli, "no_network", checked_network_guard))
@@ -202,7 +208,7 @@ def main():
                     "hash": ("hash", DIGEST, "on-disk"),
                     "dns-cap-hit": ("host", DOMAIN, "dns-record")}
         expected["dns-off-retained-hit"] = ("host", DOMAIN, "dns-record")
-        if case == "patterns" and engine:
+        if case in ("patterns", "patterns-localserver") and engine:
             expected[case] = ("patterns", "yara:MAL_DevilsTongue_HijackDll", "file-pattern")
         require(hits == ([expected[case]] if case in expected else []),
                 "wrong evidence/hits: " + str(hits))
@@ -210,12 +216,14 @@ def main():
         require(verdict["hits_total"] == len(hits), "incorrect total finding count")
         expected_verdict = ("INDICATORS_FOUND" if hits else
                             "NO_KNOWN_INDICATORS_WITH_GAPS" if case in
-                            ("corrupt", "quick", "dns-cap-gap", "patterns", "dns-off-retained-clean",
+                            ("corrupt", "quick", "dns-cap-gap", "patterns", "patterns-localserver", "dns-off-retained-clean",
                              "dns-off-unreadable", "dns-off-empty") else "NO_KNOWN_INDICATORS")
         require(verdict["status"] == expected_verdict, "incorrect overall verdict: " + str(verdict))
         if case.startswith("dns-cap-"):
             require(any("dns-log-older-events" in g for g in verdict["gaps"]), "missing DNS cap gap")
             require(modules["host"]["submetrics"]["dns_log_events_scanned"] == 50000, "wrong DNS count")
+            require('this machine holds no' not in text, 'unread history misreported as absent')
+            require('reported by this scan' in text, 'reach statement is not scoped to scan')
         if case.startswith("dns-off-"):
             require(modules["host"]["submetrics"]["dns_log_enabled"] == 0, "logging state misreported")
             require(bool(verdict["gaps"]), "disabled logging coverage gap missing")
@@ -230,7 +238,7 @@ def main():
             require(any("history" in g for g in verdict["gaps"]), "corrupt database gap missing")
         if case in ("contact", "hit-and-gap"):
             require(str(cookie) in text, "human report lost the full cookie file path")
-        if case == "patterns":
+        if case in ("patterns", "patterns-localserver"):
             require(modules["patterns"]["status"] == ("HITS" if engine else "UNKNOWN"),
                     "optional engine status is dishonest")
         require("HOW FAR BACK THIS SCAN COULD SEE" in text, "human report did not render")

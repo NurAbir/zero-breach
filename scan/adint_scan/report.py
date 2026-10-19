@@ -299,33 +299,39 @@ CAMPAIGN_LABEL = "2024-2025 (the documented campaign period)"
 
 
 def overlap_statement(earliest: datetime.date, source: str) -> List[str]:
-    """What the oldest surviving evidence means for the campaign window. Three
-    cases, and the middle one is the common one: evidence that starts INSIDE the
-    window covers only its tail, and only through whichever record reached it."""
+    """Compare the dates reported by this scan with the campaign window.
+
+    Unread or out-of-scope records may be older; an oldest date does not prove
+    that records cover every day since then or that missing evidence is gone.
+    """
     if earliest > CAMPAIGN_TO:
         return [
-            "** The oldest evidence of any kind on this machine dates from {}.".format(
+            "** The oldest dated evidence reported by this scan is {} ({}).".format(
+                source,
                 earliest.isoformat()),
             "   The campaign this tool searches for was active in {}.".format(
                 CAMPAIGN_LABEL),
-            "   Those windows DO NOT OVERLAP. For that period this machine holds no",
-            "   evidence either way, so a clean result above says nothing about it. **",
+            "   Those dates DO NOT OVERLAP. The dates reported here do not reach",
+            "   the campaign period. Older or unread records may still exist;",
+            "   this scan cannot rule out past contact during that period. **",
         ]
     if earliest > CAMPAIGN_FROM:
         return [
-            "** The oldest evidence on this machine is {} ({}).".format(
+            "** The oldest dated evidence reported by this scan is {} ({}).".format(
                 source, earliest.isoformat()),
             "   That reaches PART of the campaign period ({}),".format(CAMPAIGN_LABEL),
             "   from {} onwards, and only through that one kind of record.".format(
                 earliest.isoformat()),
-            "   Everything before it, and every other kind of record, is gone. A clean",
-            "   result covers that partial window thinly - it does not cover 2024-2025. **",
+            "   This does not establish continuous coverage from that date.",
+            "   Older or unread records may still exist. A clean result cannot",
+            "   rule out past contact during the campaign period. **",
         ]
     return [
-        "** The oldest evidence on this machine is {} ({}), which predates".format(
+        "** The oldest dated evidence reported by this scan is {} ({}), which predates".format(
             source, earliest.isoformat()),
-        "   the campaign period. That record type spans the whole window - but only",
-        "   for whatever survived in it, which is never everything. **",
+        "   the campaign period. This does not establish continuous coverage",
+        "   through that period. Surviving records are never everything, and a",
+        "   clean result cannot rule out past contact during that period. **",
     ]
 
 
@@ -343,8 +349,8 @@ def _render_reach(w, document: Dict[str, Any]) -> None:
     w(_RULE)
     w("HOW FAR BACK THIS SCAN COULD SEE")
     w("")
-    w("  A clean result only covers the window the evidence survives in. These are")
-    w("  the measured windows on THIS machine, not general estimates:")
+    w("  These dates come from the records examined by this scan. They do not")
+    w("  establish a complete history; older or unread records may still exist:")
     w("")
 
     earliest_overall = None
@@ -352,7 +358,7 @@ def _render_reach(w, document: Dict[str, Any]) -> None:
     for mod_name, label, info in entries:
         earliest = info.get("earliest")
         days = info.get("days")
-        when = "nothing recorded" if not earliest else earliest[:10]
+        when = "unknown (no date established)" if not earliest else earliest[:10]
         age = ""
         if isinstance(days, int) and earliest:
             age = "  ({} days ago)".format(days)
@@ -426,13 +432,11 @@ def _render_reach(w, document: Dict[str, Any]) -> None:
         sparse = [y for y in range(CAMPAIGN_FROM.year, CAMPAIGN_TO.year + 1)
                   if merged.get(y, 0) < 100]
         if in_window == 0 and not something_in_window:
-            # Only make the absolute claim when NOTHING of any kind - no cookie,
-            # no cache file, no DNS record - reaches the window. Otherwise it
-            # would contradict the overlap statement printed just above.
-            w("  NOTHING on this machine dates from the campaign period. A clean")
-            w("  result cannot speak to it at all.")
+            w("  No dated evidence summarised here reaches the campaign period.")
+            w("  Older or unread records may still exist. A clean result cannot")
+            w("  rule out past contact during that period.")
         elif in_window == 0 and something_in_window:
-            w("  No browser CACHE file dates from the campaign period, though some")
+            w("  No browser CACHE file examined dates from the campaign period, though some")
             w("  older evidence (shown above) does. Cache is the thinnest record;")
             w("  the window above is the one to read.")
         elif sparse:

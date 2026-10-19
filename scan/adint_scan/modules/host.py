@@ -45,6 +45,7 @@ import json
 import os
 from ..localpaths import path_problem
 import platform
+import re
 import subprocess
 
 from ..result import (Hit, ModuleResult, EV_DNS,
@@ -320,11 +321,13 @@ def _server_path(raw: str, kind: str) -> str:
     if kind == "LocalServer32" and s:
         # Parse only text here. Even an existence check would contact a UNC
         # server before _check_com has had a chance to reject the path.
-        low = s.lower()
-        for ext in (".exe", ".com", ".bat", ".cmd"):
-            idx = low.find(ext)
-            if idx != -1:
-                return s[:idx + len(ext)].strip()
+        # An extension inside a directory (tool.exe\payload.bat) or a
+        # longer filename (tool.exe.backup\app.exe) is not the binary's end.
+        # Match extensions in command order, not by extension preference:
+        # arguments may themselves contain a later .exe path.
+        end = re.search(r"\.(?:exe|com|bat|cmd)(?=\s|$)", s, re.IGNORECASE)
+        if end is not None:
+            return s[:end.end()].strip()
     return s
 
 
@@ -674,9 +677,9 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
         r.reach["dns-log"] = {
             "earliest": None,
             "days": 0,
-            "basis": "no DNS history exists on this host",
-            "note": "Nothing was ever recorded, so there is no window at all — "
-                    "not a short one.",
+            "basis": "DNS log metadata could not be read",
+            "note": "No historical window could be established. Older or "
+                    "unread records may still exist.",
             "how_to_enable": _HOW_TO_ENABLE,
         }
         return
