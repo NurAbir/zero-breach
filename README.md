@@ -1,7 +1,7 @@
 # Zero Breach
 
-> Release v0.1.3 adds an optional Candiru file-pattern check. See
-> [its scope and validation](DETECTION-UPGRADE.md). It needs a pinned YARA-X
+> Release v0.1.4 prioritizes local COM-registered files in the optional Candiru pattern check and expands Windows DNS-history coverage. See
+> [the v0.1.4 scope](COVERAGE-UPGRADE.md) and [pattern validation](DETECTION-UPGRADE.md). It needs a pinned YARA-X
 > dependency; default checks remain standard-library-only.
 
 [![tests](https://github.com/interplains/zero-breach/actions/workflows/tests.yml/badge.svg)](https://github.com/interplains/zero-breach/actions/workflows/tests.yml)
@@ -112,6 +112,16 @@ python3 -m venv .venv
 file or folder; it can be repeated. The normal browser, hash and host checks keep
 their usual scope. Pattern matches are leads for investigation, not proof of an
 active infection. A no-match result cannot rule out Candiru or other spyware.
+Without `--pattern-path`, the optional check first examines up to 128 safe local
+files named by per-user Windows COM registrations, then its usual file roots.
+A COM registration by itself is not a spyware finding. The two published rules
+only apply to files smaller than about 1 MB, so larger files remain outside
+their detection scope.
+
+On Windows, the DNS-history check reads up to the newest 50,000 retained
+events. If older retained records remain, the report marks that history as
+partial rather than complete. This does not turn on logging or recover events
+that were never recorded.
 
 **From source:**
 
@@ -134,7 +144,7 @@ set up (e.g. a bad indicator file).
 
 Use the official repository above and check the downloaded file before running it.
 
-**1. Verify the publisher's signature.** Release v0.1.3 includes detached GPG
+**1. Verify the publisher's signature.** Release v0.1.4 includes detached GPG
 signatures for the scanner and its checksum manifest, using ArchiveGenocide's
 established release key. Follow [SIGNING.md](SIGNING.md), and compare the full
 key fingerprint with [ArchiveGenocide's verification page](https://archivegenocide.com/verify.html).
@@ -158,11 +168,11 @@ you do not have to trust the download at all; you can reproduce it:
 ```
 git clone https://github.com/interplains/zero-breach.git
 cd zero-breach
-git checkout v0.1.3
+git checkout v0.1.4
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
-These commands reproduce v0.1.3; substitute the matching tag for another release.
+These commands reproduce v0.1.4; substitute the matching tag for another release.
 On macOS or Linux use `python3` for the build command.
 Compare the hash with that release's published hash. The development branch may
 contain later changes and is not expected to reproduce an earlier release.

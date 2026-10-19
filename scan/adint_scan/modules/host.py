@@ -62,6 +62,7 @@ _PS = ["powershell", "-NoProfile", "-NonInteractive",
        "-ExecutionPolicy", "Bypass", "-Command"]
 
 _DNS_LOG = "Microsoft-Windows-DNS-Client/Operational"
+_DNS_EVENT_CAP = 50000
 
 # Addresses that mean "this name was deliberately pointed nowhere". Shared by the
 # hosts-file check and the resolver-cache check, because the two have to make the
@@ -77,6 +78,7 @@ _SINK_ADDRESSES = {"0.0.0.0", "127.0.0.1", "::1", "::", "0:0:0:0:0:0:0:1"}
 # checks them. InprocHandler32 is included because it is loaded the same way
 # and is the quieter of the three.
 _SERVER_KINDS = ("InprocServer32", "LocalServer32", "InprocHandler32")
+_COM_PATTERN_CANDIDATE_CAP = 128
 
 # HKCU CLSID. Both the 64-bit and 32-bit registry views must be read, and the
 # right way is explicit KEY_WOW64_*KEY flags on the ONE logical path - not two
@@ -425,13 +427,14 @@ def _check_com(r: ModuleResult, ctx) -> None:
 
     # Expand, de-quote and test each registered path before asking about
     # signatures, so the batched call only covers files that exist on disk.
-    writable = _user_writable_dirs()
+    writable = [os.path.normcase(os.path.normpath(d)).casefold()
+                for d in _user_writable_dirs()]
     remote_letters, drives_known = _network_drive_letters()
     on_disk = []
     for e in entries:
         expanded = _server_path(e["raw"], e["kind"])
         e["path"] = expanded
-        low = expanded.lower()
+        low = os.path.normcase(os.path.normpath(expanded)).casefold() if expanded else ""
         # Decided before the path is touched: os.path.exists() on a remote path
         # is itself the network contact this tool promises never to make, and it
         # happens inside Windows where netguard cannot see it.
@@ -447,13 +450,34 @@ def _check_com(r: ModuleResult, ctx) -> None:
             e["exists"] = bool(expanded) and os.path.exists(expanded)
         except OSError:
             e["exists"] = False
-        e["user_writable"] = any(low.startswith(d) for d in writable)
+        e["user_writable"] = any(low == d or low.startswith(d + os.sep)
+                                 for d in writable)
         if e["exists"]:
             on_disk.append(expanded)
 
     sigs, sig_err = _signature_status(on_disk)
     if sig_err:
         r.could_not_run("com-signatures", sig_err)
+
+    # The existing general file roots miss a registered server in an unusual
+    # local directory. Pass only bounded, local, user-writable file paths to
+    # the opt-in pattern module; the latter rechecks each path before reading.
+    # A user's explicit --pattern-path retains its documented limited scope.
+    if getattr(ctx, "patterns", False) and not getattr(ctx, "pattern_paths", ()):
+        unique = {}
+        for e in entries:
+            if not (e.get("exists") and e.get("user_writable")) or e.get("remote_reason"):
+                continue
+            try:
+                if not os.path.isfile(e["path"]):
+                    continue
+            except OSError:
+                continue
+            key = os.path.normcase(os.path.normpath(e["path"]))
+            unique.setdefault(key, e["path"])
+        candidates = [unique[key] for key in sorted(unique)]
+        ctx.pattern_candidate_paths = tuple(candidates[:_COM_PATTERN_CANDIDATE_CAP])
+        ctx.pattern_candidate_omitted = max(0, len(candidates) - _COM_PATTERN_CANDIDATE_CAP)
 
     user_writable = 0
     reviewable = []
@@ -694,11 +718,12 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
     # silently certifying an unread log as clean history. ToString('o') gives ISO
     # 8601 so min()/max() sort chronologically rather than by locale date string.
     events, ev_err = _ps_json(
-        "Get-WinEvent -LogName '{}' -MaxEvents 20000"
+        "Get-WinEvent -LogName '{}' -MaxEvents {}"
         " -ErrorAction Stop"
         " | Select-Object @{{n='Time';e={{$_.TimeCreated.ToString('o')}}}},"
         " @{{n='Message';e={{[string]$_.Message}}}}"
-        " | ConvertTo-Json -Depth 3 -Compress".format(_DNS_LOG), timeout=300)
+        " | ConvertTo-Json -Depth 3 -Compress".format(
+            _DNS_LOG, _DNS_EVENT_CAP), timeout=300)
     if (ev_err and not events) or (records > 0 and not events):
         reason = ("log is enabled with {} records but none could be read{} - this "
                   "machine's DNS history was NOT searched, so nothing here is "
@@ -715,10 +740,10 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
         r.reach["dns-log"] = {
             "earliest": min(times),
             "days": None,
-            "basis": "oldest of {:,} DNS events read (cap 20,000)".format(
-                len(times)),
+            "basis": "oldest of {:,} DNS events read (cap {:,})".format(
+                len(times), _DNS_EVENT_CAP),
             "note": "Queries before this are either rotated out of the log or "
-                    "beyond the 20,000-event read cap.",
+                    "beyond the bounded event read.",
         }
     for ev in events:
         when = _str(ev, "Time")
@@ -736,11 +761,12 @@ def _check_dns_log(r: ModuleResult, ctx) -> None:
     r.submetrics["dns_log_events_scanned"] = len(events)
     r.ran("dns-log")
     if records > len(events):
-        # Honest about the window actually examined (D3): a capped read is not
-        # the same as having read the whole log.
-        r.note("dns-log: examined the most recent {} of {} records (cap is "
-               "20000); older entries were not checked.".format(
-                   len(events), records))
+        # A note alone let the overall check appear complete and clean even
+        # though older retained DNS records were never examined.
+        r.could_not_run("dns-log-older-events",
+                        "examined the most recent {} of {} retained records "
+                        "(read cap {:,}); older entries were not checked".format(
+                            len(events), records, _DNS_EVENT_CAP))
     ctx.emit("[host] DNS log events scanned: {} ({} indicator matches)"
              .format(len(events), hits))
 

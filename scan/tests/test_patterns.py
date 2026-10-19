@@ -21,10 +21,10 @@ from unittest.mock import Mock, patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from adint_scan.modules import patternscan as patterns
+from adint_scan.modules import host, patternscan as patterns
 from adint_scan.candiru_rules import (CANDIRU_RULE_METADATA, CANDIRU_RULE_SOURCES,
                                      CANDIRU_ENGINE_VERSION)
-from adint_scan.result import CLEAN, HITS, PARTIAL, UNKNOWN
+from adint_scan.result import CLEAN, HITS, PARTIAL, UNKNOWN, ModuleResult
 
 
 def synthetic_malpedia_fixture():
@@ -279,6 +279,82 @@ class PatternTests(unittest.TestCase):
             result = self.run_mock()
         roots.assert_called_once_with()
         self.assertEqual(result.checked, 1)
+
+    def test_default_scan_also_checks_registered_local_file_outside_roots(self):
+        ordinary = self.file("ordinary")
+        registered = self.file("elsewhere/registered.dll", b"registered harmless fixture")
+        self.ctx.pattern_paths = ()
+        self.ctx.pattern_candidate_paths = (str(registered),)
+        self.scanner.scan.side_effect = lambda data: SimpleNamespace(matching_rules=(
+            [SimpleNamespace(identifier="win_devilstongue_auto")]
+            if data == registered.read_bytes() else []))
+        with patch.object(patterns, "_pattern_roots", return_value=[str(ordinary)]):
+            result = self.run_mock()
+        self.assertEqual(result.checked, 2)
+        self.assertEqual([hit.location for hit in result.hits], [str(registered)])
+        self.assertEqual(result.status, HITS)
+        self.assertEqual(self.scanner.scan.call_args_list[0].args[0],
+                         registered.read_bytes())
+
+    def test_explicit_path_does_not_expand_to_registered_files(self):
+        requested = self.file("requested")
+        registered = self.file("registered")
+        self.ctx.pattern_paths = (str(requested),)
+        self.ctx.pattern_candidate_paths = (str(registered),)
+        result = self.run_mock()
+        self.assertEqual(result.checked, 1)
+        self.assertEqual(self.scanner.scan.call_count, 1)
+
+    def test_registered_directory_is_not_recursively_scanned(self):
+        inside = self.file("elsewhere/inside")
+        self.ctx.pattern_paths = ()
+        self.ctx.pattern_candidate_paths = (str(inside.parent),)
+        with patch.object(patterns, "_pattern_roots", return_value=[]):
+            result = self.run_mock()
+        self.assertEqual(result.status, UNKNOWN)
+        self.assertEqual(result.checked, 0)
+        self.scanner.scan.assert_not_called()
+
+    def test_registered_candidate_cap_is_coverage_gap(self):
+        registered = self.file("registered")
+        self.ctx.pattern_paths = ()
+        self.ctx.pattern_candidate_paths = (str(registered),)
+        self.ctx.pattern_candidate_omitted = 1
+        with patch.object(patterns, "_pattern_roots", return_value=[]):
+            result = self.run_mock()
+        self.assertEqual(result.checked, 1)
+        self.assertEqual(result.status, PARTIAL)
+        self.assertTrue(any(c.name == "com-pattern-candidates" for c in result.checks))
+
+    def test_host_passes_only_local_writable_com_targets(self):
+        local = self.file("registered.dll")
+        second = self.file("registered2.dll")
+        remote = r"\\attacker.invalid\share\bad.dll"
+        entries = [{"clsid": "{A}", "kind": "InprocServer32", "raw": str(local),
+                    "view": "native"},
+                   {"clsid": "{C}", "kind": "InprocServer32", "raw": str(second),
+                    "view": "native"},
+                   {"clsid": "{B}", "kind": "InprocServer32", "raw": remote,
+                    "view": "native"}]
+        ctx = SimpleNamespace(patterns=True, pattern_paths=(), emit=lambda _: None,
+                              iocs=SimpleNamespace(search=lambda _: []),
+                              pattern_candidate_paths=(), pattern_candidate_omitted=0)
+        original_exists = os.path.exists
+
+        def safe_exists(path):
+            if path == remote:
+                raise AssertionError("remote path was handed to the filesystem")
+            return original_exists(path)
+
+        with patch.object(host, "_enum_com_registrations", return_value=(entries, [])), \
+                patch.object(host, "_network_drive_letters", return_value=(set(), True)), \
+                patch.object(host, "_user_writable_dirs", return_value=[str(self.root).lower()]), \
+                patch.object(host, "_COM_PATTERN_CANDIDATE_CAP", 1), \
+                patch.object(host, "_signature_status", return_value=({}, "")), \
+                patch.object(os.path, "exists", side_effect=safe_exists):
+            host._check_com(ModuleResult("host"), ctx)
+        self.assertEqual(ctx.pattern_candidate_paths, (str(local),))
+        self.assertEqual(ctx.pattern_candidate_omitted, 1)
 
     def test_overlapping_roots_do_not_duplicate_files(self):
         target = self.file("nested/extensionless")
@@ -629,6 +705,16 @@ class RealEnginePatternTests(unittest.TestCase):
         self.assertEqual(result.checked, 2)
         self.assertEqual([hit.location for hit in result.hits], [str(wanted)])
         self.assertEqual([hit.indicator for hit in result.hits], ["yara:win_devilstongue_auto"])
+
+    def test_real_registered_candidate_outside_general_roots(self):
+        wanted = self.file("elsewhere/registered.dll", synthetic_malpedia_fixture())
+        self.ctx.pattern_paths = ()
+        self.ctx.pattern_candidate_paths = (str(wanted),)
+        with patch.object(patterns, "_pattern_roots", return_value=[]):
+            result = patterns.run(self.ctx)
+        self.assertEqual([hit.indicator for hit in result.hits],
+                         ["yara:win_devilstongue_auto"])
+        self.assertEqual([hit.location for hit in result.hits], [str(wanted)])
 
     def test_300_oversized_files_do_not_exhaust_data_read_budget(self):
         # Sparse temporary test files: metadata says >1 MiB, no contents read.

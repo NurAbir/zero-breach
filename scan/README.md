@@ -1,7 +1,7 @@
 # adint-scan
 
-> Release v0.1.3 adds experimental, opt-in `--patterns` support. See
-> [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
+> Release v0.1.4 improves coverage for the experimental, opt-in `--patterns` check. See
+> [COVERAGE-UPGRADE.md](../COVERAGE-UPGRADE.md) and [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
 > validation evidence. Default checks need no added packages.
 
 A local, read-only check for the published AdFection / Candiru indicators,
@@ -63,8 +63,8 @@ after use. `--json PATH` writes the report you request.
 |---|---|
 | `browser` | history, cookies, favicons, HTTP cache, LevelDB and Service Worker caches across Chrome / Edge / Brave / Vivaldi / Chromium (every profile) and Firefox. Locked databases are copied before being opened. |
 | `hash` | SHA-256 of candidate files under AppData, ProgramData, both Temps, Downloads, Desktop, Documents and Public, against the sample hashes in the IOC set. |
-| `host` | per-user COM registrations (this chain's documented persistence), the DNS resolver cache, whether DNS history exists at all, and the hosts file. |
-| `patterns` (optional) | file bytes checked against two published Candiru research rules; a match needs investigation and cannot confirm infection |
+| `host` | per-user COM registrations (this chain's documented persistence), the DNS resolver cache, up to 50,000 recent retained DNS-history events on Windows, and the hosts file. Older retained events are an explicit gap. |
+| `patterns` (optional) | file bytes checked against two published Candiru research rules; without an explicit pattern path, safely checks up to 128 local user-writable COM server files first. A match needs investigation and cannot confirm infection. |
 
 Why the browser module looks at the cache and not just history: history records
 only top-level navigations, and an ad is a subresource inside an iframe. A real

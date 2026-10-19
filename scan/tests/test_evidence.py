@@ -30,7 +30,7 @@ from adint_scan import iocs as iocmod  # noqa: E402
 from adint_scan import report  # noqa: E402
 from adint_scan.context import ScanContext  # noqa: E402
 from adint_scan.modules import browser  # noqa: E402
-from adint_scan.result import Hit, ModuleResult  # noqa: E402
+from adint_scan.result import Hit, ModuleResult, PARTIAL  # noqa: E402
 
 TEST_DOMAIN = "synthetic-test-indicator.invalid"
 
@@ -305,6 +305,39 @@ class TestBlockedDnsLookupIsNotContact(unittest.TestCase):
 
 
 class TestDnsLogIsNotProofOfContact(unittest.TestCase):
+    def test_dns_match_after_old_20000_event_limit_is_read(self):
+        from adint_scan.modules import host
+        with tempfile.TemporaryDirectory(prefix="dnslog_extended_") as tmp:
+            ctx = make_ctx(tmp)
+            result = ModuleResult("host")
+            events = [{"Time": "2025-03-04T12:00:00Z", "Message": ""}
+                      for _ in range(20000)]
+            events.append({"Time": "2025-03-03T12:00:00Z",
+                           "Message": "DNS query for " + TEST_DOMAIN})
+            with patch.object(host, "_ps_json", side_effect=[
+                    ([{"IsEnabled": True, "RecordCount": 20001}], ""),
+                    (events, "")]):
+                host._check_dns_log(result, ctx)
+        self.assertEqual(result.submetrics["dns_log_events_scanned"], 20001)
+        self.assertEqual(len(result.hits), 1)
+        self.assertFalse(any(c.name == "dns-log-older-events" for c in result.checks))
+
+    def test_retained_older_dns_events_are_a_coverage_gap(self):
+        from adint_scan.modules import host
+        with tempfile.TemporaryDirectory(prefix="dnslog_cap_") as tmp:
+            ctx = make_ctx(tmp)
+            result = ModuleResult("host")
+            fixture = [
+                ([{"IsEnabled": True, "RecordCount": 50001}], ""),
+                ([{"Time": "2025-03-04T12:00:00Z", "Message": "ordinary.test"}], ""),
+            ]
+            with patch.object(host, "_ps_json", side_effect=fixture) as query:
+                host._check_dns_log(result, ctx)
+        self.assertEqual(result.status, PARTIAL)
+        self.assertTrue(any(c.name == "dns-log-older-events" and not c.ran
+                            for c in result.checks))
+        self.assertIn("-MaxEvents 50000", query.call_args_list[1].args[0])
+
     def test_failed_nxdomain_lookup_remains_dns_evidence(self):
         from adint_scan.modules import host
         from adint_scan.result import EV_DNS
