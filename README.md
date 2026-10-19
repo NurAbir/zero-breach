@@ -69,9 +69,8 @@ yet. Unsupported browsers and custom profile locations are not checked and may
 not appear in the report; a no-match result does not cover them. Close the
 browser before scanning so its databases are not locked.
 
-> **Release note:** Vivaldi support is available in the source code and is not
-> included in the signed v0.1.1 download. A new build has a different SHA-256;
-> the v0.1.1 signature and checksum do not apply to it.
+> **Release note:** Vivaldi support is included in v0.1.2. Earlier downloads
+> do not include it. Verify each version against its own signature and checksum.
 
 ## Install and run
 
@@ -107,7 +106,7 @@ set up (e.g. a bad indicator file).
 
 Use the official repository above and check the downloaded file before running it.
 
-**1. Verify the publisher's signature.** Release v0.1.1 includes detached GPG
+**1. Verify the publisher's signature.** Release v0.1.2 includes detached GPG
 signatures for the scanner and its checksum manifest, using ArchiveGenocide's
 established release key. Follow [SIGNING.md](SIGNING.md), and compare the full
 key fingerprint with [ArchiveGenocide's verification page](https://archivegenocide.com/verify.html).
@@ -131,11 +130,11 @@ you do not have to trust the download at all; you can reproduce it:
 ```
 git clone https://github.com/interplains/zero-breach.git
 cd zero-breach
-git checkout v0.1.1
+git checkout v0.1.2
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
-These commands reproduce v0.1.1; substitute the matching tag for another release.
+These commands reproduce v0.1.2; substitute the matching tag for another release.
 On macOS or Linux use `python3` for the build command.
 Compare the hash with that release's published hash. The development branch may
 contain later changes and is not expected to reproduce an earlier release.
@@ -224,8 +223,9 @@ numbered "what to do" that starts with *do not delete the evidence*.
 The current source dataset has **405 indicators: 292 domains, 111 IP addresses,
 one spyware hash and one legitimate vulnerable-driver hash**, in
 [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt), one per line with its tier,
-confidence and source. Signed release **v0.1.1 remains unchanged and embeds 338
-indicators**; later source/feed updates do not replace its signed assets.
+confidence and source. Release **v0.1.2 embeds all 405 indicators**, including
+67 additional domains/hostnames compared with v0.1.1. Earlier signed release
+assets remain unchanged; later source/feed updates do not replace them.
 
 Coverage combines Citizen Lab's AdFection (2026), Hooking Candiru (2021) and
 CatalanGate (2022) reports, Confiant ADINT (2026), Recorded Future (2025),
@@ -276,7 +276,7 @@ It downloads over HTTPS, checks the file against a published SHA-256, confirms i
 parses before replacing anything, and shows a diff first. The trust model and the
 updater limitations are documented at the top of the script. It does not verify
 GPG signatures automatically. The signed release manifest authenticates the IOC
-file shipped with v0.1.1, not later development-branch updates; see [SIGNING.md](SIGNING.md).
+file shipped with v0.1.2, not later development-branch updates; see [SIGNING.md](SIGNING.md).
 
 ## Design principles
 

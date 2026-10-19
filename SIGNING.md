@@ -1,17 +1,17 @@
 # Verifying ArchiveGenocide release signatures
 
-Zero Breach v0.1.1 supplies detached GPG signatures for the exact released
+Zero Breach v0.1.2 supplies detached GPG signatures for the exact released
 scanner and its SHA256SUMS.txt manifest. They use ArchiveGenocide's existing
 Ed25519 release-signing key, also published on the archive's verification page.
 
 Official repository: https://github.com/interplains/zero-breach
-Official release: https://github.com/interplains/zero-breach/releases/tag/v0.1.1
+Official release: https://github.com/interplains/zero-breach/releases/tag/v0.1.2
 Independent publisher page: https://archivegenocide.com/scan/#verify-download
 Established key identity: https://archivegenocide.com/verify.html
 
 ## Check the publisher and file
 
-Download these three files from the v0.1.1 release into one directory:
+Download these three files from the v0.1.2 release into one directory:
 
 - zero-breach.py
 - zero-breach.py.asc
@@ -36,9 +36,9 @@ Verification must succeed using the expected ArchiveGenocide key. A warning
 that the key is not certified by your own web of trust is different from a
 bad signature; do not ignore a fingerprint mismatch or failed verification.
 
-The expected SHA-256 of zero-breach.py v0.1.1 is:
+The expected SHA-256 of zero-breach.py v0.1.2 is:
 
-    9c947d6ba23f4308b4d1512596e44b2ec2b34c3cba4139b4cb4d8774e77d08aa
+    f12f4a8dd15b00e6f2d7997f238780e43e7d82b689c6dfd5f4544b5d899c1a69
 
 A signature verifies which key signed these exact bytes. It does not establish
 that the program has no bugs. A checksum alone is not publisher authentication.
@@ -57,14 +57,14 @@ shasum -a 256 -c SHA256SUMS.txt on macOS).
 The manifest lists the ten release-content files. The manifest itself and
 the added public key/signatures are not self-listed.
 
-Public verification artifacts are also retained in release-signatures/v0.1.1/.
+Public verification artifacts are also retained in release-signatures/v0.1.2/.
 No private key is stored in this repository or in its project backups.
 
 ## Indicator updates are a separate trust path
 
 The manually run scan/update-iocs.py still checks HTTPS, a published SHA-256,
 and indicator-file validity. It does not automatically verify GPG signatures.
-The signed release manifest covers the indicator file shipped with v0.1.1;
+The signed release manifest covers the indicator file shipped with v0.1.2;
 it does not authenticate later files fetched from the development branch.
 
 ## Maintainer release procedure
