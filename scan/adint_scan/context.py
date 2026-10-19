@@ -30,3 +30,7 @@ class ScanContext:
     # Optional research feature. Never installs a dependency or fetches rules.
     patterns: bool = False
     pattern_paths: tuple = ()
+    # Local, per-user COM server files discovered by the host check. Only the
+    # optional pattern module consumes these; explicit --pattern-path wins.
+    pattern_candidate_paths: tuple = ()
+    pattern_candidate_omitted: int = 0

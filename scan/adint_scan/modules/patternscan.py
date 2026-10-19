@@ -211,7 +211,10 @@ def _pattern_engine():
 
 def _pattern_selected_roots(ctx):
     requested = getattr(ctx, "pattern_paths", ())
-    roots = requested if requested else _pattern_roots()
+    # High-value registered files go first. A broad root can exhaust the
+    # bounded budget; it must not prevent these targeted paths from being read.
+    roots = requested if requested else list(getattr(ctx, "pattern_candidate_paths", ())) + list(
+        _pattern_roots())
     # Lexical normalization only: resolving first could follow a refused link.
     unique = []
     for root in roots:
@@ -257,6 +260,24 @@ def run(ctx) -> ModuleResult:
         r.could_not_run("pattern-roots", "no local pattern paths were selected")
         return r
 
+    auto_candidates = set()
+    if not getattr(ctx, "pattern_paths", ()):
+        auto_candidates = {_pattern_os.path.normcase(_pattern_os.path.normpath(p))
+                           for p in getattr(ctx, "pattern_candidate_paths", ())}
+        if auto_candidates:
+            auto_candidates.difference_update(
+                _pattern_os.path.normcase(_pattern_os.path.normpath(p))
+                for p in _pattern_roots())
+        if auto_candidates:
+            r.note("Also checking up to {} local, user-writable files named by "
+                   "per-user COM registrations; registration alone is not a finding."
+                   .format(len(auto_candidates)))
+        omitted = getattr(ctx, "pattern_candidate_omitted", 0)
+        if omitted:
+            r.could_not_run("com-pattern-candidates", "{} registered file path(s) "
+                            "were omitted by the registered-path safety cap".format(
+                                omitted))
+
     counts = {"files": 0, "dirs": 0, "entries": 0, "bytes": 0}
     seen_files = {}  # bounded by MAX_FILES; value says whether scan succeeded
     for root in roots:
@@ -278,6 +299,8 @@ def run(ctx) -> ModuleResult:
             if _pattern_stat.S_ISREG(info.st_mode):
                 entries = iter((root,))
             elif _pattern_stat.S_ISDIR(info.st_mode):
+                if _pattern_os.path.normcase(_pattern_os.path.normpath(root)) in auto_candidates:
+                    raise OSError("registered COM target changed into a directory; not traversed")
                 entries = _pattern_walk(root, counts, r, _pattern_gap)
             else:
                 raise OSError("not a regular file or directory")

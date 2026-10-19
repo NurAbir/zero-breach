@@ -112,6 +112,16 @@ python3 -m venv .venv
 file or folder; it can be repeated. The normal browser, hash and host checks keep
 their usual scope. Pattern matches are leads for investigation, not proof of an
 active infection. A no-match result cannot rule out Candiru or other spyware.
+Without `--pattern-path`, the optional check first examines up to 128 safe local
+files named by per-user Windows COM registrations, then its usual file roots.
+A COM registration by itself is not a spyware finding. The two published rules
+only apply to files smaller than about 1 MB, so larger files remain outside
+their detection scope.
+
+On Windows, the DNS-history check reads up to the newest 50,000 retained
+events. If older retained records remain, the report marks that history as
+partial rather than complete. This does not turn on logging or recover events
+that were never recorded.
 
 **From source:**
 

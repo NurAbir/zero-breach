@@ -2,6 +2,9 @@
 
 Development extension: `ctx.patterns` explicitly enables the optional `patterns`
 module; `ctx.pattern_paths` supplies absolute local paths for that module only.
+The Windows host module supplies bounded `ctx.pattern_candidate_paths` from
+local, user-writable per-user COM server registrations when pattern paths are
+not explicitly selected; the pattern module rechecks each path before reading.
 The default checks remain standard-library-only. The optional module uses the
 pinned YARA-X engine without downloads, writes or sample execution. Its hits use
 `file-pattern` evidence and `candiru-pattern` tier, never exact-hash claims.
