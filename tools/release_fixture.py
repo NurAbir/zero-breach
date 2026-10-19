@@ -94,6 +94,18 @@ def main():
         registered.write_bytes(b"ordinary registered file")
     before = snapshot(inputs)
     denied_activity = []
+    original_network_guard = cli.no_network
+
+    @contextlib.contextmanager
+    def checked_network_guard():
+        # The scanner's socket wrappers reject calls before Python emits an
+        # audit event. Observe their recorder too, including caught attempts.
+        with original_network_guard() as recorder:
+            try:
+                yield recorder
+            finally:
+                denied_activity.extend(recorder.attempts)
+
     allowed = (root, ROOT, Path(sys.prefix).absolute(), Path(sys.prefix).resolve(),
                Path(sys.base_prefix).absolute(), Path(sys.base_prefix).resolve())
 
@@ -143,6 +155,7 @@ def main():
     if case == "patterns":
         argv.append("--patterns")
     with contextlib.ExitStack() as stack:
+        stack.enter_context(patch.object(cli, "no_network", checked_network_guard))
         for mod, name, value in (
                 (browser, "CHROMIUM_ROOTS", [("fixture", str(profile.parent))]),
                 (browser, "FIREFOX_ROOTS", []),

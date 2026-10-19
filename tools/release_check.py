@@ -2,6 +2,7 @@
 """Small, offline pre-release gate. Never runs a scan against the real host."""
 import argparse
 import hashlib
+from html.parser import HTMLParser
 import importlib.util
 import json
 import os
@@ -15,6 +16,59 @@ import time
 ROOT = Path(__file__).resolve().parents[1]
 CASES = ("clean", "contact", "reference", "hash", "corrupt", "hit-and-gap", "quick",
          "dns-cap-hit", "dns-cap-gap", "bad-feed", "patterns")
+
+
+class DownloadPanel(HTMLParser):
+    """Read code/copy values from the actual verification card, not comments."""
+    def __init__(self):
+        super().__init__()
+        self.depth = 0
+        self.group_depth = None
+        self.group = None
+        self.capture = None
+        self.cards = 0
+        self.groups = []
+
+    def handle_starttag(self, tag, attributes):
+        attrs = dict(attributes)
+        if tag == "div":
+            if attrs.get("id") == "verify-download":
+                self.cards += 1
+                self.depth = 1
+            elif self.depth:
+                self.depth += 1
+            if self.depth and "ea-copy" in attrs.get("class", "").split():
+                self.group = {"code": "", "label": "", "copy": None}
+                self.groups.append(self.group)
+                self.group_depth = self.depth
+        elif self.group is not None and tag in ("code", "button"):
+            self.capture = "code" if tag == "code" else "label"
+            if tag == "button":
+                self.group["copy"] = attrs.get("data-copy")
+
+    def handle_endtag(self, tag):
+        if tag in ("code", "button"):
+            self.capture = None
+        if tag == "div" and self.depth:
+            if self.depth == self.group_depth:
+                self.group = None
+                self.group_depth = None
+            self.depth -= 1
+
+    def handle_data(self, text):
+        if self.group is not None and self.capture:
+            self.group[self.capture] += text
+
+
+def check_web_checksum(html, digest):
+    panel = DownloadPanel()
+    panel.feed(html)
+    candidates = [g for g in panel.groups if g["label"].strip() == "Copy SHA-256"]
+    if panel.cards != 1 or len(candidates) != 1:
+        raise RuntimeError("Scan page must have one verification card and SHA-256 copy control")
+    value = candidates[0]
+    if value["code"].strip() != digest or value["copy"] != digest:
+        raise RuntimeError("Scan page displayed/copied checksum differs from the candidate download")
 
 
 def main():
@@ -38,10 +92,10 @@ def main():
                "scope": "Offline fixtures; OS collection is simulated; no personal scan"}
     env = dict(os.environ, PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1")
 
-    def run(name, command, timeout=60):
+    def run(name, command, timeout=60, environment=None):
         tick = time.monotonic()
         try:
-            proc = subprocess.run(command, cwd=ROOT, env=env, stdin=subprocess.DEVNULL,
+            proc = subprocess.run(command, cwd=ROOT, env=environment or env, stdin=subprocess.DEVNULL,
                                   stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                                   timeout=timeout)
             text = proc.stdout.decode("utf-8", errors="replace")
@@ -69,8 +123,12 @@ def main():
             summary["skipped"].append("Real YARA-X positives: engine not installed")
 
         if not args.e2e_only:
-            run("unit-tests", [sys.executable, "-B", "-m", "unittest", "discover",
-                               "-s", "scan/tests"], timeout=180)
+            # Snapshot-cleanup tests inspect the temp directory. Separate
+            # release runs must not see each other's transient snapshots.
+            with tempfile.TemporaryDirectory(prefix="zb_unit_") as unit_temp:
+                unit_env = dict(env, TMP=unit_temp, TEMP=unit_temp, TMPDIR=unit_temp)
+                run("unit-tests", [sys.executable, "-B", "-m", "unittest", "discover",
+                                   "-s", "scan/tests"], timeout=180, environment=unit_env)
 
         with tempfile.TemporaryDirectory(prefix="zb_release_") as temp:
             work = Path(temp)
@@ -108,12 +166,12 @@ def main():
             if web is not None:
                 web = web.resolve()
                 test = web / "ops/test_scan_logic.js"
-                if not test.is_file() or not shutil.which("node"):
-                    raise RuntimeError("web check requires Node and ops/test_scan_logic.js")
+                if not all((web / name).is_file() for name in
+                           ("index.html", "scan.js", "ops/test_scan_logic.js")) or not shutil.which("node"):
+                    raise RuntimeError("web check requires Node, index.html, scan.js and ops/test_scan_logic.js")
                 run("web-logic", ["node", str(test)])
                 html = (web / "index.html").read_text(encoding="utf-8")
-                if digest not in html:
-                    raise RuntimeError("Scan page checksum differs from the candidate download")
+                check_web_checksum(html, digest)
                 steps.append({"name": "web-download-checksum", "seconds": 0})
             else:
                 summary["skipped"].append("Website: separate site source not supplied (--web-dir)")

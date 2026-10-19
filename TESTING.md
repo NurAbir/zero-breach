@@ -47,6 +47,8 @@ untested optional positives as a skip. Use `--require-patterns` before release.
   and temporary snapshots must be removed.
 - During fixture scans, an audit hook rejects socket activity, subprocesses and
   file opens/listings outside fixture, project-code and Python-runtime roots.
+  The scanner's network-guard recorder is checked too, so caught network
+  attempts cannot pass silently. Each unit-suite run has its own temp directory.
   Each fixture process has a 45-second timeout; timeouts or assertion failures
   make the command fail. Results/logs stay under ignored
   `findings/release-checks/summary.json`. `PASS_WITH_SKIPS` names missing coverage.
@@ -70,7 +72,7 @@ python tools/release_check.py --require-patterns --web-dir PATH_TO_SCAN_DIRECTOR
 
 `--web-dir` requires Node, `index.html`, `scan.js`, and
 `ops/test_scan_logic.js`. It runs the existing offline page-flow matrix and
-requires the page's displayed checksum to match the candidate script. These
+  requires the verification card's code text and copy value to match the candidate script. These
 are DOM/logic fixtures; actual rendering and touch behaviour still need the
 browser smoke check. `--scanner` requires the staged download to match the
 fresh build byte for byte. Omit it to test the freshly built download.
