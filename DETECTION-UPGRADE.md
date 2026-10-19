@@ -83,10 +83,10 @@ pattern/integration tests without failures or skips. A small clean corpus of
 200 Debian files and 26 official Python Windows PE files produced no matches.
 
 The revised development candidate is SHA-256
-`57a1d4293e9f3a32c4dfc36393ecf007efef7cc4e5609bd42ba088f173f5cfd5`.
-After the prune correction and documentation changes, the Windows suite ran
-268 tests with no failures and one permission skip; without the optional engine
-it ran 268 tests with seven expected skips. These are development receipts;
+`2b30cc710a6f1fc326ef29d57e38e9f98279c428d8713d7aa85d0c905b54e549`.
+After the prune correction and a Windows Python 3.12 file-metadata compatibility
+fix, the Windows suite ran 269 tests with no failures and one permission skip;
+without the optional engine it ran 269 tests with seven expected skips. These are development receipts;
 version and packaging changes require a new final hash and checks.
 
 Two hash-verified MalwareBazaar downloads were scanned as static bytes inside

@@ -244,17 +244,20 @@ class PatternTests(unittest.TestCase):
         self.assertEqual(len(patterns._pattern_read(str(target))), patterns._PATTERN_MAX_BYTES)
 
     @unittest.skipUnless(sys.platform == "win32", "Windows file identity check")
-    def test_windows_identity_consistent_on_runner_volume(self):
+    def test_windows_path_and_handle_identity_use_common_fields(self):
         target = self.file(data=b"harmless identity fixture")
         before = os.lstat(target)
         flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NONBLOCK", 0)
         fd = os.open(target, flags)
         try:
             opened = os.fstat(fd)
+            second_path = os.lstat(target)
         finally:
             os.close(fd)
+        self.assertEqual(patterns._pattern_shared_identity(before),
+                         patterns._pattern_shared_identity(opened))
         self.assertEqual(patterns._pattern_identity(before),
-                         patterns._pattern_identity(opened))
+                         patterns._pattern_identity(second_path))
 
     def test_missing_and_empty_requested_roots_are_unknown(self):
         for path in (self.root / "absent", self.root):

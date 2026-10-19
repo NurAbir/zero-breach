@@ -129,6 +129,13 @@ def _pattern_identity(info):
             getattr(info, "st_ctime_ns", info.st_ctime))
 
 
+def _pattern_shared_identity(info):
+    # Windows Python 3.12 can report different st_ctime_ns values for lstat
+    # and fstat on the same file. Compare ctime only between calls to the same
+    # API; volume, file ID, size and mtime remain comparable across APIs.
+    return _pattern_identity(info)[:4]
+
+
 def _pattern_read(path):
     """Bound the read, reject special files, and detect observable replacements.
 
@@ -157,7 +164,8 @@ def _pattern_read(path):
         with stream:
             opened = _pattern_os.fstat(stream.fileno())
             if (not _pattern_stat.S_ISREG(opened.st_mode)
-                    or _pattern_identity(before) != _pattern_identity(opened)):
+                    or _pattern_shared_identity(before) != _pattern_shared_identity(opened)
+                    or _pattern_identity(before) != _pattern_identity(_pattern_os.lstat(path))):
                 raise OSError("file changed before bounded read")
             problem = _pattern_problem(path)
             if problem:
@@ -172,7 +180,8 @@ def _pattern_read(path):
         if problem:
             raise OSError(problem)
         if (len(data) > _PATTERN_MAX_BYTES or len(data) != before.st_size
-                or _pattern_identity(before) != _pattern_identity(after)
+                or _pattern_shared_identity(before) != _pattern_shared_identity(after)
+                or _pattern_identity(opened) != _pattern_identity(after)
                 or _pattern_identity(before) != _pattern_identity(final)):
             raise OSError("file grew or changed during bounded read")
         return data
