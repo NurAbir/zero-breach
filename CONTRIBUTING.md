@@ -13,6 +13,12 @@ cd scan && python -m unittest discover -s tests
 
 Every change must keep the suite green. New behaviour needs a test.
 
+Before publishing, run `python tools/release_check.py --require-patterns` in
+the virtual environment with the pinned optional engine installed. This builds
+and tests the download against controlled fixtures without scanning your own
+browser profiles. See [TESTING.md](TESTING.md) for setup, website checks, scope
+and the short release checklist.
+
 ## Rebuilding the generated files
 
 The STIX/MISP feeds, the blocklists, the indicator checksum and the single-file
