@@ -1,8 +1,8 @@
 # adint-scan
 
-> This development branch includes experimental `--patterns` support. See
+> Release v0.1.3 adds experimental, opt-in `--patterns` support. See
 > [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
-> validation requirements. It has not replaced the signed public release.
+> validation evidence. Default checks need no added packages.
 
 A local, read-only check for the published AdFection / Candiru indicators,
 with explicit reporting of missing evidence and checks that could not run.
@@ -39,7 +39,7 @@ python -X utf8 adint-scan.py
 ```
 
 ```
-adint-scan [--deep] [--quick] [--json PATH] [--iocs PATH]
+adint-scan [--deep] [--quick] [--json PATH] [--iocs PATH] [--patterns] [--pattern-path ABSOLUTE_PATH]
 ```
 
 | flag | effect |
@@ -49,6 +49,8 @@ adint-scan [--deep] [--quick] [--json PATH] [--iocs PATH]
 | `--json PATH` | also write the machine-readable report |
 | `--iocs PATH` | use a different indicator file (default `../iocs/adfection_iocs.txt`) |
 | `--deep` | tier 2: full persistence sweep. Not implemented — the flag reports an honest `UNKNOWN` gap rather than faking a sweep |
+| `--patterns` | opt-in, bounded check against two published Candiru file rules; requires Python 3.9+ and the pinned optional YARA-X wheel |
+| `--pattern-path ABSOLUTE_PATH` | file or folder for the optional pattern check; repeatable and requires `--patterns` |
 
 Exit codes: `0` nothing found, `2` an indicator matched, `1` the scan could not
 be set up. This release changes no system settings and needs no administrator.
@@ -62,6 +64,7 @@ after use. `--json PATH` writes the report you request.
 | `browser` | history, cookies, favicons, HTTP cache, LevelDB and Service Worker caches across Chrome / Edge / Brave / Vivaldi / Chromium (every profile) and Firefox. Locked databases are copied before being opened. |
 | `hash` | SHA-256 of candidate files under AppData, ProgramData, both Temps, Downloads, Desktop, Documents and Public, against the sample hashes in the IOC set. |
 | `host` | per-user COM registrations (this chain's documented persistence), the DNS resolver cache, whether DNS history exists at all, and the hosts file. |
+| `patterns` (optional) | file bytes checked against two published Candiru research rules; a match needs investigation and cannot confirm infection |
 
 Why the browser module looks at the cache and not just history: history records
 only top-level navigations, and an ad is a subresource inside an iframe. A real

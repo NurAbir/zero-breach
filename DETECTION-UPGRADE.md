@@ -1,8 +1,8 @@
-# Candiru pattern upgrade: unreleased research candidate
+# Optional Candiru file patterns: validation and limits
 
-This branch adds an optional check to Zero Breach itself. It is not a separate
-product and has not replaced the signed v0.1.2 release or the website download.
-The development version is 0.1.3.dev0. It is not approved for publication.
+Zero Breach v0.1.3 adds an optional check to the existing scanner. The default
+scan remains unchanged. This document records what the new mode checks, how it
+was tested and where its results are limited.
 
 ## Scope
 
@@ -82,12 +82,14 @@ ran 267 tests with seven expected skips. The disposable Linux VM ran all 52
 pattern/integration tests without failures or skips. A small clean corpus of
 200 Debian files and 26 official Python Windows PE files produced no matches.
 
-The revised development candidate is SHA-256
-`2b30cc710a6f1fc326ef29d57e38e9f98279c428d8713d7aa85d0c905b54e549`.
+The reviewed release build is SHA-256
+`1a1eb0e76cd2791349be9861840a5756940c3a950a134b5436bc7f9d1b50e3b8`.
 After the prune correction and a Windows Python 3.12 file-metadata compatibility
 fix, the Windows suite ran 269 tests with no failures and one permission skip;
-without the optional engine it ran 269 tests with seven expected skips. These are development receipts;
-version and packaging changes require a new final hash and checks.
+without the optional engine it ran 269 tests with seven expected skips. The
+release build changes the displayed version and help text, not the two rules
+or file scanning logic. The signed final artifact and cross-platform CI must
+still match this exact hash before publication.
 
 Two hash-verified MalwareBazaar downloads were scanned as static bytes inside
 the disconnected VM, without execution:
@@ -107,8 +109,9 @@ shared folders. It has been removed; only sanitized results were exported.
 These two positives and the small clean corpus demonstrate useful additional
 coverage, not a measured detection rate or proof of broad Candiru coverage.
 New native macOS execution, actual cloud placeholders and an adversarial
-wall-clock engine-timeout case remain untested. The live v0.1.2 release remains
-unchanged. Detailed local receipts are under `findings/vm-lab/`.
+wall-clock engine-timeout case remain untested. At validation time the live
+v0.1.2 release remained unchanged. Detailed local receipts are under
+`findings/vm-lab/`.
 
 ## MVT integration assessment
 

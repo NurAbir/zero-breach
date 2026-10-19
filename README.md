@@ -1,9 +1,8 @@
 # Zero Breach
 
-> Development branch: optional Candiru pattern scanning is under validation.
-> It is not part of the signed v0.1.2 release. See
-> [the upgrade scope and test gate](DETECTION-UPGRADE.md). The optional mode
-> needs a pinned YARA-X dependency; default checks remain standard-library-only.
+> Release v0.1.3 adds an optional Candiru file-pattern check. See
+> [its scope and validation](DETECTION-UPGRADE.md). It needs a pinned YARA-X
+> dependency; default checks remain standard-library-only.
 
 [![tests](https://github.com/interplains/zero-breach/actions/workflows/tests.yml/badge.svg)](https://github.com/interplains/zero-breach/actions/workflows/tests.yml)
 
@@ -79,7 +78,7 @@ browser before scanning so its databases are not locked.
 
 ## Install and run
 
-Requires Python 3.8 or newer. No administrator. No third-party packages.
+Default checks require Python 3.8 or newer, no administrator and no added packages.
 
 **Single file (simplest):** [download zero-breach.py](https://github.com/interplains/zero-breach/releases/latest/download/zero-breach.py),
 verify it using the [release checksums](https://github.com/interplains/zero-breach/releases/latest),
@@ -91,6 +90,28 @@ python -X utf8 zero-breach.py            # full scan
 python -X utf8 zero-breach.py --quick    # faster; skips file fingerprinting
 python -X utf8 zero-breach.py --json report.json
 ```
+
+**Optional Candiru file patterns:** Download `requirements-patterns.txt` from
+the same release as the scanner. This mode needs Python 3.9 or newer. From the
+folder containing both downloads, make a separate Python environment and install
+the hash-pinned YARA-X wheel:
+
+```text
+# Windows PowerShell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install -r requirements-patterns.txt
+.venv\Scripts\python.exe -X utf8 zero-breach.py --patterns
+
+# macOS / Linux
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-patterns.txt
+.venv/bin/python -X utf8 zero-breach.py --patterns
+```
+
+`--pattern-path ABSOLUTE_PATH` limits this extra file check to a chosen local
+file or folder; it can be repeated. The normal browser, hash and host checks keep
+their usual scope. Pattern matches are leads for investigation, not proof of an
+active infection. A no-match result cannot rule out Candiru or other spyware.
 
 **From source:**
 
@@ -113,7 +134,7 @@ set up (e.g. a bad indicator file).
 
 Use the official repository above and check the downloaded file before running it.
 
-**1. Verify the publisher's signature.** Release v0.1.2 includes detached GPG
+**1. Verify the publisher's signature.** Release v0.1.3 includes detached GPG
 signatures for the scanner and its checksum manifest, using ArchiveGenocide's
 established release key. Follow [SIGNING.md](SIGNING.md), and compare the full
 key fingerprint with [ArchiveGenocide's verification page](https://archivegenocide.com/verify.html).
@@ -137,11 +158,11 @@ you do not have to trust the download at all; you can reproduce it:
 ```
 git clone https://github.com/interplains/zero-breach.git
 cd zero-breach
-git checkout v0.1.2
+git checkout v0.1.3
 python build/build.py          # writes dist/zero-breach.py and prints its SHA-256
 ```
 
-These commands reproduce v0.1.2; substitute the matching tag for another release.
+These commands reproduce v0.1.3; substitute the matching tag for another release.
 On macOS or Linux use `python3` for the build command.
 Compare the hash with that release's published hash. The development branch may
 contain later changes and is not expected to reproduce an earlier release.
@@ -283,7 +304,7 @@ It downloads over HTTPS, checks the file against a published SHA-256, confirms i
 parses before replacing anything, and shows a diff first. The trust model and the
 updater limitations are documented at the top of the script. It does not verify
 GPG signatures automatically. The signed release manifest authenticates the IOC
-file shipped with v0.1.2, not later development-branch updates; see [SIGNING.md](SIGNING.md).
+file shipped with the signed release, not later development-branch updates; see [SIGNING.md](SIGNING.md).
 
 ## Design principles
 
