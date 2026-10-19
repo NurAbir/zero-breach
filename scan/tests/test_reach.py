@@ -15,6 +15,7 @@ import sqlite3
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -22,11 +23,13 @@ from adint_scan import iocs as iocmod  # noqa: E402
 from adint_scan import report  # noqa: E402
 from adint_scan.context import ScanContext  # noqa: E402
 from adint_scan.modules import browser  # noqa: E402
+from adint_scan.modules import host
+from adint_scan.result import ModuleResult
 
 
 class TestOverlapStatement(unittest.TestCase):
     def text(self, d):
-        return " ".join(report.overlap_statement(d, "browser/cookies"))
+        return " ".join(" ".join(report.overlap_statement(d, "browser/cookies")).split())
 
     def test_evidence_after_campaign_end_says_no_overlap(self):
         t = self.text(datetime.date(2026, 6, 21))
@@ -49,6 +52,63 @@ class TestOverlapStatement(unittest.TestCase):
     def test_boundary_days(self):
         self.assertIn("DO NOT OVERLAP", self.text(datetime.date(2026, 1, 1)))
         self.assertNotIn("DO NOT OVERLAP", self.text(datetime.date(2025, 12, 31)))
+
+    def test_all_windows_are_scoped_to_reported_evidence(self):
+        for date in (datetime.date(2023, 1, 1), datetime.date(2024, 6, 1),
+                     datetime.date(2026, 1, 1)):
+            with self.subTest(date=date):
+                text = self.text(date)
+                self.assertIn('reported by this scan', text)
+                self.assertIn('browser/cookies', text)
+                self.assertIn('cannot rule out past contact', text)
+                self.assertNotIn('on this machine', text)
+                self.assertNotIn('is gone', text)
+                self.assertNotIn('spans the whole window', text)
+
+
+class TestReachScope(unittest.TestCase):
+    def render(self, reach, gaps=()):
+        result = {'modules': {'host': {'reach': reach}}, 'verdict': {'gaps': list(gaps)}}
+        lines = []
+        report._render_reach(lines.append, result)
+        return ' '.join(' '.join(lines).split())
+
+    def test_unread_older_dns_records_do_not_become_absence_claim(self):
+        text = self.render({'dns-log': {'earliest': '2026-01-01',
+            'basis': 'oldest of 50,000 DNS events read (cap 50,000)',
+            'note': 'Older retained events were not read.'}}, ['host/dns-log-older-events'])
+        self.assertIn('reported by this scan', text)
+        self.assertIn('Older or unread records may still exist', text)
+        self.assertNotIn('this machine holds no', text)
+        self.assertNotIn('oldest evidence of any kind', text)
+
+    def test_cache_dates_do_not_claim_nothing_else_exists(self):
+        for older in (False, True):
+            reach = {'cache': {'earliest': '2026-01-01', 'by_year': {2026: 2}}}
+            if older:
+                reach['cookies'] = {'earliest': '2024-06-01'}
+            with self.subTest(older=older):
+                text = self.render(reach)
+                self.assertNotIn('NOTHING on this machine', text)
+                if older:
+                    self.assertIn('No browser CACHE file examined', text)
+                else:
+                    self.assertIn('No dated evidence summarised here', text)
+
+    def test_unknown_date_is_not_reported_as_nothing_recorded(self):
+        text = self.render({'dns-log': {'earliest': None, 'basis': 'log could not be read'}})
+        self.assertIn('unknown (no date established)', text)
+        self.assertNotIn('nothing recorded', text)
+
+    def test_unreadable_log_metadata_does_not_claim_history_never_existed(self):
+        result = ModuleResult('host')
+        with patch.object(host, '_ps_json', return_value=([], 'fixture access denied')):
+            host._check_dns_log(result, ScanContext(iocs=None, emit=lambda _: None))
+        text = self.render(result.reach)
+        self.assertIn('metadata could not be read', text)
+        self.assertIn('unread records may still exist', text)
+        self.assertNotIn('Nothing was ever recorded', text)
+        self.assertNotIn('no DNS history exists', text)
 
 
 class TestCookieWindowMeasured(unittest.TestCase):

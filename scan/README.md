@@ -1,7 +1,7 @@
 # adint-scan
 
-> Release v0.1.5 reads retained Windows DNS events even if logging is currently
-> disabled, and keeps gaps for unrecorded activity. It never enables logging.
+> Release v0.1.6 fixes extension-like folder names in COM command paths and
+> avoids treating unread history as absent. It never executes registered commands.
 > Optional Candiru pattern dependencies and limits are documented in
 > [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md).
 
