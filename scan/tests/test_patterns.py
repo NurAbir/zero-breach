@@ -140,6 +140,7 @@ class PatternTests(unittest.TestCase):
         self.assertIn("Python 3.9", " ".join(result.notes))
         imported.assert_not_called()
 
+    @unittest.skipIf(sys.version_info < (3, 9), "optional engine requires Python 3.9+")
     def test_engine_uses_trusted_sources_disabled_includes_timeout(self):
         engine = Mock()
         metadata = SimpleNamespace(version=lambda name: CANDIRU_ENGINE_VERSION)
@@ -152,6 +153,7 @@ class PatternTests(unittest.TestCase):
                          list(CANDIRU_RULE_SOURCES))
         scanner.set_timeout.assert_called_once_with(5)
 
+    @unittest.skipIf(sys.version_info < (3, 9), "optional engine requires Python 3.9+")
     def test_wrong_engine_version_is_unknown(self):
         with patch.object(patterns._pattern_importlib, "import_module", side_effect=[
                 Mock(), SimpleNamespace(version=lambda name: "0.0.0")]):
@@ -159,6 +161,7 @@ class PatternTests(unittest.TestCase):
         self.assertEqual(result.status, UNKNOWN)
         self.assertIn("unsupported yara-x version", " ".join(result.notes))
 
+    @unittest.skipIf(sys.version_info < (3, 9), "optional engine requires Python 3.9+")
     def test_compile_failure_is_unknown(self):
         engine = Mock()
         engine.Compiler.return_value.add_source.side_effect = ValueError("compile failed")
@@ -239,6 +242,19 @@ class PatternTests(unittest.TestCase):
     def test_exact_cap_read_is_bounded(self):
         target = self.file(data=b"X" * patterns._PATTERN_MAX_BYTES)
         self.assertEqual(len(patterns._pattern_read(str(target))), patterns._PATTERN_MAX_BYTES)
+
+    @unittest.skipUnless(sys.platform == "win32", "Windows file identity check")
+    def test_windows_identity_consistent_on_runner_volume(self):
+        target = self.file(data=b"harmless identity fixture")
+        before = os.lstat(target)
+        flags = os.O_RDONLY | getattr(os, "O_BINARY", 0) | getattr(os, "O_NONBLOCK", 0)
+        fd = os.open(target, flags)
+        try:
+            opened = os.fstat(fd)
+        finally:
+            os.close(fd)
+        self.assertEqual(patterns._pattern_identity(before),
+                         patterns._pattern_identity(opened))
 
     def test_missing_and_empty_requested_roots_are_unknown(self):
         for path in (self.root / "absent", self.root):
