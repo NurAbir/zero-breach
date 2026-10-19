@@ -55,7 +55,7 @@ after use. `--json PATH` writes the report you request.
 
 | module | what it reads |
 |---|---|
-| `browser` | history, cookies, favicons, HTTP cache, LevelDB and Service Worker caches across Chrome / Edge / Brave / Chromium (every profile) and Firefox. Locked databases are copied before being opened. |
+| `browser` | history, cookies, favicons, HTTP cache, LevelDB and Service Worker caches across Chrome / Edge / Brave / Vivaldi / Chromium (every profile) and Firefox. Locked databases are copied before being opened. |
 | `hash` | SHA-256 of candidate files under AppData, ProgramData, both Temps, Downloads, Desktop, Documents and Public, against the sample hashes in the IOC set. |
 | `host` | per-user COM registrations (this chain's documented persistence), the DNS resolver cache, whether DNS history exists at all, and the hosts file. |
 
