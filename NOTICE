@@ -41,6 +41,15 @@ released into the public domain under CC0 1.0 so that it can be copied into
 blocklists, STIX bundles, MISP instances and other tools without friction.
 See iocs/LICENSE.md.
 
+The optional Candiru YARA rules are NOT part of that CC0 indicator grant.
+Microsoft Threat Intelligence Center's MAL_DevilsTongue_HijackDll rule is
+redistributed from Signature-Base under Detection Rule License 1.1.
+Felix Bilstein's win_devilstongue_auto rule is redistributed from Malpedia
+under CC BY-SA 4.0. Both rules are unchanged. Author, source and license
+attribution are retained in the embedded rules, match details, and
+third_party/candiru/. YARA-X itself is a separate optional BSD-3-Clause
+dependency, not embedded executable code in this script.
+
 Primary sources for the indicator set:
 
   The Citizen Lab, "Exposing AdFection: How Discover-Tech Turned Targeted Ads

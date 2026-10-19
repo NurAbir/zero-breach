@@ -1,7 +1,8 @@
-"""Refuse remote paths and filesystem redirections before scanner reads.
+"""Refuse Windows remote drives and filesystem redirections before reads.
 
 Checks are conservative and use lstat so a reparse point is inspected rather
-than followed. This is not a sandbox against concurrent filesystem changes.
+than followed. POSIX network mounts cannot always be distinguished from local
+paths here. This is not a sandbox against concurrent filesystem changes.
 """
 
 import os

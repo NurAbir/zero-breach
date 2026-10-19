@@ -20,7 +20,7 @@ from typing import Any, Dict, List
 from . import __version__
 from .iocs import IocSet
 from .result import (CLEAN, HITS, PARTIAL, UNKNOWN, ModuleResult, is_serious,
-                     EV_ON_DISK, EV_PERSISTENCE, EV_CONTACTED, EV_ATTEMPTED,
+                     EV_ON_DISK, EV_FILE_PATTERN, EV_PERSISTENCE, EV_CONTACTED, EV_ATTEMPTED,
                      EV_CONFIGURED, EV_REFERENCED, EV_DNS)
 
 # The exact text required by D1. Do not reword.
@@ -144,6 +144,8 @@ _METRIC_LABELS = {
     "hsts_entries": "HSTS security records checked (proof of past connections)",
     "connection_records": "saved connection records checked",
     "files_hashed": "files fingerprinted",
+    "files_pattern_scanned": "files checked against Candiru patterns",
+    "bytes_pattern_scanned": "bytes checked against Candiru patterns",
     "com_registrations": "auto-start COM registrations reviewed",
     "com_user_writable": "   of those, in a folder you can write to",
     "dns_cache_entries": "names in the DNS cache since last reboot",
@@ -226,7 +228,7 @@ def render_human(document: Dict[str, Any]) -> str:
             # Strongest evidence first: someone reading this should see a sample
             # on disk or a proven contact before a string that merely appeared in
             # cached page text.
-            order = {EV_ON_DISK: 0, EV_PERSISTENCE: 1, EV_CONTACTED: 2,
+            order = {EV_ON_DISK: 0, EV_FILE_PATTERN: 0.5, EV_PERSISTENCE: 1, EV_CONTACTED: 2,
                      EV_DNS: 3, EV_ATTEMPTED: 4, EV_CONFIGURED: 5,
                      EV_REFERENCED: 6, "": 0}
             for h in sorted(m["hits"], key=lambda x: order.get(x.get("evidence", ""), 0)):
@@ -478,6 +480,10 @@ TIER_MEANING = {
                    "current ownership and activity are not established."),
     "sample": ("The file fingerprint of a published Candiru sample. A match "
                "here is conclusive, not circumstantial."),
+    "candiru-pattern": ("A published Candiru detection rule matched patterns "
+                        "inside a file. This needs expert verification; it is "
+                        "not an exact sample identification or proof that "
+                        "spyware ran."),
     "vuln-driver": ("A LEGITIMATE, signed third-party driver that this actor "
                     "abuses to disable protections (bring-your-own-vulnerable-"
                     "driver). The file itself is not spyware and is present on "
@@ -493,6 +499,9 @@ TIER_MEANING = {
 NOT_MALWARE_TIERS = {"vuln-driver"}
 
 EVIDENCE_MEANING = {
+    EV_FILE_PATTERN: ("patterns inside a file matched a published detection "
+                      "rule. This is a lead for investigation, not a confirmed "
+                      "infection or an exact known-file match"),
     EV_ON_DISK: ("a file on this machine has the fingerprint of a published "
                  "spyware sample - this is conclusive, not circumstantial"),
     # Same grade, different claim: see _on_disk_gloss(). A legitimate-but-abused
@@ -515,6 +524,7 @@ EVIDENCE_MEANING = {
 # not EV_REFERENCED are serious and each gets its own, so a sample on disk and a
 # persistence entry can never be rendered as "probably nothing".
 EVIDENCE_HEADLINE = {
+    EV_FILE_PATTERN: "A FILE MATCHED A CANDIRU DETECTION RULE - NEEDS REVIEW",
     EV_ON_DISK: "A KNOWN SPYWARE FILE IS ON THIS MACHINE",
     EV_PERSISTENCE: "SOMETHING IS SET TO RUN AUTOMATICALLY FROM THIS INFRASTRUCTURE",
     EV_CONTACTED: "THIS DEVICE CONTACTED THIS INFRASTRUCTURE",
@@ -673,6 +683,15 @@ def _advice_paragraph(w, text):
 def _next_steps(w, hits):
     action = max(_recommended_action(h) for h in hits)
     w("  WHAT TO DO")
+    if any(h.get("evidence") == EV_FILE_PATTERN for h in hits):
+        _advice_paragraph(w, "A file matched a Candiru pattern rule. Ask a "
+                         "qualified incident responder to verify the named file "
+                         "and rule. Preserve the file and this report; do not "
+                         "open, run or delete the file. A pattern match alone "
+                         "does not prove infection or that the file executed.")
+        w("")
+        if all(h.get("evidence") in (EV_FILE_PATTERN, EV_REFERENCED) for h in hits):
+            return
     if action == 3:
         _advice_paragraph(w, "Seek expert help promptly. Preserve this report and "
                          "the named files or registrations. Do NOT delete, move, "
