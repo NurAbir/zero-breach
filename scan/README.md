@@ -1,7 +1,7 @@
 # adint-scan
 
-> Release v0.1.3 adds experimental, opt-in `--patterns` support. See
-> [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
+> Release v0.1.4 improves coverage for the experimental, opt-in `--patterns` check. See
+> [COVERAGE-UPGRADE.md](../COVERAGE-UPGRADE.md) and [DETECTION-UPGRADE.md](../DETECTION-UPGRADE.md) for dependencies, limits and
 > validation evidence. Default checks need no added packages.
 
 A local, read-only check for the published AdFection / Candiru indicators,
