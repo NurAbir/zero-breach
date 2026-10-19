@@ -427,14 +427,14 @@ def _check_com(r: ModuleResult, ctx) -> None:
 
     # Expand, de-quote and test each registered path before asking about
     # signatures, so the batched call only covers files that exist on disk.
-    writable = [os.path.normcase(os.path.normpath(d))
+    writable = [os.path.normcase(os.path.normpath(d)).casefold()
                 for d in _user_writable_dirs()]
     remote_letters, drives_known = _network_drive_letters()
     on_disk = []
     for e in entries:
         expanded = _server_path(e["raw"], e["kind"])
         e["path"] = expanded
-        low = os.path.normcase(os.path.normpath(expanded)) if expanded else ""
+        low = os.path.normcase(os.path.normpath(expanded)).casefold() if expanded else ""
         # Decided before the path is touched: os.path.exists() on a remote path
         # is itself the network contact this tool promises never to make, and it
         # happens inside Windows where netguard cannot see it.
