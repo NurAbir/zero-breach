@@ -1,17 +1,17 @@
 # Verifying ArchiveGenocide release signatures
 
-Zero Breach v0.1.6 supplies detached GPG signatures for the exact released
+Zero Breach v0.1.7 supplies detached GPG signatures for the exact released
 scanner and its SHA256SUMS.txt manifest. They use ArchiveGenocide's existing
 Ed25519 release-signing key, also published on the archive's verification page.
 
 Official repository: https://github.com/interplains/zero-breach
-Official release: https://github.com/interplains/zero-breach/releases/tag/v0.1.6
+Official release: https://github.com/interplains/zero-breach/releases/tag/v0.1.7
 Independent publisher page: https://archivegenocide.com/scan/#verify-download
 Established key identity: https://archivegenocide.com/verify.html
 
 ## Check the publisher and file
 
-Download these three files from the v0.1.6 release into one directory:
+Download these three files from the v0.1.7 release into one directory:
 
 - zero-breach.py
 - zero-breach.py.asc
@@ -36,9 +36,9 @@ Verification must succeed using the expected ArchiveGenocide key. A warning
 that the key is not certified by your own web of trust is different from a
 bad signature; do not ignore a fingerprint mismatch or failed verification.
 
-The expected SHA-256 of zero-breach.py v0.1.6 is:
+The expected SHA-256 of zero-breach.py v0.1.7 is:
 
-    09fba9710143c11465c1627a0399b34ad1ee9a49341eddaa7d4656d77bf5ec78
+    9431426a940a3a9bdea617017030e0fa7b155693c3b2d25d97960d1eb262ae4e
 
 A signature verifies which key signed these exact bytes. It does not establish
 that the program has no bugs. A checksum alone is not publisher authentication.
@@ -58,14 +58,14 @@ The manifest lists the fifteen release-content files, including the optional
 requirements file and Candiru rule attribution and licence records. The manifest itself and
 the added public key/signatures are not self-listed.
 
-Public verification artifacts are also retained in release-signatures/v0.1.6/.
+Public verification artifacts are also retained in release-signatures/v0.1.7/.
 No private key is stored in this repository or in its project backups.
 
 ## Indicator updates are a separate trust path
 
 The manually run scan/update-iocs.py still checks HTTPS, a published SHA-256,
 and indicator-file validity. It does not automatically verify GPG signatures.
-The signed release manifest covers the indicator file shipped with v0.1.6;
+The signed release manifest covers the indicator file shipped with v0.1.7;
 it does not authenticate later files fetched from the development branch.
 
 ## Maintainer release procedure
