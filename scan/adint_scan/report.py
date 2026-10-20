@@ -619,6 +619,29 @@ def _defang_text(text: str, indicator: str) -> str:
     return out
 
 
+# Artifact-derived text is attacker-influenced: a browser profile's display name,
+# a registry value, a page title. Rendered raw, a newline or a terminal escape
+# inside one can forge whole report lines - a fake "VERDICT: no known indicators
+# found" printed under a real hit, which survives being pasted into an email to a
+# helpline. Control characters, Unicode line separators and bidirectional
+# overrides (which can visually reverse a line without any newline) are
+# replaced, and newlines collapse to spaces so a field can never begin a line of
+# its own. The JSON report keeps the raw evidence.
+_UNSAFE_CHARS = re.compile(
+    "[\x00-\x08\x0b-\x1f\x7f-\x9f\u2028\u2029\u202a-\u202e\u2066-\u2069]")
+
+
+def _safe_text(value, limit=2000):
+    text = str(value).replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
+    text = _UNSAFE_CHARS.sub("�", text)
+    return text if len(text) <= limit else text[:limit] + "…"
+
+
+# Tighter limits for the single-line fields an attacker can fill most freely.
+_HIT_FIELD_LIMITS = {"profile": 120, "observed": 64, "location": 500,
+                     "detail": 500}
+
+
 def _human_document(document):
     """Sanitize artifact-derived fields without changing the JSON evidence.
 
@@ -627,13 +650,13 @@ def _human_document(document):
     """
     doc = copy.deepcopy(document)
 
-    def scrub(value):
+    def scrub(value, limit=2000):
         if isinstance(value, str):
-            return _defang_text(value, "")
+            return _defang_text(_safe_text(value, limit), "")
         if isinstance(value, list):
-            return [scrub(item) for item in value]
+            return [scrub(item, limit) for item in value]
         if isinstance(value, dict):
-            return {key: scrub(item) for key, item in value.items()}
+            return {key: scrub(item, limit) for key, item in value.items()}
         return value
 
     for module in doc["modules"].values():
@@ -643,7 +666,7 @@ def _human_document(document):
         for hit in module["hits"]:
             for key in ("location", "detail", "observed", "profile"):
                 if key in hit:
-                    hit[key] = scrub(hit[key])
+                    hit[key] = scrub(hit[key], _HIT_FIELD_LIMITS[key])
     doc["verdict"]["gaps"] = scrub(doc["verdict"].get("gaps", []))
     return doc
 
@@ -769,10 +792,7 @@ def _next_steps(w, hits):
                          "have to complete these steps first.")
     w("")
     _advice_paragraph(w, "Do NOT open, visit or look up indicator addresses. Keep "
-                     "the [.] spelling when sharing them. Reports can contain "
-                     "usernames, profile names, file paths and browsing details. "
-                     "Ask a responder how to share evidence securely; do not "
-                     "post the full report publicly.")
+                     "the [.] spelling when sharing them.")
 
 
 def _support_options(w):
@@ -904,9 +924,21 @@ def render_summary(document: Dict[str, Any]) -> str:
             w("       See \"HOW TO TURN ON DNS HISTORY\" further down. It tells you")
             w("       nothing about the past, but it means a future check can")
             w("       actually answer the question.")
+    # Every report, not only one with findings. A clean or reference-only result
+    # is the one people are most relaxed about posting publicly to say "I'm
+    # fine" - and it carries the same usernames, profile names and paths.
+    w("")
+    for line in _wrap(_PRIVACY_NOTE, 68):
+        w("  " + line)
     w(_RULE)
     w("")
     return _defang_report("\n".join(out), document)
+
+
+_PRIVACY_NOTE = ("Before you share this report: it can contain your Windows "
+                 "username, browser profile names, file paths and browsing "
+                 "details. Ask a responder how to share evidence securely; "
+                 "do not post the full report publicly.")
 
 
 def _dedup_serious(hits: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

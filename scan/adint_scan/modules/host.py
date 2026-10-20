@@ -34,8 +34,7 @@ Ported from scripts/scan_host.ps1. Four checks, and the reason each one exists:
      address is a finding.
 
 Read-only throughout: this module never writes the registry, never enables the
-log, and needs no administrator (D7). (A system-writing "arm" helper exists in
-arm.py but is deliberately not wired to the CLI in this release.)
+log, and needs no administrator (D7).
 """
 
 from __future__ import annotations
@@ -190,11 +189,6 @@ def _ps_json(cmd: str, timeout: int = 60):
     if isinstance(data, list):
         return data, ""
     return [], "unexpected JSON shape from PowerShell: {}".format(type(data))
-
-
-def _ps_literal(value: str) -> str:
-    """Quote a path for a PowerShell single-quoted string literal."""
-    return "'{}'".format(value.replace("'", "''"))
 
 
 def _str(row, *names) -> str:
