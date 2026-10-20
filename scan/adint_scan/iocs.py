@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import io
 import os
+import ipaddress
 import re
 import datetime
 from dataclasses import dataclass
@@ -377,6 +378,41 @@ class IocError(Exception):
     pass
 
 
+# Indicator values drive substring searches over every artifact and are printed
+# into reports people forward, but only the file's schema was checked. A hostile
+# or corrupted feed could pass: a lone "." normalises to the empty string, which
+# matches between every pair of bytes (measured at ~31 MB of RAM per MB scanned);
+# a lone ":" parses as an IP that matches every URL; "0.0.0.0" would match every
+# BLOCKED lookup; and a value carrying control characters went straight into the
+# report. Real indicators are hostnames, IP addresses and hex digests. Anything
+# else is refused, loudly, rather than scanned for.
+_DOMAIN_LABEL_RE = re.compile(r"^[a-z0-9]([a-z0-9-]*[a-z0-9])?$")
+_MAX_INDICATORS = 20000
+
+
+def _value_problem(value, kind):
+    """Why an indicator value is unsafe to scan for, or an empty string."""
+    if kind == TYPE_IP:
+        try:
+            addr = ipaddress.ip_address(value)
+        except ValueError:
+            return "not a valid IP address"
+        if addr.is_unspecified or len(value) < 7:
+            return "would match far more than the intended host"
+        return ""
+    if kind == TYPE_DOMAIN:
+        if not 4 <= len(value) <= 253:
+            return "not the length of a hostname"
+        labels = value.split(".")
+        if len(labels) < 2:
+            return "a hostname needs at least one dot"
+        for label in labels:
+            if not 1 <= len(label) <= 63 or not _DOMAIN_LABEL_RE.match(label):
+                return "label {!r} is not a valid hostname label".format(label[:70])
+        return ""
+    return ""   # hashes are already pinned to 64 hex digits by infer_type
+
+
 def load(path: str) -> IocSet:
     if not os.path.exists(path):
         raise IocError("IOC file not found: {}".format(path))
@@ -427,7 +463,15 @@ def load(path: str) -> IocSet:
                     except UnicodeError:
                         raise IocError("line {}: {!r} is not a valid domain "
                                        "name".format(lineno, value))
+            problem = _value_problem(value, kind)
+            if problem:
+                raise IocError("line {}: {!r}: {}".format(
+                    lineno, value[:80], problem))
             seen[value] = Indicator(value, tier, confidence, kind, source)
+            if len(seen) > _MAX_INDICATORS:
+                raise IocError("more than {:,} indicators - refusing what looks "
+                               "like a corrupted or hostile feed".format(
+                                   _MAX_INDICATORS))
     if not seen:
         # An empty list must never produce a report. A truncated download or an
         # emptied file would otherwise run a full scan, search for nothing, and

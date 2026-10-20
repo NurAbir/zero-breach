@@ -1,9 +1,10 @@
 """Build a single-file, self-contained copy of the scanner.
 
 One .py file someone can be emailed, read, and run. It embeds the indicator data
-so there is no second file to lose, and it deliberately OMITS arm.py, so the
-result cannot change anything on the machine it runs on - which is a much better
-thing to be able to promise someone receiving a script from a friend.
+so there is no second file to lose, and the scanner contains no code that writes
+to the machine, so the result cannot change anything on the machine it runs on -
+which is a much better thing to be able to promise someone receiving a script from
+a friend.
 
 The only transformation applied to the module sources is renaming the two names
 that collide across the three scan modules (NAME and run), plus dropping the

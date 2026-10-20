@@ -5,14 +5,14 @@
 Default behaviour (no flags): read-only tier-1 IOC match across the browser, hash
 and host modules, under the no-network guard. Requires no administrator (D7).
 
-The system-writing tier-5 feature (--arm / --undo) is HELD BACK from this release.
-Its code is in arm.py but is not wired to the CLI: a review found its --undo path
-could, from a journal file any program can write, delete every scheduled task on
-the machine and still report success, and could shrink the DNS log and destroy the
-history it had collected. None of that is acceptable in a tool at-risk people run,
-and the one thing it was for - turning on DNS history - is a single manual command
-the report already prints. It returns once the undo path has been rewritten with
-the write-ahead journal and per-step safety the review specifies.
+There is no system-writing mode. An earlier tier-5 feature (--arm / --undo) was
+removed: a review found its --undo path could, from a journal file any program can
+write, delete every scheduled task on the machine and still report success, and
+could shrink the DNS log and destroy the history it had collected. None of that is
+acceptable in a tool at-risk people run, and the one thing it was for - turning on
+DNS history - is a single manual command the report already prints. The code is
+gone rather than merely unwired, so a reviewer reading this read-only tool finds
+no write path at all.
 
 Exit codes: 0 = no indicators found (CLEAN or with gaps); 2 = indicators matched;
 1 = the scan could not be set up (bad IOC file, etc.).
@@ -30,6 +30,7 @@ from typing import List
 from . import __version__
 from .context import ScanContext
 from .iocs import IocError, load
+from .localpaths import path_problem
 from .netguard import no_network
 from .report import V_HITS, build_document, render_human, write_json
 from .result import ModuleResult
@@ -155,8 +156,7 @@ def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
                 r.could_not_run(
                     "persistence-sweep",
                     "tier 2 (--deep) is not implemented yet — no full "
-                    "persistence sweep was performed. The --arm commands are "
-                    "also disabled in this release. A full persistence review "
+                    "persistence sweep was performed. A full persistence review "
                     "requires a separate forensic examination")
                 results.append(r)
             else:
@@ -170,9 +170,36 @@ def _run_modules(ctx: ScanContext) -> List[ModuleResult]:
     return results
 
 
+def _refuse_remote(label: str, value: str) -> bool:
+    """Refuse a user-typed path that is not on a local disk.
+
+    --iocs and --json are paths people type, often copied from an instruction
+    somebody else wrote ("run it against our updated list at ..."). Opening or
+    creating a UNC path or a mapped network drive makes Windows itself open an
+    SMB session to that host - sending this account's network credentials and,
+    for --json, the complete report. The socket guard cannot see that. Every
+    other path the scanner opens is already checked this way; these two were
+    the gap. abspath first: path_problem refuses relative paths outright, and
+    "--json report.json" is the documented usage."""
+    problem = path_problem(os.path.abspath(value))
+    if problem:
+        print("error: {} {}: {} - use a path on a local disk".format(
+            label, value, problem), file=sys.stderr)
+        return True
+    return False
+
+
 def main(argv: List[str] = None) -> int:
     _force_utf8_io()
     args = _parse(sys.argv[1:] if argv is None else argv)
+
+    # Checked before anything is opened, and before a 15-minute scan rather than
+    # after it. The bundled default is never attacker-chosen, so only a path the
+    # user supplied is checked.
+    if args.iocs != _default_ioc_path() and _refuse_remote("--iocs", args.iocs):
+        return 1
+    if args.json and _refuse_remote("--json", args.json):
+        return 1
 
     try:
         iocs = load(args.iocs)

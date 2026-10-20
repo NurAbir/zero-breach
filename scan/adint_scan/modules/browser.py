@@ -147,6 +147,11 @@ def _firefox_roots():
     return []
 
 
+# Largest browser database we will snapshot, siblings included. Real History /
+# Cookies files are tens of MB; 1 GiB leaves generous headroom.
+_MAX_SNAPSHOT_BYTES = 1024 * 1024 * 1024
+
+
 def copy_locked(path):
     """Copy a possibly-locked SQLite db (plus -wal/-shm/-journal) to a temp dir.
 
@@ -162,6 +167,21 @@ def copy_locked(path):
     problem = path_problem(path)
     if problem:
         raise PermissionError(13, problem, path)
+    # Refuse an implausibly large database before copying anything. A profile
+    # database the attacker can write could otherwise fill the temp drive - an
+    # unbounded write by a tool that promises it only reads - and then exhaust
+    # memory when its rows are read. Checked before mkdtemp so a refusal never
+    # leaves a temp directory behind; the caller records it as a gap.
+    try:
+        total = os.path.getsize(path) + sum(
+            os.path.getsize(path + sfx) for sfx in ("-wal", "-shm", "-journal")
+            if os.path.exists(path + sfx))
+    except OSError:
+        total = 0   # let the copy below surface the real error
+    if total > _MAX_SNAPSHOT_BYTES:
+        raise OSError(27, "database is {:,} bytes, over the {:,}-byte snapshot "
+                      "limit, so it was not copied".format(
+                          total, _MAX_SNAPSHOT_BYTES), path)
     tmpdir = tempfile.mkdtemp(prefix="bscan_", dir=local_temp_dir())
     try:
         base = os.path.join(tmpdir, os.path.basename(path))
@@ -236,7 +256,11 @@ def _chromium_profile_names(user_data):
     try:
         with io.open(path, encoding="utf-8", errors="replace") as fh:
             data = json.load(fh)
-    except (OSError, ValueError):
+    # RecursionError is not a ValueError. A Local State file of 200,000 nested
+    # brackets - about 400 KB, writable without admin - made json.load raise it
+    # before a single profile was read, and the whole browser module was lost.
+    # Malformed is malformed: fall back to folder names, keep scanning.
+    except (OSError, ValueError, RecursionError, MemoryError):
         return out
     profile = data.get("profile", {}) if isinstance(data, dict) else {}
     if not isinstance(profile, dict):
@@ -1027,7 +1051,7 @@ def run(ctx) -> ModuleResult:
                             "browser received an HSTS header from it over HTTPS"
                             + (" (observed {})".format(when[:10]) if when else ""),
                             EV_CONTACTED, when)
-            except (OSError, ValueError) as exc:
+            except (OSError, ValueError, RecursionError, MemoryError) as exc:
                 r.skipped += 1
                 mark_fail(label, "hsts", _locked_note(ts_path, exc))
 
@@ -1085,7 +1109,7 @@ def run(ctx) -> ModuleResult:
                             nps_path, ind,
                             "{}: the browser has a connection record for {}"
                             .format(kind, host), EV_CONTACTED)
-            except (OSError, ValueError) as exc:
+            except (OSError, ValueError, RecursionError, MemoryError) as exc:
                 r.skipped += 1
                 mark_fail(label, "connection-records",
                           _locked_note(nps_path, exc))
