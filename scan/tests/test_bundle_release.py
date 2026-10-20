@@ -230,3 +230,14 @@ class TestStixDriverWithdrawal(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+    def test_bundle_reports_the_package_version(self):
+        # v0.1.7 shipped a single file that reported "0.1.6" because the version
+        # was hardcoded in build/bundle.py and drifted from the package. The
+        # bundle now derives it, so the two can never disagree again.
+        from adint_scan import __version__ as pkg_version
+        self.assertTrue(
+            self.bundle.__version__.startswith(pkg_version),
+            "bundle reports {!r}, package is {!r}".format(
+                self.bundle.__version__, pkg_version))

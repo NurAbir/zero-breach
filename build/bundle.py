@@ -26,6 +26,20 @@ OUT = (sys.argv[2] if len(sys.argv) > 2
 PKG = os.path.join(SRC, "scan", "adint_scan")
 IOC = os.path.join(SRC, "iocs", "adfection_iocs.txt")
 
+# Single source of truth for the version. Read it from the package rather than
+# repeating it here: the two silently drifted once and the download shipped
+# reporting the wrong version (it said 0.1.6 while it was v0.1.7). Derive it, so
+# that can never happen again.
+def _package_version():
+    init = io.open(os.path.join(PKG, "__init__.py"), encoding="utf-8").read()
+    m = re.search(r'__version__\s*=\s*"([^"]+)"', init)
+    if not m:
+        raise SystemExit("bundle: could not read __version__ from the package")
+    return m.group(1)
+
+
+VERSION = _package_version()
+
 
 def read(path):
     return io.open(path, encoding="utf-8").read()
@@ -161,7 +175,7 @@ A('import datetime')
 A('import sys')
 A('import time')
 A('')
-A('__version__ = "0.1.6 (single-file build)"')
+A('__version__ = "{} (single-file build)"'.format(VERSION))
 A('')
 A('# --- embedded indicator data ------------------------------------------------')
 A('# The real file is iocs/adfection_iocs.txt in the project. Its provenance')
