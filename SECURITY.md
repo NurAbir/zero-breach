@@ -41,7 +41,7 @@ acknowledge, investigate, and credit you if you wish.
 
 Do not run a security script on trust. Every release publishes the SHA-256 of
 `zero-breach.py`, and the build is reproducible — you can rebuild the file from
-source and confirm it matches. Release v0.1.2 also supplies detached GPG signatures
+source and confirm it matches. Every signed release also supplies detached GPG signatures
 under ArchiveGenocide's established release key. Check the complete fingerprint
 against the official publisher page before trusting a downloaded key. See
 [SIGNING.md](SIGNING.md) and "Verifying what you downloaded" in the README.

@@ -231,7 +231,7 @@ that it leads with the caveat and lists what it could *not* check:
 
 ```
 ========================================================================
-  Zero Breach 0.1.0  —  AdFection / Candiru indicator check
+  Zero Breach 0.1.8  —  AdFection / Candiru indicator check
   Checks for TRACES of ad-delivered spyware. A clean result is NOT a
   clean bill of health - see what could not be checked, below.
   2026-10-18T14:30:00   Windows 11
@@ -262,7 +262,7 @@ numbered "what to do" that starts with *do not delete the evidence*.
 The current source dataset has **405 indicators: 292 domains, 111 IP addresses,
 one spyware hash and one legitimate vulnerable-driver hash**, in
 [`iocs/adfection_iocs.txt`](iocs/adfection_iocs.txt), one per line with its tier,
-confidence and source. Release **v0.1.2 embeds all 405 indicators**, including
+confidence and source. The current release **embeds all 405 indicators**, including
 67 additional domains/hostnames compared with v0.1.1. Earlier signed release
 assets remain unchanged; later source/feed updates do not replace them.
 
