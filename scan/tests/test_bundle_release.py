@@ -5,6 +5,7 @@ import datetime
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -54,7 +55,7 @@ class TestDownloadedEntryPoint(unittest.TestCase):
             "review.invalid\tcc\tprimary\ttest\n"
             "later.invalid\tcc\tprimary\ttest\n", encoding="utf-8")
 
-    def run_bundle(self, browser_run=None):
+    def run_bundle(self, browser_run=None, extra=()):
         b = self.bundle
         documents = []
         with contextlib.ExitStack() as stack:
@@ -73,8 +74,46 @@ class TestDownloadedEntryPoint(unittest.TestCase):
                 stack.enter_context(patch.object(b, "run_browser", browser_run))
             stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
             stack.enter_context(contextlib.redirect_stderr(io.StringIO()))
-            code = b.main(["--no-pause", "--iocs", str(self.ioc_path)])
+            code = b.main(["--no-pause", "--iocs", str(self.ioc_path)] + list(extra))
         return code, documents[0]
+
+    # The download has its own entry point, separate from the source CLI. The
+    # network-path guard was once added only to cli.py and was silently absent
+    # from the file people actually download, so it is tested here directly.
+    @unittest.skipUnless(sys.platform == "win32",
+                         "UNC and mapped-drive paths are a Windows concept")
+    def test_download_refuses_network_paths_before_opening_anything(self):
+        b = self.bundle
+        bs = chr(92)
+        unc = bs + bs + "server.invalid" + bs + "share" + bs + "x.txt"
+        opened = []
+
+        def must_not_load(*args, **kwargs):
+            opened.append(args)
+            raise AssertionError("indicator file opened before the refusal")
+
+        for flag in ("--iocs", "--json"):
+            err = io.StringIO()
+            with contextlib.ExitStack() as stack:
+                stack.enter_context(patch.object(b, "_load_embedded_iocs",
+                                                 must_not_load))
+                stack.enter_context(patch.object(b, "_force_utf8_io",
+                                                 lambda: None))
+                stack.enter_context(contextlib.redirect_stderr(err))
+                stack.enter_context(contextlib.redirect_stdout(io.StringIO()))
+                code = b.main(["--no-pause", flag, unc])
+            self.assertEqual(code, 1, flag)
+            self.assertIn("local disk", err.getvalue(), flag)
+        self.assertEqual(opened, [])
+
+    def test_download_accepts_a_relative_local_json_path(self):
+        # "--json report.json" is the documented usage and must keep working.
+        old = os.getcwd()
+        os.chdir(self.root)
+        self.addCleanup(os.chdir, old)
+        code, _document = self.run_bundle(extra=("--json", "report.json"))
+        self.assertNotEqual(code, 1)
+        self.assertTrue((self.root / "report.json").exists())
 
     def test_module_failure_preserves_already_observed_hit(self):
         b = self.bundle

@@ -282,6 +282,23 @@ def main(argv=None):
         _hold(args)
         return 1
 
+    # Refuse a user-typed --iocs/--json path that is not on a local disk.
+    # Opening or creating a UNC path or mapped network drive makes Windows open
+    # an SMB session to that host - sending this account's network credentials
+    # and, for --json, the whole report. Checked before anything is opened and
+    # before the scan rather than after it. This entry point is separate from
+    # the source CLI, so the guard has to live here too. abspath first, because
+    # path_problem refuses relative paths and "--json report.json" is the
+    # documented usage.
+    for label, value in (("--iocs", args.iocs), ("--json", args.json)):
+        if value:
+            problem = path_problem(os.path.abspath(value))
+            if problem:
+                print("error: {} {}: {} - use a path on a local disk".format(
+                    label, value, problem), file=sys.stderr)
+                _hold(args)
+                return 1
+
     try:
         ioc_set = _load_embedded_iocs(args.iocs)
     except IocError as exc:
