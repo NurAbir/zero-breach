@@ -49,7 +49,26 @@ def main(argv=None):
     p = argparse.ArgumentParser(description="Rebuild all generated artifacts.")
     p.add_argument("--check", action="store_true",
                    help="exit non-zero if any artifact changed (for CI)")
+    p.add_argument("--expect-version", metavar="X.Y.Z",
+                   help="fail unless the package __version__ equals this. Run "
+                        "with the release's own number when cutting a release, "
+                        "so the single file can never again ship reporting a "
+                        "different version than the tag (as v0.1.7 did).")
     args = p.parse_args(argv)
+
+    if args.expect_version:
+        init = io.open(os.path.join(ROOT, "scan", "adint_scan", "__init__.py"),
+                       encoding="utf-8").read()
+        import re as _re
+        found = _re.search(r'__version__\s*=\s*"([^"]+)"', init)
+        found = found.group(1) if found else "(unreadable)"
+        if found != args.expect_version:
+            print("\nERROR: package __version__ is {!r} but the release "
+                  "being cut is {!r}. Update scan/adint_scan/__init__.py "
+                  "before building.".format(found, args.expect_version),
+                  file=sys.stderr)
+            return 1
+        print("version check: package reports {} as expected.".format(found))
 
     if not os.path.isdir(DIST):
         os.makedirs(DIST)
