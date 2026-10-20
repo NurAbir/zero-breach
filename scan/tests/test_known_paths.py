@@ -84,3 +84,24 @@ class TestKnownPaths(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+# Regression for issue #7: PowerShell must be invoked by absolute path, never the
+# bare name "powershell". Launched by bare name, Windows resolves it through the
+# executable search order, which includes the current directory - letting a
+# planted Downloads\powershell.exe run during the host checks (and forge their
+# results). An absolute path is never resolved through that search.
+import os as _os
+from adint_scan.modules import host as _host
+
+
+def test_powershell_is_an_absolute_path_not_a_bare_name():
+    assert _os.path.isabs(_host._PS[0]), \
+        "PowerShell must be an absolute path (issue #7), got: {!r}".format(_host._PS[0])
+    assert _host._PS[0].lower().endswith("powershell.exe")
+    assert _host._PS[0] != "powershell"
+
+
+def test_ps_runs_in_a_controlled_working_directory():
+    # The child must not inherit a hostile CWD either.
+    assert _os.path.isabs(_host._PS_CWD)
