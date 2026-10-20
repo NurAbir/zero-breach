@@ -59,7 +59,20 @@ try:
 except ImportError:  # pragma: no cover - non-Windows
     winreg = None  # type: ignore
 
-_PS = ["powershell", "-NoProfile", "-NonInteractive",
+# Resolve PowerShell by its absolute path, never the bare name. Invoked as
+# "powershell", Windows resolves it through the executable search order - which
+# includes the CURRENT DIRECTORY before System32. The tool tells users to run it
+# from their Downloads folder, a user-writable location, so a planted
+# powershell.exe there would be executed in its place (issue #7). An absolute
+# path is never resolved through that search, so only the real interpreter at
+# the System32 location can run; if it is not there, the call fails to a gap
+# rather than ever executing a same-named file from elsewhere.
+_PS_EXE = os.path.join(os.environ.get("SystemRoot") or r"C:\Windows",
+                       "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
+# A directory the scanner does not control, used as the child's working
+# directory so it cannot inherit a hostile CWD either.
+_PS_CWD = os.environ.get("SystemRoot") or r"C:\Windows"
+_PS = [_PS_EXE, "-NoProfile", "-NonInteractive",
        "-ExecutionPolicy", "Bypass", "-Command"]
 
 _DNS_LOG = "Microsoft-Windows-DNS-Client/Operational"
@@ -142,7 +155,8 @@ def _ps(cmd: str, timeout: int = 60):
     # nothing to repair in the first place.
     cmd = "[Console]::OutputEncoding=[System.Text.Encoding]::UTF8; " + cmd
     proc = subprocess.run(_PS + [cmd], capture_output=True, text=True,
-                          encoding="utf-8", errors="replace", timeout=timeout)
+                          encoding="utf-8", errors="replace", timeout=timeout,
+                          cwd=_PS_CWD)
     return proc.returncode, (proc.stdout or ""), (proc.stderr or "")
 
 
